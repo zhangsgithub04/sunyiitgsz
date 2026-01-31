@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Physics: Complete Guide to Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'IBM Plex Mono', monospace; 
+            background: #000; 
+            color: #e0e0e0;
+            line-height: 1.7;
+        }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #00f5ff 0%, #ff00ff 50%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradient-shift 8s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .quantum-border {
+            padding: 3px;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff, #00ff88);
+            background-size: 300% 300%;
+            animation: border-flow 5s linear infinite;
+            border-radius: 12px;
+        }
+        
+        @keyframes border-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .quantum-border-inner {
+            background: #0a0a0a;
+            border-radius: 10px;
+            padding: 2.5rem;
+        }
+        
+        .section-card {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.05), rgba(255, 0, 255, 0.05));
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .interactive-element {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .interactive-element:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+        }
+        
+        .formula-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 245, 255, 0.4);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        code {
+            background: rgba(255, 0, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-sm border-b border-cyan-500/30 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <h1 class="orbitron text-2xl font-bold gradient-text">QUANTUM PHYSICS</h1>
+            <button onclick="document.getElementById('sidebar').classList.toggle('hidden')" class="text-cyan-400 md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-black/95 border-r border-cyan-500/30 overflow-y-auto z-40 hidden md:block p-6">
+        <h3 class="orbitron text-lg font-bold text-cyan-400 mb-4">TABLE OF CONTENTS</h3>
+        <nav class="space-y-2 text-sm">
+            <a href="#intro" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Introduction</a>
+            <a href="#history" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Historical Development</a>
+            <a href="#classical-quantum" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Classical vs Quantum</a>
+            <a href="#planck" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Planck's Constant</a>
+            <a href="#photoelectric" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Photoelectric Effect</a>
+            <a href="#bohr-model" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Bohr Atomic Model</a>
+            <a href="#wave-particle" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Wave-Particle Duality</a>
+            <a href="#de-broglie" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">de Broglie Wavelength</a>
+            <a href="#double-slit" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Double-Slit Experiment</a>
+            <a href="#schrodinger" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Schrödinger Equation</a>
+            <a href="#wavefunction" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Wave Function & Probability</a>
+            <a href="#superposition" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Superposition Principle</a>
+            <a href="#measurement" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Measurement Problem</a>
+            <a href="#uncertainty" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Uncertainty Principle</a>
+            <a href="#tunneling" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Quantum Tunneling</a>
+            <a href="#spin" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Quantum Spin</a>
+            <a href="#pauli" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Pauli Exclusion Principle</a>
+            <a href="#entanglement" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Quantum Entanglement</a>
+            <a href="#bell" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Bell's Theorem</a>
+            <a href="#interpretations" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">QM Interpretations</a>
+            <a href="#qft" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Quantum Field Theory</a>
+            <a href="#applications" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Modern Applications</a>
+            <a href="#quantum-computing" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Quantum Computing</a>
+            <a href="#future" class="block py-2 px-3 rounded hover:bg-cyan-900/30 transition">Future Directions</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="md:ml-64 mt-16 p-6 md:p-12">
+        <div class="max-w-5xl mx-auto">
+
+            <!-- Hero Section -->
+            <section id="intro" class="min-h-screen flex flex-col justify-center mb-20">
+                <h1 class="orbitron text-5xl md:text-7xl font-black gradient-text mb-8 text-center">
+                    QUANTUM PHYSICS
+                </h1>
+                <h2 class="orbitron text-2xl md:text-4xl text-cyan-400 mb-12 text-center">
+                    A Complete Guide to the Fundamentals
+                </h2>
+                
+                <div class="quantum-border mb-12">
+                    <div class="quantum-border-inner">
+                        <p class="text-lg md:text-xl leading-relaxed mb-6">
+                            Welcome to the fascinating world of quantum mechanics—the most successful scientific theory ever developed, 
+                            yet one that challenges our deepest intuitions about reality. Quantum physics describes the behavior of matter 
+                            and energy at the smallest scales, where particles can exist in multiple states simultaneously, where observation 
+                            changes outcomes, and where objects separated by vast distances can instantaneously affect each other.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            This comprehensive guide will take you through the complete journey: from the historical crisis that birthed 
+                            quantum theory, through its mathematical foundations and strangest phenomena, to cutting-edge applications 
+                            that are transforming technology and our understanding of the universe itself.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <div class="section-card">
+                        <div class="text-4xl mb-3">⚛️</div>
+                        <h3 class="orbitron font-bold text-cyan-400 mb-2">Fundamental Concepts</h3>
+                        <p class="text-sm text-gray-400">Wave-particle duality, superposition, uncertainty, and more</p>
+                    </div>
+                    <div class="section-card">
+                        <div class="text-4xl mb-3">🔬</div>
+                        <h3 class="orbitron font-bold text-purple-400 mb-2">Groundbreaking Experiments</h3>
+                        <p class="text-sm text-gray-400">Double-slit, Stern-Gerlach, Bell tests, and quantum teleportation</p>
+                    </div>
+                    <div class="section-card">
+                        <div class="text-4xl mb-3">💻</div>
+                        <h3 class="orbitron font-bold text-pink-400 mb-2">Modern Applications</h3>
+                        <p class="text-sm text-gray-400">Quantum computers, cryptography, sensors, and emerging technologies</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historical Development -->
+            <section id="history" class="mb-20">
+                <div class="quantum-border">
+                    <div class="quantum-border-inner">
+                        <h2 class="orbitron text-4xl md:text-5xl font-bold gradient-text mb-12">Historical Development</h2>
+                        
+                        <p class="text-lg mb-12 leading-relaxed">
+                            Quantum mechanics emerged from a crisis in physics at the turn of the 20th century. Classical physics, 
+                            which had explained everything from planetary orbits to thermodynamics with remarkable success, suddenly 
+                            failed when applied to atoms and radiation. The solution required a complete revolution in our understanding 
+                            of nature.
+                        </p>
+
+                        <div class="space-y-8">
+                            <div class="border-l-4 border-cyan-500 pl-6">
+                                <p class="orbitron text-2xl text-cyan-400 mb-2">1900 - Max Planck</p>
+                                <h3 class="text-xl font-bold text-purple-300 mb-3">The Quantum Hypothesis</h3>
+                                <p class="leading-relaxed mb-3">
+                                    Planck solved the "ultraviolet catastrophe" (the failure of classical physics to explain blackbody 
+                                    radiation) by proposing that energy is emitted and absorbed in discrete packets called "quanta." 
+                                    He introduced <code>h = 6.626 × 10⁻³⁴ J·s</code>, now known as Planck's constant.
+                                </p>
+                                <p class="leading-relaxed text-gray-400">
+                                    This seemingly small assumption—that energy comes in specific chunks rather than being continuous—
+                                    marked the birth of quantum theory and would revolutionize all of physics.
+                                </p>
+                            </div>
+
+                            <div class="border-l-4 border-purple-500 pl-6">
+                                <p class="orbitron text-2xl text-purple-400 mb-2">1905 - Albert Einstein</p>
+                                <h3 class="text-xl font-bold text-pink-300 mb-3">The Photoelectric Effect</h3>
+                                <p class="leading-relaxed mb-3">
+                                    Einstein explained why light ejects electrons from metal surfaces only above a certain frequency 
+                                    by proposing that light itself comes in discrete particles (photons) with energy <code>E = hf</code>. 
+                                    This won him the Nobel Prize in 1921.
+                                </p>
+                                <p class="leading-relaxed text-gray-400">
+                                    Light exhibits both wave properties (interference) and particle properties (photoelectric effect), 
+                                    establishing wave-particle duality as a fundamental feature of nature.
+                                </p>
+                            </div>
+
+                            <div class="border-l-4 border-pink-500 pl-6">
+                                <p class="orbitron text-2xl text-pink-400 mb-2">1913 - Niels Bohr</p>
+                                <h3 class="text-xl font-bold text-cyan-300 mb-3">Quantized Atomic Orbits</h3>
+                                <p class="leading-relaxed mb-3">
+                                    Bohr proposed that electrons orbit the nucleus only at specific distances (energy levels), jumping 
+                                    between levels by emitting or absorbing photons. This explained atomic spectra and why atoms are stable.
+                                </p>
+                                <p class="leading-relaxed text-gray-400">
+                                    While later superseded by full quantum mechanics, the Bohr model introduced the crucial concept 
+                                    of quantized energy levels that remains central to modern atomic physics.
+                                </p>
+                            </div>
+
+                            <div class="border-l-4 border-green-500 pl-6">
+                                <p class="orbitron text-2xl text-green-400 mb-2">1924 - Louis de Broglie</p>
+                                <h3 class="text-xl font-bold text-green-300 mb-3">Matter Waves</h3>
+                                <p class="leading-relaxed mb-3">
+                                    If light can behave as particles, de Broglie reasoned, perhaps particles can behave as waves. 
+                                    He proposed that every particle has an associated wavelength <code>λ = h/p</code>, where p is momentum.
+                                </p>
+                                <p class="leading-relaxed text-gray-400">
+                                    This hypothesis was soon confirmed experimentally, showing that electrons create diffraction patterns 
+                                    just like light waves. Matter waves are real!
+                                </p>
+                            </div>
+
+                            <div class="border-l-4 border-orange-500 pl-6">
+                                <p class="orbitron text-2xl text-orange-400 mb-2">1925-1927 - The Quantum Revolution</p>
+                                <h3 class="text-xl font-bold text-orange-300 mb-3">Complete Framework Established</h3>
+                                <p class="leading-relaxed mb-3">
+                                    In just two years, quantum mechanics was fully formulated: Heisenberg developed matrix mechanics, 
+                                    Schrödinger formulated his wave equation, Born introduced the probabilistic interpretation, 
+                                    and Heisenberg announced the uncertainty principle.
+                                </p>
+                                <p class="leading-relaxed text-gray-400">
+                                    Dirac later unified these approaches and extended quantum mechanics to relativistic speeds, 
+                                    creating quantum electrodynamics (QED), one of the most precisely tested theories in all of science.
+                                </p>
+                            </div>
+
+                            <div class="border-l-4 border-red-500 pl-6">
+                                <p class="orbitron text-2xl text-red-400 mb-2">1935-Present - Ongoing Revolution</p>
+                                <h3 class="text-xl font-bold text-red-300 mb-3">From Theory to Technology</h3>
+                                <p class="leading-relaxed mb-3">
+                                    The framework from the 1920s proved incredibly successful. Quantum field theory explained fundamental 
+                                    particles and forces. Quantum mechanics enabled transistors, lasers, and MRI machines.
+                                </p>
+                                <p class="leading-relaxed text-gray-400">
+                                    Today, quantum entanglement has been experimentally verified (Nobel Prize 2022), quantum computers 
+                                    are being built, and quantum technologies promise to revolutionize computing, communication, and sensing.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Classical vs Quantum Physics -->
+            <section id="classical-quantum" class="mb-20">
+                <div class="quantum-border">
+                    <div class="quantum-border-inner">
+                        <h2 class="orbitron text-4xl md:text-5xl font-bold gradient-text mb-12">Classical vs Quantum Physics</h2>
+                        
+                        <p class="text-lg mb-12 leading-relaxed">
+                            The transition from classical to quantum physics represents one of the most dramatic paradigm shifts in 
+                            scientific history. Understanding these differences illuminates why quantum mechanics is so revolutionary.
+                        </p>
+
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="section-card bg-gradient-to-br from-blue-900/20 to-cyan-900/20 border-cyan-500/40">
+                                <h3 class="orbitron text-2xl font-bold text-cyan-400 mb-6">Classical Physics</h3>
+                                <ul class="space-y-4">
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-cyan-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-cyan-300">Deterministic:</strong> Future is completely determined by 
+                                            initial conditions—the universe is like clockwork
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-cyan-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-cyan-300">Continuous:</strong> Properties can take any value—no fundamental 
+                                            gaps or quantization
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-cyan-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-cyan-300">Definite States:</strong> Objects have well-defined properties 
+                                            independent of observation
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-cyan-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-cyan-300">Separate Entities:</strong> Waves and particles are distinct—
+                                            no mixing or overlap
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-cyan-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-cyan-300">Local:</strong> Objects only influenced by immediate surroundings—
+                                            no action at a distance
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="section-card bg-gradient-to-br from-purple-900/20 to-pink-900/20 border-purple-500/40">
+                                <h3 class="orbitron text-2xl font-bold text-purple-400 mb-6">Quantum Physics</h3>
+                                <ul class="space-y-4">
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-purple-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-purple-300">Probabilistic:</strong> We can only predict probabilities—
+                                            fundamental randomness at nature's core
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-purple-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-purple-300">Quantized:</strong> Many properties come in discrete chunks—
+                                            energy levels, angular momentum, etc.
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-purple-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-purple-300">Superposition:</strong> Objects exist in multiple states 
+                                            simultaneously until measured
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-purple-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-purple-300">Wave-Particle Duality:</strong> All matter/energy exhibits 
+                                            both wave AND particle properties
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-purple-400 text-lg">•</span>
+                                        <div>
+                                            <strong class="text-purple-300">Non-local:</strong> Entangled particles remain connected 
+                                            across any distance
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-12 p-6 bg-yellow-900/20 border-l-4 border-yellow-500 rounded">
+                            <h4 class="font-bold text-yellow-400 mb-3 text-lg">Why Both Are "Right"</h4>
+                            <p class="leading-relaxed">
+                                Classical physics isn't wrong—it's an excellent approximation for large-scale phenomena where quantum 
+                                effects average out. The transition happens through "decoherence," where environmental interactions 
+                                make quantum superpositions appear classical. For everyday objects, quantum effects are negligible, 
+                                which is why the world looks deterministic to us.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Continue with all other major sections... -->
+            <!-- I'll add the key formulas and concepts for each major topic -->
+
+        </div>
+    </main>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
+
+<!-- Planck's Constant Section -->
+<section id="planck" class="mb-20">
+    <div class="quantum-border">
+        <div class="quantum-border-inner">
+            <h2 class="orbitron text-4xl md:text-5xl font-bold gradient-text mb-8">Planck's Constant</h2>
+            
+            <div class="formula-box text-center mb-8">
+                <p class="orbitron text-4xl font-bold text-cyan-300 mb-2">h = 6.626 × 10⁻³⁴ J·s</p>
+                <p class="text-gray-400">The fundamental quantum of action</p>
+            </div>
+
+            <p class="text-lg leading-relaxed mb-6">
+                Planck's constant is the most important number in quantum mechanics. It sets the scale of quantum effects 
+                and appears in virtually every quantum equation. This tiny constant represents the fundamental "graininess" 
+                of nature—the minimum amount of action that can occur.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div class="section-card">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-4">The Blackbody Crisis</h3>
+                    <p class="mb-3">Classical theory predicted infinite energy emission at high frequencies (the "ultraviolet catastrophe"). 
+                    This was obviously wrong!</p>
+                    <p>Planck solved it by proposing energy quantization: <code>E = nhf</code> where n is an integer.</p>
+                </div>
+                <div class="section-card">
+                    <h3 class="text-xl font-bold text-purple-400 mb-4">Key Equations</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><code>E = hf</code> — Photon energy</li>
+                        <li><code>λ = h/p</code> — de Broglie wavelength</li>
+                        <li><code>ΔxΔp ≥ ℏ/2</code> — Uncertainty relation</li>
+                        <li><code>L = nℏ</code> — Angular momentum quantization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Photoelectric Effect -->
+<section id="photoelectric" class="mb-20">
+    <div class="quantum-border">
+        <div class="quantum-border-inner">
+            <h2 class="orbitron text-4xl md:text-5xl font-bold gradient-text mb-8">The Photoelectric Effect</h2>
+            
+            <p class="text-lg leading-relaxed mb-8">
+                When light hits a metal surface, electrons are ejected—but only if the light's frequency is high enough, 
+                regardless of intensity. This proved light behaves as particles (photons), not just waves.
+            </p>
+
+            <div class="formula-box text-center mb-8">
+                <p class="orbitron text-3xl font-bold text-purple-300 mb-2">KE<sub>max</sub> = hf - φ</p>
+                <p class="text-gray-400 text-sm">Maximum kinetic energy = photon energy - work function</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="section-card border-red-500/30">
+                    <h3 class="font-bold text-red-400 mb-3">Classical Prediction ❌</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>• Any frequency should work if bright enough</li>
+                        <li>• Brighter light → more energetic electrons</li>
+                        <li>• Time delay while energy accumulates</li>
+                    </ul>
+                </div>
+                <div class="section-card border-green-500/30">
+                    <h3 class="font-bold text-green-400 mb-3">Actual Results ✓</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>• Minimum frequency required (threshold)</li>
+                        <li>• Brighter light → more electrons (same KE)</li>
+                        <li>• Instantaneous ejection, no delay</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Continue adding ALL other major sections... -->
+
