@@ -1,0 +1,1360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UML Diagrams - Collaborative Whiteboard Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Mono', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .whiteboard {
+            background: #f8f9fa;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 19px, #e0e6ed 19px, #e0e6ed 20px),
+                repeating-linear-gradient(90deg, transparent, transparent 19px, #e0e6ed 19px, #e0e6ed 20px);
+            background-size: 20px 20px;
+            position: relative;
+        }
+
+        .marker-text {
+            font-family: 'Caveat', cursive;
+        }
+
+        .sketch-box {
+            background: white;
+            border: 3px solid #2d3748;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .sketch-box:hover {
+            transform: rotate(-1deg) translateY(-4px);
+            box-shadow: 12px 12px 0 rgba(0,0,0,0.15);
+        }
+
+        .marker-title {
+            font-family: 'Permanent Marker', cursive;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .sticky-note {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            transform: rotate(-2deg);
+            transition: all 0.3s ease;
+        }
+
+        .sticky-note:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .sticky-note:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+
+        .cursor-pointer {
+            cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='8' fill='%23ff6b6b' opacity='0.7'/%3E%3C/svg%3E"), auto;
+        }
+
+        .nav-btn {
+            transition: all 0.3s ease;
+            border: 3px solid #2d3748;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+        }
+
+        .nav-btn.active {
+            background: #48bb78;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .diagram-card {
+            background: white;
+            border-left: 6px solid;
+            transition: all 0.3s ease;
+        }
+
+        .diagram-card:hover {
+            transform: translateX(4px);
+        }
+
+        .hand-drawn-line {
+            border-bottom: 3px dashed #cbd5e0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes draw {
+            from { stroke-dashoffset: 1000; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        .draw-animation {
+            stroke-dasharray: 1000;
+            animation: draw 2s ease-in-out forwards;
+        }
+
+        .scenario-box {
+            background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            border: 3px dashed #e53e3e;
+        }
+
+        .code-snippet {
+            background: #1a202c;
+            color: #68d391;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Space Mono', monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="cursor-pointer">
+    <div id="app" class="min-h-screen">
+        <!-- Header -->
+        <header class="whiteboard py-8 px-6 border-b-4 border-gray-800">
+            <div class="max-w-7xl mx-auto">
+                <h1 class="marker-title text-5xl md:text-7xl text-center text-gray-900 mb-4">
+                    🎨 UML Whiteboard
+                </h1>
+                <p class="marker-text text-2xl text-center text-gray-700">
+                    Learn UML diagrams like you're sketching on a collaborative whiteboard!
+                </p>
+                <div class="flex justify-center gap-4 mt-6 flex-wrap">
+                    <div class="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-full transform -rotate-2">
+                        <span class="w-3 h-3 bg-white rounded-full animate-pulse"></span>
+                        <span class="font-bold">3 users online</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full border-2 border-white"></div>
+                        <div class="w-8 h-8 bg-green-500 rounded-full border-2 border-white -ml-3"></div>
+                        <div class="w-8 h-8 bg-yellow-500 rounded-full border-2 border-white -ml-3"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="whiteboard py-6 px-6 border-b-4 border-gray-800">
+            <div class="max-w-7xl mx-auto flex gap-4 justify-center flex-wrap">
+                <button onclick="showCategory('structural')" class="nav-btn active px-6 py-3 bg-blue-400 text-white font-bold rounded-lg" id="btn-structural">
+                    📐 Structural Diagrams
+                </button>
+                <button onclick="showCategory('behavioral')" class="nav-btn px-6 py-3 bg-yellow-400 text-gray-900 font-bold rounded-lg" id="btn-behavioral">
+                    🔄 Behavioral Diagrams
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="whiteboard py-12 px-6 min-h-screen">
+            <div class="max-w-7xl mx-auto">
+                <!-- Structural Diagrams Section -->
+                <div id="structural-section" class="category-section">
+                    <div class="sketch-box p-8 mb-8 bg-white">
+                        <h2 class="marker-title text-4xl text-blue-600 mb-4">📐 Structural Diagrams</h2>
+                        <p class="marker-text text-xl text-gray-700 mb-6">
+                            Structural diagrams show the static structure of the system and its parts. 
+                            Think of them as blueprints - they show what exists and how things are organized.
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Class Diagram -->
+                            <div class="diagram-card p-6 border-blue-500 shadow-lg rounded-lg" onclick="showDiagram('class')">
+                                <h3 class="font-bold text-2xl mb-2 text-blue-600">Class Diagram</h3>
+                                <p class="text-gray-600 mb-4">The foundation of object-oriented design</p>
+                                <div class="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <rect x="50" y="10" width="100" height="80" fill="white" stroke="#3b82f6" stroke-width="2"/>
+                                        <line x1="50" y1="30" x2="150" y2="30" stroke="#3b82f6" stroke-width="2"/>
+                                        <line x1="50" y1="60" x2="150" y2="60" stroke="#3b82f6" stroke-width="2"/>
+                                        <text x="100" y="23" text-anchor="middle" class="text-xs font-bold">User</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg font-bold hover:bg-blue-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Component Diagram -->
+                            <div class="diagram-card p-6 border-purple-500 shadow-lg rounded-lg" onclick="showDiagram('component')">
+                                <h3 class="font-bold text-2xl mb-2 text-purple-600">Component Diagram</h3>
+                                <p class="text-gray-600 mb-4">System's modular structure</p>
+                                <div class="bg-purple-50 p-4 rounded-lg border-2 border-purple-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <rect x="40" y="30" width="120" height="40" fill="white" stroke="#9333ea" stroke-width="2"/>
+                                        <rect x="30" y="35" width="15" height="10" fill="#9333ea"/>
+                                        <rect x="30" y="55" width="15" height="10" fill="#9333ea"/>
+                                        <text x="100" y="55" text-anchor="middle" class="text-xs font-bold">Component</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-purple-500 text-white py-2 rounded-lg font-bold hover:bg-purple-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Deployment Diagram -->
+                            <div class="diagram-card p-6 border-green-500 shadow-lg rounded-lg" onclick="showDiagram('deployment')">
+                                <h3 class="font-bold text-2xl mb-2 text-green-600">Deployment Diagram</h3>
+                                <p class="text-gray-600 mb-4">Physical deployment architecture</p>
+                                <div class="bg-green-50 p-4 rounded-lg border-2 border-green-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <path d="M 70 20 L 130 20 L 140 30 L 140 80 L 60 80 L 60 30 Z" fill="white" stroke="#16a34a" stroke-width="2"/>
+                                        <line x1="130" y1="20" x2="130" y2="30" stroke="#16a34a" stroke-width="2"/>
+                                        <line x1="130" y1="30" x2="140" y2="30" stroke="#16a34a" stroke-width="2"/>
+                                        <text x="100" y="55" text-anchor="middle" class="text-xs font-bold">Server</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-green-500 text-white py-2 rounded-lg font-bold hover:bg-green-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Object Diagram -->
+                            <div class="diagram-card p-6 border-cyan-500 shadow-lg rounded-lg" onclick="showDiagram('object')">
+                                <h3 class="font-bold text-2xl mb-2 text-cyan-600">Object Diagram</h3>
+                                <p class="text-gray-600 mb-4">Snapshot of objects at runtime</p>
+                                <div class="bg-cyan-50 p-4 rounded-lg border-2 border-cyan-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <rect x="50" y="25" width="100" height="50" fill="white" stroke="#0891b2" stroke-width="2"/>
+                                        <line x1="50" y1="45" x2="150" y2="45" stroke="#0891b2" stroke-width="2"/>
+                                        <text x="100" y="38" text-anchor="middle" class="text-xs font-bold underline">user1:User</text>
+                                        <text x="100" y="62" text-anchor="middle" class="text-xs">name="Alice"</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-cyan-500 text-white py-2 rounded-lg font-bold hover:bg-cyan-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Package Diagram -->
+                            <div class="diagram-card p-6 border-orange-500 shadow-lg rounded-lg" onclick="showDiagram('package')">
+                                <h3 class="font-bold text-2xl mb-2 text-orange-600">Package Diagram</h3>
+                                <p class="text-gray-600 mb-4">Organizing elements into groups</p>
+                                <div class="bg-orange-50 p-4 rounded-lg border-2 border-orange-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <rect x="50" y="30" width="100" height="50" fill="white" stroke="#ea580c" stroke-width="2"/>
+                                        <rect x="50" y="20" width="40" height="15" fill="#ea580c" stroke="#ea580c" stroke-width="2"/>
+                                        <text x="100" y="60" text-anchor="middle" class="text-xs font-bold">package</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-orange-500 text-white py-2 rounded-lg font-bold hover:bg-orange-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Composite Structure Diagram -->
+                            <div class="diagram-card p-6 border-pink-500 shadow-lg rounded-lg" onclick="showDiagram('composite')">
+                                <h3 class="font-bold text-2xl mb-2 text-pink-600">Composite Structure</h3>
+                                <p class="text-gray-600 mb-4">Internal structure of a class</p>
+                                <div class="bg-pink-50 p-4 rounded-lg border-2 border-pink-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <rect x="40" y="20" width="120" height="60" fill="white" stroke="#db2777" stroke-width="2"/>
+                                        <rect x="50" y="30" width="40" height="30" fill="#fce7f3" stroke="#db2777" stroke-width="1"/>
+                                        <rect x="110" y="30" width="40" height="30" fill="#fce7f3" stroke="#db2777" stroke-width="1"/>
+                                        <text x="100" y="15" text-anchor="middle" class="text-xs font-bold">Container</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-pink-500 text-white py-2 rounded-lg font-bold hover:bg-pink-600">
+                                    Learn More →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Behavioral Diagrams Section -->
+                <div id="behavioral-section" class="category-section hidden">
+                    <div class="sketch-box p-8 mb-8 bg-white">
+                        <h2 class="marker-title text-4xl text-yellow-600 mb-4">🔄 Behavioral Diagrams</h2>
+                        <p class="marker-text text-xl text-gray-700 mb-6">
+                            Behavioral diagrams show the dynamic behavior of the system. 
+                            They capture how things interact, respond, and change over time - like a movie script!
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Use Case Diagram -->
+                            <div class="diagram-card p-6 border-indigo-500 shadow-lg rounded-lg" onclick="showDiagram('usecase')">
+                                <h3 class="font-bold text-2xl mb-2 text-indigo-600">Use Case Diagram</h3>
+                                <p class="text-gray-600 mb-4">System functionality from user perspective</p>
+                                <div class="bg-indigo-50 p-4 rounded-lg border-2 border-indigo-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <ellipse cx="100" cy="50" rx="50" ry="25" fill="white" stroke="#4f46e5" stroke-width="2"/>
+                                        <circle cx="30" cy="50" r="10" fill="white" stroke="#4f46e5" stroke-width="2"/>
+                                        <line x1="20" y1="60" x2="30" y2="70" stroke="#4f46e5" stroke-width="2"/>
+                                        <line x1="40" y1="60" x2="30" y2="70" stroke="#4f46e5" stroke-width="2"/>
+                                        <line x1="40" y1="50" x2="50" y2="50" stroke="#4f46e5" stroke-width="2"/>
+                                        <text x="100" y="55" text-anchor="middle" class="text-xs font-bold">Use Case</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-indigo-500 text-white py-2 rounded-lg font-bold hover:bg-indigo-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Activity Diagram -->
+                            <div class="diagram-card p-6 border-red-500 shadow-lg rounded-lg" onclick="showDiagram('activity')">
+                                <h3 class="font-bold text-2xl mb-2 text-red-600">Activity Diagram</h3>
+                                <p class="text-gray-600 mb-4">Flow of control in a process</p>
+                                <div class="bg-red-50 p-4 rounded-lg border-2 border-red-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <circle cx="100" cy="15" r="8" fill="#dc2626" stroke="#dc2626" stroke-width="2"/>
+                                        <rect x="70" y="30" width="60" height="20" rx="10" fill="white" stroke="#dc2626" stroke-width="2"/>
+                                        <rect x="70" y="60" width="60" height="20" rx="10" fill="white" stroke="#dc2626" stroke-width="2"/>
+                                        <line x1="100" y1="23" x2="100" y2="30" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowred)"/>
+                                        <line x1="100" y1="50" x2="100" y2="60" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowred)"/>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-red-500 text-white py-2 rounded-lg font-bold hover:bg-red-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Sequence Diagram -->
+                            <div class="diagram-card p-6 border-teal-500 shadow-lg rounded-lg" onclick="showDiagram('sequence')">
+                                <h3 class="font-bold text-2xl mb-2 text-teal-600">Sequence Diagram</h3>
+                                <p class="text-gray-600 mb-4">Object interactions over time</p>
+                                <div class="bg-teal-50 p-4 rounded-lg border-2 border-teal-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <rect x="30" y="10" width="40" height="20" fill="white" stroke="#0d9488" stroke-width="2"/>
+                                        <rect x="130" y="10" width="40" height="20" fill="white" stroke="#0d9488" stroke-width="2"/>
+                                        <line x1="50" y1="30" x2="50" y2="85" stroke="#0d9488" stroke-width="1" stroke-dasharray="5,5"/>
+                                        <line x1="150" y1="30" x2="150" y2="85" stroke="#0d9488" stroke-width="1" stroke-dasharray="5,5"/>
+                                        <line x1="50" y1="50" x2="150" y2="50" stroke="#0d9488" stroke-width="2" marker-end="url(#arrowteal)"/>
+                                        <text x="40" y="22" class="text-xs font-bold">A</text>
+                                        <text x="140" y="22" class="text-xs font-bold">B</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-teal-500 text-white py-2 rounded-lg font-bold hover:bg-teal-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- State Machine Diagram -->
+                            <div class="diagram-card p-6 border-violet-500 shadow-lg rounded-lg" onclick="showDiagram('state')">
+                                <h3 class="font-bold text-2xl mb-2 text-violet-600">State Machine</h3>
+                                <p class="text-gray-600 mb-4">Object states and transitions</p>
+                                <div class="bg-violet-50 p-4 rounded-lg border-2 border-violet-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <circle cx="40" cy="50" r="8" fill="#7c3aed" stroke="#7c3aed" stroke-width="2"/>
+                                        <rect x="80" y="35" width="60" height="30" rx="15" fill="white" stroke="#7c3aed" stroke-width="2"/>
+                                        <line x1="48" y1="50" x2="80" y2="50" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrowviolet)"/>
+                                        <text x="110" y="53" text-anchor="middle" class="text-xs font-bold">State</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-violet-500 text-white py-2 rounded-lg font-bold hover:bg-violet-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Communication Diagram -->
+                            <div class="diagram-card p-6 border-amber-500 shadow-lg rounded-lg" onclick="showDiagram('communication')">
+                                <h3 class="font-bold text-2xl mb-2 text-amber-600">Communication</h3>
+                                <p class="text-gray-600 mb-4">Object interactions and links</p>
+                                <div class="bg-amber-50 p-4 rounded-lg border-2 border-amber-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <rect x="20" y="30" width="60" height="40" fill="white" stroke="#d97706" stroke-width="2"/>
+                                        <rect x="120" y="30" width="60" height="40" fill="white" stroke="#d97706" stroke-width="2"/>
+                                        <line x1="80" y1="50" x2="120" y2="50" stroke="#d97706" stroke-width="2"/>
+                                        <text x="50" y="53" text-anchor="middle" class="text-xs font-bold">A</text>
+                                        <text x="150" y="53" text-anchor="middle" class="text-xs font-bold">B</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-amber-500 text-white py-2 rounded-lg font-bold hover:bg-amber-600">
+                                    Learn More →
+                                </button>
+                            </div>
+
+                            <!-- Timing Diagram -->
+                            <div class="diagram-card p-6 border-lime-500 shadow-lg rounded-lg" onclick="showDiagram('timing')">
+                                <h3 class="font-bold text-2xl mb-2 text-lime-600">Timing Diagram</h3>
+                                <p class="text-gray-600 mb-4">Timing constraints and behavior</p>
+                                <div class="bg-lime-50 p-4 rounded-lg border-2 border-lime-200">
+                                    <svg class="w-full h-24" viewBox="0 0 200 100">
+                                        <line x1="20" y1="30" x2="180" y2="30" stroke="#65a30d" stroke-width="2"/>
+                                        <line x1="20" y1="60" x2="180" y2="60" stroke="#65a30d" stroke-width="2"/>
+                                        <polyline points="20,60 60,60 60,30 120,30 120,60 180,60" fill="none" stroke="#65a30d" stroke-width="2"/>
+                                        <text x="100" y="20" text-anchor="middle" class="text-xs font-bold">Time →</text>
+                                    </svg>
+                                </div>
+                                <button class="mt-4 w-full bg-lime-500 text-white py-2 rounded-lg font-bold hover:bg-lime-600">
+                                    Learn More →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Modal -->
+                <div id="detail-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border-4 border-gray-800">
+                        <div class="sticky top-0 bg-gradient-to-r from-blue-500 to-purple-600 p-6 border-b-4 border-gray-800">
+                            <div class="flex justify-between items-center">
+                                <h2 id="modal-title" class="marker-title text-3xl text-white"></h2>
+                                <button onclick="closeModal()" class="text-white text-4xl hover:text-gray-200 font-bold">&times;</button>
+                            </div>
+                        </div>
+                        <div id="modal-content" class="p-6">
+                            <!-- Content will be dynamically inserted -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="whiteboard py-8 px-6 border-t-4 border-gray-800">
+            <div class="max-w-7xl mx-auto text-center">
+                <p class="marker-text text-xl text-gray-700">
+                    🎨 Made with love for UML learners everywhere
+                </p>
+                <div class="mt-4 flex justify-center gap-4 flex-wrap">
+                    <div class="sticky-note px-6 py-3 text-white font-bold rounded-lg shadow-lg">
+                        Sketch freely!
+                    </div>
+                    <div class="sticky-note px-6 py-3 text-white font-bold rounded-lg shadow-lg">
+                        Learn visually!
+                    </div>
+                    <div class="sticky-note px-6 py-3 text-white font-bold rounded-lg shadow-lg">
+                        Design better!
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Diagram data
+        const diagramData = {
+            class: {
+                title: "Class Diagram",
+                color: "blue",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Class Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Class Diagram is the backbone of object-oriented design. It shows the structure of a system by displaying 
+                        classes, their attributes, methods, and relationships between objects. Think of it as the blueprint that shows 
+                        what "things" exist in your system and how they're connected.
+                    </p>
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Class Name:</strong> The name of the class (e.g., User, Whiteboard)</li>
+                            <li><strong>Attributes:</strong> Data/properties the class holds (e.g., username, color)</li>
+                            <li><strong>Methods:</strong> Actions the class can perform (e.g., draw(), save())</li>
+                            <li><strong>Relationships:</strong> How classes connect (inheritance, association, composition)</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            Imagine you're building a collaborative whiteboard app. You need to model:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 mb-4 marker-text text-lg">
+                            <li><strong>User:</strong> Has username, email, cursor color</li>
+                            <li><strong>Whiteboard:</strong> Has ID, title, background color</li>
+                            <li><strong>Shape:</strong> Has position, size, color</li>
+                            <li><strong>TextBox, Circle, Rectangle:</strong> Specific types of shapes</li>
+                        </ul>
+                        <div class="code-snippet mb-4">
+                            <pre>┌─────────────────┐
+│     User        │
+├─────────────────┤
+│ - username      │
+│ - email         │
+│ - cursorColor   │
+├─────────────────┤
+│ + draw()        │
+│ + save()        │
+└─────────────────┘
+        ▲
+        │ owns
+        │
+┌─────────────────┐
+│  Whiteboard     │
+├─────────────────┤
+│ - id            │
+│ - title         │
+│ - bgColor       │
+├─────────────────┤
+│ + addShape()    │
+│ + clear()       │
+└─────────────────┘
+        ◆
+        │ contains
+        │
+┌─────────────────┐
+│     Shape       │
+├─────────────────┤
+│ - x, y          │
+│ - width, height │
+│ - color         │
+├─────────────────┤
+│ + render()      │
+└─────────────────┘
+        △
+        │
+   ┌────┴────┐
+   │         │
+Circle   Rectangle</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Relationships shown:</strong> User owns Whiteboard (association), 
+                            Whiteboard contains Shapes (composition ◆), Circle and Rectangle inherit from Shape (inheritance △)
+                        </p>
+                    </div>
+                `
+            },
+            component: {
+                title: "Component Diagram",
+                color: "purple",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Component Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Component Diagram shows how a system is broken down into modular, reusable components and how they 
+                        interact through interfaces. It's like showing the major building blocks of your application and how 
+                        they plug together.
+                    </p>
+                    <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Component:</strong> A modular part of the system (shown with tabs)</li>
+                            <li><strong>Interface:</strong> Contract for communication (lollipop or socket notation)</li>
+                            <li><strong>Dependency:</strong> One component requires another</li>
+                            <li><strong>Port:</strong> Interaction point on a component</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            Your collaborative whiteboard has these major components:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>┌──────────────────────┐
+║ Frontend Component   ║
+╠══════════════════════╣
+│  • Canvas Renderer   │
+│  • User Interface    │
+│  • Event Handlers    │
+└──────────────────────┘
+         │ uses
+         ▼
+┌──────────────────────┐
+║ WebSocket Component  ║
+╠══════════════════════╣
+│  • Real-time Sync    │
+│  • Connection Mgmt   │
+└──────────────────────┘
+         │ uses
+         ▼
+┌──────────────────────┐
+║ Backend Component    ║
+╠══════════════════════╣
+│  • API Server        │
+│  • Database Access   │
+│  • Auth Service      │
+└──────────────────────┘
+         │ uses
+         ▼
+┌──────────────────────┐
+║ Storage Component    ║
+╠══════════════════════╣
+│  • MongoDB           │
+│  • File Storage      │
+└──────────────────────┘</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Why this matters:</strong> Shows how your app is modularized. Frontend talks to Backend 
+                            through WebSocket component for real-time updates. Each component can be developed, tested, and 
+                            deployed independently!
+                        </p>
+                    </div>
+                `
+            },
+            deployment: {
+                title: "Deployment Diagram",
+                color: "green",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Deployment Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Deployment Diagram shows the physical architecture of your system - where software components actually 
+                        run. It maps software to hardware, showing servers, devices, and network connections.
+                    </p>
+                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Node:</strong> Physical device or execution environment (3D box)</li>
+                            <li><strong>Artifact:</strong> Physical piece of information (file, database)</li>
+                            <li><strong>Communication Path:</strong> How nodes connect</li>
+                            <li><strong>Deployment Spec:</strong> Configuration details</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            Here's how your collaborative whiteboard is deployed in production:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>┌─────────────────────────┐
+│  User's Browser         │
+│  ┌───────────────────┐  │
+│  │ React App         │  │
+│  │ (whiteboard.js)   │  │
+│  └───────────────────┘  │
+└─────────────────────────┘
+         │ HTTPS/WSS
+         ▼
+┌─────────────────────────┐
+│  Application Server     │
+│  (AWS EC2)              │
+│  ┌───────────────────┐  │
+│  │ Node.js           │  │
+│  │ Express + Socket  │  │
+│  └───────────────────┘  │
+└─────────────────────────┘
+         │ TCP/IP
+         ▼
+┌─────────────────────────┐
+│  Database Server        │
+│  (AWS RDS)              │
+│  ┌───────────────────┐  │
+│  │ MongoDB           │  │
+│  │ (whiteboards DB)  │  │
+│  └───────────────────┘  │
+└─────────────────────────┘
+         │
+         ▼
+┌─────────────────────────┐
+│  CDN / File Storage     │
+│  (AWS S3)               │
+│  ┌───────────────────┐  │
+│  │ Images, Assets    │  │
+│  └───────────────────┘  │
+└─────────────────────────┘</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Infrastructure view:</strong> Shows that users access a React app served from a CDN, 
+                            which connects via WebSocket to EC2 servers running Node.js, which store data in MongoDB on RDS, 
+                            with static assets on S3.
+                        </p>
+                    </div>
+                `
+            },
+            object: {
+                title: "Object Diagram",
+                color: "cyan",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is an Object Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        An Object Diagram shows a snapshot of objects (instances of classes) at a specific moment in time. 
+                        While class diagrams show the blueprint, object diagrams show actual instances with real data.
+                    </p>
+                    <div class="bg-cyan-50 p-4 rounded-lg border-l-4 border-cyan-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Object:</strong> Instance name underlined (e.g., user1:User)</li>
+                            <li><strong>Attribute Values:</strong> Actual data values, not just types</li>
+                            <li><strong>Links:</strong> Specific relationships between objects</li>
+                            <li><strong>Object State:</strong> Snapshot at one point in time</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            Let's look at a live collaborative session at 2:30pm:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>┌─────────────────────────┐
+│ alice:User              │
+├─────────────────────────┤
+│ username = "alice"      │
+│ email = "a@example.com" │
+│ cursorColor = "#FF5733" │
+└─────────────────────────┘
+         │ owns
+         ▼
+┌─────────────────────────┐
+│ board1:Whiteboard       │
+├─────────────────────────┤
+│ id = "wb-123"           │
+│ title = "Sprint Plan"   │
+│ bgColor = "#FFFFFF"     │
+└─────────────────────────┘
+         │ contains
+    ┌────┴────┐
+    ▼         ▼
+┌──────────┐ ┌──────────┐
+│rect1:    │ │text1:    │
+│Rectangle │ │TextBox   │
+├──────────┤ ├──────────┤
+│x = 100   │ │x = 50    │
+│y = 200   │ │y = 50    │
+│width=150 │ │text="Hi" │
+│color=    │ │fontSize= │
+│"#3498db" │ │  24      │
+└──────────┘ └──────────┘
+
+Another user:
+┌─────────────────────────┐
+│ bob:User                │
+├─────────────────────────┤
+│ username = "bob"        │
+│ email = "b@example.com" │
+│ cursorColor = "#2ECC71" │
+└─────────────────────────┘
+         │ viewing
+         ▼
+    (same board1)</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Real-world snapshot:</strong> Shows exactly what exists right now - Alice owns the 
+                            whiteboard "Sprint Plan" with one blue rectangle and one text box, while Bob is viewing it.
+                        </p>
+                    </div>
+                `
+            },
+            package: {
+                title: "Package Diagram",
+                color: "orange",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Package Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Package Diagram shows how elements are organized into groups (packages) and the dependencies between 
+                        those packages. It's like organizing files into folders - showing the high-level structure of your codebase.
+                    </p>
+                    <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Package:</strong> Namespace for grouping elements (folder tab icon)</li>
+                            <li><strong>Dependency:</strong> One package uses another (dashed arrow)</li>
+                            <li><strong>Import:</strong> Package imports elements from another</li>
+                            <li><strong>Merge:</strong> Combining package contents</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            Your whiteboard codebase is organized into logical packages:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>┌─────────────────────┐
+│ com.whiteboard.ui   │
+│ ┌─────────────────┐ │
+│ │ Canvas          │ │
+│ │ Toolbar         │ │
+│ │ ColorPicker     │ │
+│ └─────────────────┘ │
+└─────────────────────┘
+         │ uses
+         ▼
+┌─────────────────────┐
+│ com.whiteboard.core │
+│ ┌─────────────────┐ │
+│ │ Shape           │ │
+│ │ DrawingEngine   │ │
+│ │ EventManager    │ │
+│ └─────────────────┘ │
+└─────────────────────┘
+         │ uses
+    ┌────┴────┐
+    ▼         ▼
+┌──────────┐ ┌──────────────┐
+│ com.     │ │ com.         │
+│whiteboard│ │whiteboard    │
+│.network  │ │.persistence  │
+│┌────────┐│ │┌────────────┐│
+││WebSocket││ ││Database    ││
+││Manager  ││ ││Repository  ││
+│└────────┘│ │└────────────┘│
+└──────────┘ └──────────────┘</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Organization matters:</strong> UI package depends on Core for drawing logic, 
+                            Core depends on Network for real-time sync and Persistence for saving. Clean separation 
+                            means you can update Network package without touching UI!
+                        </p>
+                    </div>
+                `
+            },
+            composite: {
+                title: "Composite Structure Diagram",
+                color: "pink",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Composite Structure Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Composite Structure Diagram shows the internal structure of a class and how its parts collaborate 
+                        at runtime. It's like an X-ray view showing what's inside a complex component and how the pieces work together.
+                    </p>
+                    <div class="bg-pink-50 p-4 rounded-lg border-l-4 border-pink-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Parts:</strong> Internal components of a class</li>
+                            <li><strong>Ports:</strong> Interaction points with external elements</li>
+                            <li><strong>Connectors:</strong> Communication pathways between parts</li>
+                            <li><strong>Collaborations:</strong> How parts work together</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            Let's peek inside the WhiteboardSession component to see how it works internally:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>┌───────────────────────────────────────┐
+│         WhiteboardSession             │
+│ ┌──────────────┐   ┌───────────────┐ │
+│ │CanvasManager │◄──┤ToolController │ │
+│ │              │   │               │ │
+│ │- render()    │   │- selectTool() │ │
+│ └──────┬───────┘   └───────────────┘ │
+│        │                    ▲         │
+│        │                    │         │
+│        ▼                    │         │
+│ ┌──────────────┐   ┌───────┴───────┐ │
+│ │  ShapeStore  │───┤UserCursor     │ │
+│ │              │   │Manager        │ │
+│ │- shapes[]    │   │- cursors{}    │ │
+│ └──────────────┘   └───────────────┘ │
+│                                       │
+│  [Port: network] ◄──────────────────┐│
+│  [Port: storage] ◄──────────────────┘│
+└───────────────────────────────────────┘</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Internal collaboration:</strong> The WhiteboardSession contains a CanvasManager 
+                            that renders shapes from ShapeStore, a ToolController that lets users pick drawing tools, 
+                            and a UserCursorManager tracking all active cursors. They communicate through connectors, 
+                            and external systems interact via network and storage ports.
+                        </p>
+                    </div>
+                `
+            },
+            usecase: {
+                title: "Use Case Diagram",
+                color: "indigo",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Use Case Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Use Case Diagram shows what a system does from the user's perspective. It captures functional 
+                        requirements by showing actors (users/systems) and use cases (things they can do). Perfect for 
+                        understanding "what can users do with this system?"
+                    </p>
+                    <div class="bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Actor:</strong> User or external system (stick figure)</li>
+                            <li><strong>Use Case:</strong> System functionality (oval)</li>
+                            <li><strong>Association:</strong> Actor participates in use case</li>
+                            <li><strong>Include/Extend:</strong> Relationships between use cases</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            What can users do with your collaborative whiteboard?
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>     ┌──────────┐
+     │  User    │
+     └────┬─────┘
+          │
+          ├──────► ( Create Whiteboard )
+          │
+          ├──────► ( Draw Shape )
+          │            │
+          │            │ «include»
+          │            ▼
+          │        ( Select Tool )
+          │
+          ├──────► ( Add Text )
+          │
+          ├──────► ( Change Colors )
+          │
+          ├──────► ( Share Whiteboard )
+          │            │
+          │            │ «extend»
+          │            ▼
+          │        ( Set Permissions )
+          │
+          └──────► ( Export to PDF )
+
+
+  ┌─────────────┐
+  │Guest Viewer │
+  └──────┬──────┘
+         │
+         └──────► ( View Whiteboard )</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>User capabilities:</strong> Regular users can create, draw, share, and export whiteboards. 
+                            Drawing a shape always includes selecting a tool first («include»). Sharing might optionally 
+                            extend to setting detailed permissions («extend»). Guest viewers can only view, not edit.
+                        </p>
+                    </div>
+                `
+            },
+            activity: {
+                title: "Activity Diagram",
+                color: "red",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is an Activity Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        An Activity Diagram shows the flow of control from activity to activity. It's like a flowchart showing 
+                        the workflow of a process - what happens step by step, including decisions, parallel actions, and loops.
+                    </p>
+                    <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Activity:</strong> A step in the process (rounded rectangle)</li>
+                            <li><strong>Decision:</strong> Branching point (diamond)</li>
+                            <li><strong>Fork/Join:</strong> Parallel activities (thick bar)</li>
+                            <li><strong>Start/End:</strong> Initial and final nodes (filled circles)</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            The workflow when a user draws a shape on the whiteboard:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>        ●  (Start)
+        │
+        ▼
+   ┌─────────────┐
+   │Select Tool  │
+   └──────┬──────┘
+          │
+          ▼
+    ╔═══════════╗
+    ║ Tool Type?║
+    ╚═══╦═══╦═══╝
+        │   │
+   Text │   │ Shape
+        │   │
+        ▼   ▼
+   ┌────────┐ ┌────────┐
+   │Enter   │ │Choose  │
+   │Text    │ │Shape   │
+   └───┬────┘ └───┬────┘
+       │          │
+       └────┬─────┘
+            ▼
+   ━━━━━━━━━━━━━━━━ (Fork)
+        │      │
+        ▼      ▼
+   ┌────────┐ ┌─────────┐
+   │Render  │ │Broadcast│
+   │Locally │ │to Other │
+   │        │ │Users    │
+   └───┬────┘ └───┬─────┘
+       │          │
+   ━━━━━━━━━━━━━━━━ (Join)
+            │
+            ▼
+      ┌──────────┐
+      │Save to DB│
+      └────┬─────┘
+           │
+           ▼
+        ● (End)</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Process flow:</strong> User selects tool → system branches based on tool type → 
+                            user inputs content → then two things happen in parallel (fork): render locally AND broadcast 
+                            to other users → both complete (join) → finally save to database. This ensures smooth real-time 
+                            collaboration!
+                        </p>
+                    </div>
+                `
+            },
+            sequence: {
+                title: "Sequence Diagram",
+                color: "teal",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Sequence Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Sequence Diagram shows how objects interact with each other over time. It displays the order of 
+                        messages between objects in a specific scenario, reading from top to bottom like a timeline. 
+                        Perfect for understanding "what happens when" during a process.
+                    </p>
+                    <div class="bg-teal-50 p-4 rounded-lg border-l-4 border-teal-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Actor/Object:</strong> Participants (boxes at top)</li>
+                            <li><strong>Lifeline:</strong> Object existence over time (dashed vertical line)</li>
+                            <li><strong>Message:</strong> Communication between objects (arrows)</li>
+                            <li><strong>Activation:</strong> When object is active (thin rectangle on lifeline)</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            When Alice draws a circle, here's the message flow over time:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>Alice    Canvas   WebSocket  Server   Database
+  │         │         │         │         │
+  │ mouseDown()       │         │         │
+  ├────────>│         │         │         │
+  │         │         │         │         │
+  │ mouseDrag()       │         │         │
+  ├────────>│         │         │         │
+  │         │ renderCircle()    │         │
+  │         ├─┐       │         │         │
+  │         │<┘       │         │         │
+  │         │         │         │         │
+  │ mouseUp()         │         │         │
+  ├────────>│         │         │         │
+  │         │ send(circleData)  │         │
+  │         ├────────>│         │         │
+  │         │         │ broadcast()       │
+  │         │         ├────────>│         │
+  │         │         │         │ save()  │
+  │         │         │         ├────────>│
+  │         │         │         │         │
+  │         │         │         │ success │
+  │         │         │         │<────────┤
+  │         │         │ confirm │         │
+  │         │         │<────────┤         │
+  │         │ update  │         │         │
+  │         │<────────┤         │         │
+  │         │         │         │         │
+  
+  
+Other Users
+  │         │         │         │         │
+  │         │ receive(circleData)         │
+  │         │<────────┤         │         │
+  │         │ render()│         │         │
+  │         ├─┐       │         │         │
+  │         │<┘       │         │         │</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Timeline of events:</strong> Alice drags mouse → Canvas renders circle locally → 
+                            on mouse up, sends data via WebSocket → Server broadcasts to all users AND saves to database → 
+                            other users receive and render the same circle. All in milliseconds!
+                        </p>
+                    </div>
+                `
+            },
+            state: {
+                title: "State Machine Diagram",
+                color: "violet",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a State Machine Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A State Machine Diagram shows the different states an object can be in and how it transitions between 
+                        those states in response to events. It's like a map showing all possible conditions of an object and 
+                        what triggers changes between them.
+                    </p>
+                    <div class="bg-violet-50 p-4 rounded-lg border-l-4 border-violet-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>State:</strong> A condition of the object (rounded rectangle)</li>
+                            <li><strong>Transition:</strong> Change from one state to another (arrow)</li>
+                            <li><strong>Event:</strong> What triggers a transition (label on arrow)</li>
+                            <li><strong>Initial/Final:</strong> Starting and ending states (filled circles)</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            A collaborative whiteboard session goes through these states:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>        ●  (Initial)
+        │
+        │ create()
+        ▼
+   ╔══════════╗
+   ║  Empty   ║
+   ╚═════╦════╝
+         │ addShape()
+         ▼
+   ╔══════════╗
+   ║  Active  ║◄────────┐
+   ╚═════╦════╝         │
+         │              │
+         │ inactivity   │ edit()
+         ▼              │
+   ╔══════════╗         │
+   ║   Idle   ║─────────┘
+   ╚═════╦════╝
+         │
+         │ share()
+         ▼
+   ╔═══════════╗
+   ║Shared     ║
+   ║(Collab)   ║
+   ╚═════╦═════╝
+         │
+         │ disconnect()
+         ▼
+   ╔══════════╗
+   ║Syncing   ║
+   ╚═════╦════╝
+         │
+         │ archive()
+         ▼
+   ╔══════════╗
+   ║Archived  ║
+   ╚═════╦════╝
+         │
+         │ delete()
+         ▼
+         ●  (Final)</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>State lifecycle:</strong> A whiteboard starts Empty, becomes Active when shapes are added, 
+                            goes Idle after inactivity (but can return to Active with edits), becomes Shared when collaboration 
+                            starts, enters Syncing when users disconnect, gets Archived when no longer needed, and finally 
+                            gets Deleted. Each transition is triggered by a specific event!
+                        </p>
+                    </div>
+                `
+            },
+            communication: {
+                title: "Communication Diagram",
+                color: "amber",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Communication Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Communication Diagram (formerly Collaboration Diagram) shows how objects interact through messages, 
+                        emphasizing the structural relationships between objects. Unlike sequence diagrams that focus on time, 
+                        this focuses on the network of objects and their links.
+                    </p>
+                    <div class="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Object:</strong> Participating instances (rectangles)</li>
+                            <li><strong>Link:</strong> Connection between objects (lines)</li>
+                            <li><strong>Message:</strong> Numbered communication (arrows with sequence numbers)</li>
+                            <li><strong>Sequence Numbers:</strong> Order of messages (1, 2, 3...)</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            When a user shares a whiteboard, objects communicate in this pattern:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>┌──────────────┐
+│  :User       │
+└──────┬───────┘
+       │ 1: shareBoard(id, emails)
+       ▼
+┌──────────────────┐
+│  :Whiteboard     │
+└──────┬───────────┘
+       │ 2: validatePermissions()
+       ├──────────────────────┐
+       │                      │
+       │ 3: createShareLinks()│
+       ▼                      ▼
+┌──────────────┐     ┌──────────────┐
+│:PermissionMgr│     │:Notification │
+└──────┬───────┘     │ Service      │
+       │             └──────┬───────┘
+       │                    │
+       │ 4: grantAccess()   │
+       │                    │ 5: sendEmails()
+       ▼                    ▼
+┌──────────────┐     ┌──────────────┐
+│  :Database   │     │:EmailService │
+└──────────────┘     └──────────────┘</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Object collaboration:</strong> User calls Whiteboard to share → Whiteboard validates 
+                            permissions → creates share links → PermissionMgr grants database access in parallel with 
+                            NotificationService sending email invites. The numbered sequence shows the order, while the 
+                            structure shows which objects are connected!
+                        </p>
+                    </div>
+                `
+            },
+            timing: {
+                title: "Timing Diagram",
+                color: "lime",
+                explanation: `
+                    <h3 class="text-2xl font-bold mb-4">What is a Timing Diagram?</h3>
+                    <p class="mb-4 text-lg">
+                        A Timing Diagram shows how objects change state over time and the timing constraints between events. 
+                        It's like an oscilloscope view showing state changes along a timeline - perfect for real-time systems, 
+                        animations, and precise timing requirements.
+                    </p>
+                    <div class="bg-lime-50 p-4 rounded-lg border-l-4 border-lime-500 mb-4">
+                        <h4 class="font-bold text-xl mb-2">Key Components:</h4>
+                        <ul class="list-disc list-inside space-y-2 marker-text text-lg">
+                            <li><strong>Lifeline:</strong> Object being observed over time</li>
+                            <li><strong>State/Condition:</strong> Different values or states (horizontal bands)</li>
+                            <li><strong>Timeline:</strong> Horizontal time axis</li>
+                            <li><strong>State Change:</strong> Vertical transitions between states</li>
+                        </ul>
+                    </div>
+                `,
+                scenario: `
+                    <div class="scenario-box">
+                        <h4 class="marker-title text-2xl mb-4">🎨 Whiteboard Scenario</h4>
+                        <p class="mb-4 marker-text text-lg">
+                            When multiple users collaborate in real-time, here's how connection states change:
+                        </p>
+                        <div class="code-snippet mb-4">
+                            <pre>Time:    0ms   100ms  200ms  300ms  400ms  500ms
+         │      │      │      │      │      │
+
+User1    Connected ─────────────────────────────
+WebSocket    ▲                    ▼
+Status       │                    Reconnecting ──
+             │                        ▲
+             │                        │
+                                      ▼
+                                   Connected ────
+
+Server   Idle ──┐
+Load         ▼  │
+Status    Medium│  ▲
+             ▼  │  │
+           High─┘  │
+                   ▼
+                Medium ──┐
+                      ▼  │
+                    Low──┘
+
+Sync     InSync ────┐
+State              ▼ │
+               Pending│  ▲
+                      ▼  │
+                  InSync─┘
+
+         {duration: 100ms}
+         {max latency: 50ms}
+         {retry after: 200ms}</pre>
+                        </div>
+                        <p class="marker-text text-lg">
+                            <strong>Real-time coordination:</strong> Shows User1's WebSocket staying connected for 300ms, 
+                            then dropping to Reconnecting briefly before recovering. Meanwhile, Server Load fluctuates between 
+                            Idle/Medium/High as activity changes. Sync State shows brief Pending periods during reconnection. 
+                            Timing constraints ensure reconnection happens within 200ms to maintain smooth collaboration!
+                        </p>
+                    </div>
+                `
+            }
+        };
+
+        // Navigation functions
+        function showCategory(category) {
+            // Hide all sections
+            document.querySelectorAll('.category-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(`${category}-section`).classList.remove('hidden');
+            
+            // Update button states
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-green-500');
+            });
+            document.getElementById(`btn-${category}`).classList.add('active', 'bg-green-500');
+        }
+
+        function showDiagram(diagramType) {
+            const data = diagramData[diagramType];
+            if (!data) return;
+
+            const modal = document.getElementById('detail-modal');
+            const title = document.getElementById('modal-title');
+            const content = document.getElementById('modal-content');
+
+            title.textContent = data.title;
+            content.innerHTML = data.explanation + data.scenario;
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('detail-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+
+    <!-- SVG Arrow Markers -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <marker id="arrowred" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#dc2626" />
+            </marker>
+            <marker id="arrowteal" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#0d9488" />
+            </marker>
+            <marker id="arrowviolet" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#7c3aed" />
+            </marker>
+        </defs>
+    </svg>
+</body>
+</html>
