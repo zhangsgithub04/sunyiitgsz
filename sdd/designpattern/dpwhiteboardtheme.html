@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UML Mastery: Collaborative Whiteboard Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans leading-relaxed">
+
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600 tracking-tight">UML.Whiteboard</h1>
+            <div class="space-x-6 text-sm font-medium text-slate-600">
+                <a href="#structural" class="hover:text-indigo-600 transition">Structural</a>
+                <a href="#behavioral" class="hover:text-indigo-600 transition">Behavioral</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-indigo-700 text-white py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-6">Mastering UML Diagrams</h2>
+            <p class="text-xl text-indigo-100">Learning the 14 UML standards through the lens of building a <strong>Real-time Collaborative Whiteboard Application</strong>.</p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12">
+
+        <section id="structural" class="mb-20">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="p-3 bg-indigo-100 text-indigo-700 rounded-lg"><i class="fas fa-cubes fa-2x"></i></div>
+                <h2 class="text-3xl font-bold">Structural Diagrams (7)</h2>
+            </div>
+            <p class="mb-8 text-slate-600 max-w-3xl">Structural diagrams define the static architecture of the system—the "blueprints" of what exists within the whiteboard app.</p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-indigo-600 mb-2">1. Class Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Shows system classes, attributes, and relationships.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-indigo-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Defining the properties of a <strong>CanvasElement</strong> class and its subclasses like <strong>StickyNote</strong>, <strong>Shape</strong>, and <strong>Arrow</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-indigo-600 mb-2">2. Object Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">A snapshot of instances at a specific moment.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-indigo-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Showing a specific <strong>StickyNote</strong> (ID: 101, Color: Yellow) currently placed on "Project Alpha" Board.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-indigo-600 mb-2">3. Package Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Organizes elements into logical groups.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-indigo-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Grouping the code into <strong>UI Components</strong>, <strong>Real-time Engine (WebSockets)</strong>, and <strong>Storage Layer</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-indigo-600 mb-2">4. Component Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Shows high-level modular parts of the system.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-indigo-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Visualizing how the <strong>Image Processing Service</strong> interacts with the <strong>S3 Bucket Component</strong> via an API.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-indigo-600 mb-2">5. Composite Structure Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Details the internal structure of a class/classifier.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-indigo-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Breaking down the <strong>Toolbar</strong> class to show how the <strong>ColorPicker</strong> and <strong>BrushSize</strong> ports connect internally.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-indigo-600 mb-2">6. Deployment Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Shows physical hardware and software execution environments.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-indigo-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Mapping the <strong>Node.js Server</strong> onto an AWS EC2 instance and the <strong>React App</strong> onto the User's Browser.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-indigo-600 mb-2">7. Profile Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Extends UML for specific domains using stereotypes.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-indigo-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Creating a custom <strong>«RealTime»</strong> stereotype to apply to classes that require sub-50ms latency.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-slate-200 mb-20">
+
+        <section id="behavioral" class="mb-20">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-lg"><i class="fas fa-project-diagram fa-2x"></i></div>
+                <h2 class="text-3xl font-bold">Behavioral Diagrams (7)</h2>
+            </div>
+            <p class="mb-8 text-slate-600 max-w-3xl">Behavioral diagrams describe what happens in the system—the dynamic movements and interactions between users and data.</p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-600 mb-2">1. Use Case Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Summarizes user goals and system boundaries.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-emerald-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">A <strong>Designer</strong> (Actor) needs to <strong>Create Board</strong>, <strong>Invite Collaborator</strong>, and <strong>Export to PDF</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-600 mb-2">2. Activity Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Models the workflow or business process.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-emerald-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">The step-by-step logic of <strong>User Login</strong>: Enter Email -> Auth Check -> [Success] Load Dashboard / [Fail] Show Error.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-600 mb-2">3. State Machine Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Shows the lifecycle of an object via states and transitions.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-emerald-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">A <strong>Connection</strong> object transitioning from <strong>Connecting</strong> to <strong>Active</strong>, <strong>Reconnecting</strong>, or <strong>Disconnected</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-600 mb-2">4. Sequence Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Focuses on the time-ordered exchange of messages.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-emerald-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">User A moves a square -> Frontend sends <strong>'update'</strong> to Server -> Server broadcasts <strong>'sync'</strong> to User B -> User B's screen updates.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-600 mb-2">5. Communication Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Focuses on organizational relationships between objects.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-emerald-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Visualizing how the <strong>WhiteboardManager</strong> talks to 5 different <strong>UserSession</strong> objects simultaneously.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-600 mb-2">6. Interaction Overview Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">A high-level mix of Activity and Sequence diagrams.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-emerald-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">An overview showing the choice between <strong>Join via Link</strong> vs <strong>Join via Email</strong>, containing smaller sequence flows for each.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-600 mb-2">7. Timing Diagram</h3>
+                    <p class="text-sm text-slate-600 mb-4">Focuses on timing constraints and state changes over time.</p>
+                    <div class="bg-slate-50 p-4 rounded border-l-4 border-emerald-400">
+                        <span class="text-xs font-bold uppercase text-slate-400">Whiteboard Scenario</span>
+                        <p class="text-sm italic">Ensuring the <strong>Auto-Save</strong> trigger happens exactly 2 seconds after the last <strong>StrokeEvent</strong> to prevent server overload.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 px-4 text-center">
+        <p>© 2026 UML Collaborative App Guide. Designed for clarity.</p>
+    </footer>
+
+</body>
+</html>
