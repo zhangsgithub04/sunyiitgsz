@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & Music: The New Symphony</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .cartoon-shadow {
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 1);
+        }
+        
+        .cartoon-shadow-sm {
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-orange {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .gradient-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .gradient-yellow {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            transform: translateY(-2px);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) rotate(-1deg);
+        }
+        
+        .wave-emoji {
+            animation: wave 1s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body class="bg-purple-50">
+    <!-- Navigation -->
+    <nav class="bg-white border-b-4 border-black sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-2">
+                    <div class="text-4xl">🎵</div>
+                    <span class="text-2xl font-bold">AI Music Revolution</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#composing" class="nav-link font-semibold hover:text-purple-600">Composing</a>
+                    <a href="#generating" class="nav-link font-semibold hover:text-purple-600">Generating</a>
+                    <a href="#legal" class="nav-link font-semibold hover:text-purple-600">Legal Issues</a>
+                    <a href="#tools" class="nav-link font-semibold hover:text-purple-600">Tools</a>
+                </div>
+                <button class="md:hidden text-2xl">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg py-20 px-4 border-b-8 border-black">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="text-8xl mb-6 float-animation">🎸🤖</div>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                The Future of Music<br>is AI-Powered
+            </h1>
+            <p class="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto">
+                Discover how artificial intelligence is revolutionizing the way we create, produce, and experience music
+            </p>
+            <button class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-full cartoon-shadow text-lg border-4 border-black transform hover:scale-105 transition">
+                Explore Now 🚀
+            </button>
+        </div>
+    </section>
+
+    <!-- Composing Section -->
+    <section id="composing" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="text-6xl mb-4">🎼</div>
+                <h2 class="text-5xl font-black mb-4">AI Composing</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    From melodies to full orchestrations, AI is changing how music is composed
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-3xl p-8 border-4 border-black cartoon-shadow card-hover">
+                    <div class="text-5xl mb-4">🎹</div>
+                    <h3 class="text-2xl font-bold mb-3">Melody Generation</h3>
+                    <p class="text-gray-700">
+                        AI algorithms analyze patterns from thousands of songs to create original melodies that follow musical theory and emotional arcs.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-3xl p-8 border-4 border-black cartoon-shadow card-hover">
+                    <div class="text-5xl mb-4">🎺</div>
+                    <h3 class="text-2xl font-bold mb-3">Harmonization</h3>
+                    <p class="text-gray-700">
+                        Machine learning models suggest chord progressions and harmonies, helping composers explore new musical territories instantly.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-3xl p-8 border-4 border-black cartoon-shadow card-hover">
+                    <div class="text-5xl mb-4">🎻</div>
+                    <h3 class="text-2xl font-bold mb-3">Orchestration</h3>
+                    <p class="text-gray-700">
+                        AI can arrange compositions for full orchestras, assigning instruments and creating rich, layered soundscapes automatically.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-3xl p-8 border-4 border-black cartoon-shadow">
+                <div class="flex items-start space-x-4">
+                    <div class="text-4xl">💡</div>
+                    <div>
+                        <h4 class="text-2xl font-bold mb-2 text-white">Human + AI Collaboration</h4>
+                        <p class="text-white text-lg">
+                            The most exciting development isn't AI replacing composers, but augmenting human creativity. Musicians use AI as a creative partner, generating ideas they might never have thought of while maintaining artistic control over the final product.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Generating Section -->
+    <section id="generating" class="py-20 px-4 bg-blue-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="text-6xl mb-4">🎤</div>
+                <h2 class="text-5xl font-black mb-4">Music Generation</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    AI can now generate complete tracks, vocals, and production-ready music
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white rounded-3xl p-8 border-4 border-black cartoon-shadow-sm">
+                    <div class="gradient-blue rounded-2xl p-6 mb-6 border-4 border-black">
+                        <div class="text-5xl mb-2">🎧</div>
+                        <h3 class="text-2xl font-bold text-white">Full Track Creation</h3>
+                    </div>
+                    <ul class="space-y-3 text-lg">
+                        <li class="flex items-start">
+                            <span class="mr-3">✓</span>
+                            <span>Generate complete songs in any genre</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-3">✓</span>
+                            <span>Customize tempo, mood, and instrumentation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-3">✓</span>
+                            <span>Create variations and remixes instantly</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-3">✓</span>
+                            <span>Production-quality output in minutes</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-3xl p-8 border-4 border-black cartoon-shadow-sm">
+                    <div class="gradient-orange rounded-2xl p-6 mb-6 border-4 border-black">
+                        <div class="text-5xl mb-2">🎙️</div>
+                        <h3 class="text-2xl font-bold text-white">Voice Synthesis</h3>
+                    </div>
+                    <ul class="space-y-3 text-lg">
+                        <li class="flex items-start">
+                            <span class="mr-3">✓</span>
+                            <span>Generate realistic singing voices</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-3">✓</span>
+                            <span>Clone and modify vocal characteristics</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-3">✓</span>
+                            <span>Multi-language vocal generation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-3">✓</span>
+                            <span>Emotion and expression control</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-yellow-300 rounded-3xl p-8 border-4 border-black cartoon-shadow">
+                <h4 class="text-3xl font-bold mb-4">🌟 Popular Use Cases</h4>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border-3 border-black">
+                        <div class="text-3xl mb-2">🎮</div>
+                        <h5 class="font-bold text-lg mb-2">Gaming</h5>
+                        <p class="text-sm">Dynamic soundtracks that adapt to gameplay</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border-3 border-black">
+                        <div class="text-3xl mb-2">📱</div>
+                        <h5 class="font-bold text-lg mb-2">Content Creation</h5>
+                        <p class="text-sm">Background music for videos and podcasts</p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border-3 border-black">
+                        <div class="text-3xl mb-2">🎬</div>
+                        <h5 class="font-bold text-lg mb-2">Film Scoring</h5>
+                        <p class="text-sm">Quick prototypes and temp music for productions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legal Section -->
+    <section id="legal" class="py-20 px-4 bg-red-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="text-6xl mb-4">⚖️</div>
+                <h2 class="text-5xl font-black mb-4">Legal & Copyright Issues</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Navigating the complex legal landscape of AI-generated music
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white rounded-3xl p-8 border-4 border-black cartoon-shadow">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="text-4xl">⚠️</div>
+                        <h3 class="text-2xl font-bold text-red-600">Key Challenges</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <h4 class="font-bold mb-1">Training Data Rights</h4>
+                            <p class="text-gray-700">Who owns the rights when AI is trained on copyrighted music?</p>
+                        </div>
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <h4 class="font-bold mb-1">Ownership of Output</h4>
+                            <p class="text-gray-700">Can AI-generated music be copyrighted? Who is the creator?</p>
+                        </div>
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <h4 class="font-bold mb-1">Voice Cloning Ethics</h4>
+                            <p class="text-gray-700">Using AI to replicate artists' voices without permission</p>
+                        </div>
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <h4 class="font-bold mb-1">Style Imitation</h4>
+                            <p class="text-gray-700">Creating music "in the style of" famous artists raises legal questions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 border-4 border-black cartoon-shadow">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="text-4xl">📋</div>
+                        <h3 class="text-2xl font-bold text-green-600">Current Regulations</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h4 class="font-bold mb-1">US Copyright Office</h4>
+                            <p class="text-gray-700">Generally denies copyright for AI-only generated works without human authorship</p>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h4 class="font-bold mb-1">EU AI Act</h4>
+                            <p class="text-gray-700">Requires disclosure when content is AI-generated</p>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h4 class="font-bold mb-1">Platform Policies</h4>
+                            <p class="text-gray-700">Streaming services developing guidelines for AI music</p>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h4 class="font-bold mb-1">Artist Rights Groups</h4>
+                            <p class="text-gray-700">Organizations advocating for musician protections</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-orange-400 to-red-400 rounded-3xl p-8 border-4 border-black cartoon-shadow">
+                <div class="flex items-start space-x-4">
+                    <div class="text-5xl">🔮</div>
+                    <div>
+                        <h4 class="text-3xl font-bold mb-3 text-white">The Future of Music Law</h4>
+                        <p class="text-white text-lg mb-4">
+                            Legal frameworks are evolving rapidly to address AI music creation. Key debates include fair compensation for artists whose work trains AI models, establishing new categories of creative rights, and determining how royalties should be distributed for AI-assisted compositions.
+                        </p>
+                        <div class="bg-white bg-opacity-20 rounded-xl p-4 border-2 border-white">
+                            <p class="text-white font-semibold">
+                                💼 Best Practice: Always disclose AI usage, respect artist rights, and stay informed about changing regulations in your jurisdiction.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="py-20 px-4 bg-green-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="text-6xl mb-4">🛠️</div>
+                <h2 class="text-5xl font-black mb-4">Popular AI Music Tools</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Explore the leading platforms transforming music creation
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white rounded-3xl p-6 border-4 border-black cartoon-shadow card-hover">
+                    <div class="gradient-green rounded-2xl p-4 mb-4 border-3 border-black text-center">
+                        <div class="text-4xl mb-2">🎵</div>
+                        <h3 class="text-xl font-bold text-white">Suno</h3>
+                    </div>
+                    <p class="text-gray-700 mb-3">Generate complete songs with vocals from text prompts. Perfect for quick music creation.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-green-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Vocals</span>
+                        <span class="bg-green-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Full Songs</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border-4 border-black cartoon-shadow card-hover">
+                    <div class="gradient-blue rounded-2xl p-4 mb-4 border-3 border-black text-center">
+                        <div class="text-4xl mb-2">🎹</div>
+                        <h3 class="text-xl font-bold text-white">Udio</h3>
+                    </div>
+                    <p class="text-gray-700 mb-3">AI music generator with high-quality output and fine control over musical elements.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-blue-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Quality</span>
+                        <span class="bg-blue-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Control</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border-4 border-black cartoon-shadow card-hover">
+                    <div class="gradient-orange rounded-2xl p-4 mb-4 border-3 border-black text-center">
+                        <div class="text-4xl mb-2">🎼</div>
+                        <h3 class="text-xl font-bold text-white">AIVA</h3>
+                    </div>
+                    <p class="text-gray-700 mb-3">Specialized in composing emotional soundtrack music for films, games, and commercials.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-orange-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Cinematic</span>
+                        <span class="bg-orange-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Pro</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border-4 border-black cartoon-shadow card-hover">
+                    <div class="gradient-yellow rounded-2xl p-4 mb-4 border-3 border-black text-center">
+                        <div class="text-4xl mb-2">🎧</div>
+                        <h3 class="text-xl font-bold text-white">Soundraw</h3>
+                    </div>
+                    <p class="text-gray-700 mb-3">Create royalty-free music with customizable beats, melodies, and instruments.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-yellow-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Royalty-Free</span>
+                        <span class="bg-yellow-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Custom</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border-4 border-black cartoon-shadow card-hover">
+                    <div class="bg-gradient-to-r from-purple-400 to-pink-400 rounded-2xl p-4 mb-4 border-3 border-black text-center">
+                        <div class="text-4xl mb-2">🎤</div>
+                        <h3 class="text-xl font-bold text-white">Mubert</h3>
+                    </div>
+                    <p class="text-gray-700 mb-3">Generate infinite streams of music in various genres, great for background ambiance.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-purple-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Streaming</span>
+                        <span class="bg-purple-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Real-time</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-6 border-4 border-black cartoon-shadow card-hover">
+                    <div class="bg-gradient-to-r from-indigo-400 to-cyan-400 rounded-2xl p-4 mb-4 border-3 border-black text-center">
+                        <div class="text-4xl mb-2">🎸</div>
+                        <h3 class="text-xl font-bold text-white">Amper Music</h3>
+                    </div>
+                    <p class="text-gray-700 mb-3">Enterprise-focused platform for creating custom music for professional projects.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-indigo-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Enterprise</span>
+                        <span class="bg-indigo-200 px-3 py-1 rounded-full text-sm font-semibold border-2 border-black">Licensed</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 border-4 border-black cartoon-shadow">
+                <h4 class="text-3xl font-bold mb-6 text-center">🔧 Specialized Tools</h4>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="flex items-start space-x-4 p-4 bg-blue-50 rounded-2xl border-2 border-black">
+                        <div class="text-3xl">🎚️</div>
+                        <div>
+                            <h5 class="font-bold text-lg mb-1">Mastering & Mixing</h5>
+                            <p class="text-gray-700">LANDR, eMastered - AI-powered mastering and mixing services</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4 p-4 bg-purple-50 rounded-2xl border-2 border-black">
+                        <div class="text-3xl">🎼</div>
+                        <div>
+                            <h5 class="font-bold text-lg mb-1">Stem Separation</h5>
+                            <p class="text-gray-700">Spleeter, LALAL.AI - Extract vocals, drums, and instruments</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4 p-4 bg-green-50 rounded-2xl border-2 border-black">
+                        <div class="text-3xl">🎹</div>
+                        <div>
+                            <h5 class="font-bold text-lg mb-1">MIDI Generation</h5>
+                            <p class="text-gray-700">Magenta Studio - Google's AI music tools for producers</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4 p-4 bg-yellow-50 rounded-2xl border-2 border-black">
+                        <div class="text-3xl">🎙️</div>
+                        <div>
+                            <h5 class="font-bold text-lg mb-1">Voice Synthesis</h5>
+                            <p class="text-gray-700">Synthesizer V, Vocaloid AI - Advanced vocal synthesis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion Section -->
+    <section class="py-20 px-4 gradient-bg border-t-8 border-black">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="text-7xl mb-6">🌟</div>
+            <h2 class="text-5xl font-black text-white mb-6">The Symphony Continues</h2>
+            <p class="text-xl text-white mb-8 leading-relaxed">
+                AI is not replacing musicians—it's opening new doors for creativity and democratizing music production. As technology evolves, the collaboration between human artistry and artificial intelligence will create sounds we've never imagined before.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <div class="bg-white rounded-2xl px-6 py-3 border-4 border-black cartoon-shadow-sm">
+                    <span class="font-bold">🎵 Endless Creativity</span>
+                </div>
+                <div class="bg-white rounded-2xl px-6 py-3 border-4 border-black cartoon-shadow-sm">
+                    <span class="font-bold">🤝 Human + AI</span>
+                </div>
+                <div class="bg-white rounded-2xl px-6 py-3 border-4 border-black cartoon-shadow-sm">
+                    <span class="font-bold">🚀 Innovation</span>
+                </div>
+            </div>
+            <p class="text-white text-lg italic">
+                "The future of music is a collaboration between the heart of humanity and the mind of machines."
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12 px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="text-5xl mb-4">🎵</div>
+            <p class="text-lg mb-4">Exploring the intersection of technology and creativity</p>
+            <p class="text-gray-400">© 2026 AI Music Revolution | Built with passion for music and innovation</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('button.md\\:hidden');
+        const navLinks = document.querySelector('nav .hidden.md\\:flex');
+        
+        if (mobileMenuButton && navLinks) {
+            mobileMenuButton.addEventListener('click', () => {
+                navLinks.classList.toggle('hidden');
+                navLinks.classList.toggle('flex');
+                navLinks.classList.toggle('flex-col');
+                navLinks.classList.toggle('absolute');
+                navLinks.classList.toggle('top-20');
+                navLinks.classList.toggle('left-0');
+                navLinks.classList.toggle('right-0');
+                navLinks.classList.toggle('bg-white');
+                navLinks.classList.toggle('p-4');
+                navLinks.classList.toggle('border-b-4');
+                navLinks.classList.toggle('border-black');
+            });
+        }
+    </script>
+</body>
+</html>
