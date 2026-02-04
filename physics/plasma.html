@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Plasma Physics: The Fourth State</title>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed">
+
+    <header class="bg-indigo-900 text-white py-16 px-6 shadow-lg">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl font-extrabold mb-4">Plasma Physics</h1>
+            <p class="text-xl text-indigo-200">A rigorous introduction to collective behavior and ionized gases.</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto py-12 px-6 space-y-16">
+
+        <section>
+            <h2 class="text-3xl font-bold text-indigo-900 mb-4">1. The Transition to Plasma</h2>
+            <p class="mb-4">
+                As temperature increases, the kinetic energy of atoms eventually overcomes the ionization potential. 
+                Unlike a gas, a plasma is a <strong>fluid of charged particles</strong> that responds to electromagnetic fields.
+            </p>
+            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 italic">
+                "A plasma is a quasineutral gas of charged and neutral particles which exhibits collective behavior." — Francis F. Chen
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold text-indigo-900 mb-4">2. Debye Shielding</h2>
+            <p class="mb-4">
+                A fundamental property of plasma is its ability to shield out electric fields. If you insert a test charge, 
+                the surrounding particles will rearrange themselves to effectively cancel the charge's field within a specific distance.
+            </p>
+            
+            <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200 my-6">
+                <h3 class="text-xl font-semibold mb-2 text-center">The Debye Length ($\lambda_D$)</h3>
+                <p class="text-center text-lg py-4">
+                    $$\lambda_D = \sqrt{\frac{\epsilon_0 k_B T_e}{n e^2}}$$
+                </p>
+                <p class="text-sm text-slate-600">
+                    Where $T_e$ is electron temperature and $n$ is density. For a substance to be a plasma, 
+                    the physical dimensions of the system ($L$) must be much larger than $\lambda_D$.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold text-indigo-900 mb-4">3. Plasma Oscillations</h2>
+            <p class="mb-4">
+                Because particles are charged, a local displacement of electrons creates an electric field that pulls them back. 
+                This leads to high-frequency oscillations known as <strong>Langmuir Waves</strong>.
+            </p>
+            <p class="text-center text-xl bg-slate-800 text-white py-4 rounded shadow-inner">
+                $$\omega_p = \sqrt{\frac{n e^2}{m_e \epsilon_0}}$$
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold mb-6">Plasma Criteria</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-indigo-100">
+                            <th class="p-3 border">Criterion</th>
+                            <th class="p-3 border">Requirement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-3 border font-medium">Size Scale</td>
+                            <td class="p-3 border">$L \gg \lambda_D$</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border font-medium">Plasma Parameter</td>
+                            <td class="p-3 border">$N_D \gg 1$ (Many particles in a Debye sphere)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 border font-medium">Collision Frequency</td>
+                            <td class="p-3 border">$\omega \tau > 1$ (Electromagnetic forces dominate collisions)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center">
+        <p>&copy; 2026 Plasma Physics Department</p>
+    </footer>
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>
