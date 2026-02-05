@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Patterns Mastery - CollabBoard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pattern-orange: #ff6b35;
+            --pattern-teal: #00d4aa;
+            --pattern-violet: #6a4c93;
+            --bg-dark: #1a1a2e;
+            --bg-darker: #0f0f1e;
+        }
+        body { font-family: 'JetBrains Mono', monospace; background: var(--bg-darker); color: #e4e4e7; }
+        .hero-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            background: linear-gradient(135deg, var(--pattern-orange), var(--pattern-teal), var(--pattern-violet));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .pattern-card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .pattern-card:hover {
+            border-color: var(--pattern-teal);
+            box-shadow: 0 10px 40px rgba(0,212,170,0.2);
+            transform: translateY(-4px);
+        }
+        .code-block {
+            background: var(--bg-darker);
+            border-left: 4px solid var(--pattern-teal);
+            font-size: 0.875rem;
+        }
+        .nav-tab { padding: 12px 32px; border: 2px solid transparent; transition: all 0.3s; }
+        .nav-tab.active { border-color: currentColor; }
+        .list-item { padding-left: 24px; position: relative; }
+        .list-item::before { content: '▸'; position: absolute; left: 0; color: var(--pattern-teal); }
+    </style>
+</head>
+<body>
+    <header class="py-20 px-6" style="background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="hero-title mb-6">Design Patterns</h1>
+            <p class="text-2xl md:text-3xl text-gray-300 mb-4">Master the 23 Gang of Four Patterns</p>
+            <p class="text-xl text-gray-400">Through Building CollabBoard - A Real-Time Collaborative Whiteboard</p>
+        </div>
+    </header>
+
+    <nav class="sticky top-0 z-40 backdrop-blur-lg bg-opacity-80 border-b border-gray-800 py-4 px-6" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto flex gap-4 justify-center flex-wrap">
+            <button onclick="show('creational')" class="nav-tab active text-orange-500" id="btn-creational">Creational (5)</button>
+            <button onclick="show('structural')" class="nav-tab text-teal-500" id="btn-structural">Structural (7)</button>
+            <button onclick="show('behavioral')" class="nav-tab text-violet-500" id="btn-behavioral">Behavioral (11)</button>
+        </div>
+    </nav>
+
+    <main class="py-16 px-6 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div id="content"></div>
+        </div>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,15,30,0.95);">
+        <div class="relative max-w-5xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-8" style="background: rgba(22,33,62,0.98); border: 2px solid var(--pattern-teal);">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-white">×</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+const patterns = {
+    creational: [
+        {name: 'Singleton', icon: '🔒', desc: 'Single instance with global access', 
+         scenario: 'WebSocketManager - one connection for all components',
+         code: `class WebSocketManager {
+    private static instance: WebSocketManager;
+    private constructor() {}
+    static getInstance() {
+        if (!this.instance) this.instance = new WebSocketManager();
+        return this.instance;
+    }
+}`},
+        {name: 'Factory Method', icon: '🏭', desc: 'Define interface for creation, subclasses decide class',
+         scenario: 'ExportFactory - create PNG/PDF/SVG exporters',
+         code: `abstract class ExportFactory {
+    abstract createExporter(): Exporter;
+    export(board) {
+        const exporter = this.createExporter();
+        return exporter.export(board);
+    }
+}`},
+        {name: 'Abstract Factory', icon: '🏢', desc: 'Families of related objects without specifying classes',
+         scenario: 'ThemeFactory - Light/Dark/HighContrast UI components',
+         code: `interface ThemeFactory {
+    createButton(): Button;
+    createPanel(): Panel;
+    createCursor(): Cursor;
+}
+class DarkThemeFactory implements ThemeFactory { ... }`},
+        {name: 'Builder', icon: '🔧', desc: 'Separate complex construction from representation',
+         scenario: 'WhiteboardBuilder - fluent API for board configuration',
+         code: `new WhiteboardBuilder()
+    .setTitle('My Board')
+    .setDimensions(1920, 1080)
+    .enableGrid(20)
+    .addPermission(...)
+    .build();`},
+        {name: 'Prototype', icon: '🧬', desc: 'Create objects by cloning existing ones',
+         scenario: 'Shape cloning - duplicate shapes with all properties',
+         code: `abstract class Shape {
+    abstract clone(): Shape;
+}
+class Rectangle extends Shape {
+    clone() { return new Rectangle(...this.properties); }
+}`}
+    ],
+    structural: [
+        {name: 'Adapter', icon: '🔌', desc: 'Convert interface to match client expectations',
+         scenario: 'Fabric.js/Konva adapter - unified rendering API',
+         code: `class FabricAdapter implements Renderer {
+    drawShape(shape) {
+        const fabricObj = this.convertToFabric(shape);
+        this.fabricCanvas.add(fabricObj);
+    }
+}`},
+        {name: 'Bridge', icon: '🌉', desc: 'Decouple abstraction from implementation',
+         scenario: 'Drawing tools × rendering backends (Canvas/WebGL/SVG)',
+         code: `class PenTool {
+    constructor(private impl: DrawingImplementation) {}
+    draw(x, y) { this.impl.drawLine(...); }
+}`},
+        {name: 'Composite', icon: '🌳', desc: 'Tree structures for part-whole hierarchies',
+         scenario: 'ShapeGroup - groups containing shapes or other groups',
+         code: `class ShapeGroup implements Graphic {
+    private children: Graphic[] = [];
+    draw(ctx) { this.children.forEach(c => c.draw(ctx)); }
+    move(dx, dy) { this.children.forEach(c => c.move(dx, dy)); }
+}`},
+        {name: 'Decorator', icon: '🎀', desc: 'Attach responsibilities dynamically',
+         scenario: 'Shape effects - shadows, glows, borders, animations',
+         code: `let shape = new Rectangle();
+shape = new ShadowDecorator(shape);
+shape = new GlowDecorator(shape);
+shape = new AnimatedDecorator(shape);`},
+        {name: 'Facade', icon: '🏛️', desc: 'Simplified interface to complex subsystem',
+         scenario: 'CollaborationFacade - simple API for complex real-time features',
+         code: `class CollaborationFacade {
+    joinSession(boardId) {
+        this.ws.connect();
+        this.cursors.init();
+        this.sync.start();
+    }
+}`},
+        {name: 'Flyweight', icon: '🪶', desc: 'Share objects to support large quantities efficiently',
+         scenario: 'StyleManager - share color/font objects across shapes',
+         code: `class StyleManager {
+    private styles = new Map();
+    getStyle(color, width) {
+        const key = \`\${color}-\${width}\`;
+        if (!this.styles.has(key))
+            this.styles.set(key, new Style(color, width));
+        return this.styles.get(key);
+    }
+}`},
+        {name: 'Proxy', icon: '🛡️', desc: 'Surrogate controlling access to an object',
+         scenario: 'LazyImageProxy - load images only when visible',
+         code: `class ImageProxy implements Image {
+    private realImage: RealImage | null = null;
+    draw(ctx) {
+        if (!this.realImage) this.realImage = new RealImage(this.url);
+        this.realImage.draw(ctx);
+    }
+}`}
+    ],
+    behavioral: [
+        {name: 'Chain of Responsibility', icon: '⛓️', desc: 'Pass request along chain of handlers',
+         scenario: 'Event handling - mouse events through tool chain',
+         code: `abstract class EventHandler {
+    protected next: EventHandler | null;
+    handle(event) {
+        if (this.canHandle(event)) this.process(event);
+        else if (this.next) this.next.handle(event);
+    }
+}`},
+        {name: 'Command', icon: '⌨️', desc: 'Encapsulate request as object for undo/redo',
+         scenario: 'Drawing commands - undo/redo for all operations',
+         code: `interface Command {
+    execute(): void;
+    undo(): void;
+}
+class DrawShapeCommand implements Command {
+    execute() { this.board.addShape(this.shape); }
+    undo() { this.board.removeShape(this.shape); }
+}`},
+        {name: 'Iterator', icon: '🔄', desc: 'Sequential access without exposing representation',
+         scenario: 'ShapeIterator - traverse shapes in z-order',
+         code: `class ZOrderIterator implements Iterator<Shape> {
+    next() { return this.shapes[this.index++]; }
+    hasNext() { return this.index < this.shapes.length; }
+}`},
+        {name: 'Mediator', icon: '📡', desc: 'Centralize complex communications',
+         scenario: 'BoardMediator - coordinate toolbar, canvas, properties panel',
+         code: `class BoardMediator {
+    onToolSelected(tool) {
+        this.canvas.setTool(tool);
+        this.propertiesPanel.update(tool);
+    }
+}`},
+        {name: 'Memento', icon: '💾', desc: 'Capture and restore object state',
+         scenario: 'BoardMemento - save/restore board state for version history',
+         code: `class BoardMemento {
+    constructor(private state: BoardState) {}
+    restore() { return this.state; }
+}
+class Board {
+    save() { return new BoardMemento({...this.state}); }
+}`},
+        {name: 'Observer', icon: '👁️', desc: 'Notify dependents of state changes',
+         scenario: 'ShapeObserver - UI updates when shapes change',
+         code: `class Shape extends Observable {
+    setColor(color) {
+        this.color = color;
+        this.notifyObservers({ type: 'colorChanged', color });
+    }
+}`},
+        {name: 'State', icon: '🎰', desc: 'Alter behavior when state changes',
+         scenario: 'Drawing tool states - idle, drawing, dragging',
+         code: `class DrawingTool {
+    private state: ToolState;
+    onMouseDown(e) { this.state = this.state.onMouseDown(e); }
+}
+class IdleState extends ToolState { ... }`},
+        {name: 'Strategy', icon: '🎯', desc: 'Encapsulate algorithms, make them interchangeable',
+         scenario: 'Collision detection strategies - grid/quadtree/brute-force',
+         code: `interface CollisionStrategy {
+    detect(shapes): Collision[];
+}
+class QuadTreeStrategy implements CollisionStrategy { ... }`},
+        {name: 'Template Method', icon: '📋', desc: 'Define algorithm skeleton, subclasses override steps',
+         scenario: 'ShapeRenderer - common render pipeline, custom draw',
+         code: `abstract class ShapeRenderer {
+    render(ctx) {
+        this.beginRender(ctx);
+        this.drawShape(ctx);  // abstract
+        this.endRender(ctx);
+    }
+}`},
+        {name: 'Visitor', icon: '🚶', desc: 'Add operations without modifying classes',
+         scenario: 'ExportVisitor - export shapes to different formats',
+         code: `interface ShapeVisitor {
+    visitCircle(circle: Circle): void;
+    visitRect(rect: Rectangle): void;
+}
+class SVGExportVisitor implements ShapeVisitor { ... }`},
+        {name: 'Interpreter', icon: '🔤', desc: 'Evaluate language grammar/expressions',
+         scenario: 'CommandInterpreter - parse text commands like "circle 100,100 50"',
+         code: `class CommandInterpreter {
+    interpret(cmd: string): Command {
+        const tokens = this.tokenize(cmd);
+        return this.parse(tokens);
+    }
+}`}
+    ]
+};
+
+function render() {
+    const cat = document.querySelector('.nav-tab.active').id.replace('btn-', '');
+    const html = patterns[cat].map(p => `
+        <div class="pattern-card p-6 rounded-xl mb-4 cursor-pointer" onclick='openModal(${JSON.stringify(p).replace(/'/g, "&apos;")})'>
+            <div class="flex items-start gap-4">
+                <div class="text-4xl">${p.icon}</div>
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold mb-2" style="color: var(--pattern-teal)">${p.name}</h3>
+                    <p class="text-gray-400 mb-3">${p.desc}</p>
+                    <div class="text-sm" style="color: var(--pattern-orange)">💡 ${p.scenario}</div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('content').innerHTML = html;
+}
+
+function show(cat) {
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + cat).classList.add('active');
+    render();
+}
+
+function openModal(pattern) {
+    document.getElementById('modal-content').innerHTML = `
+        <div class="text-4xl mb-4">${pattern.icon}</div>
+        <h2 class="text-3xl font-bold mb-4" style="color: var(--pattern-teal)">${pattern.name}</h2>
+        <p class="text-lg mb-6 text-gray-300">${pattern.desc}</p>
+        <div class="p-4 rounded-lg mb-6" style="background: rgba(106,76,147,0.1); border: 2px solid var(--pattern-violet);">
+            <h4 class="font-bold mb-2" style="color: var(--pattern-orange)">CollabBoard Scenario:</h4>
+            <p class="text-gray-300">${pattern.scenario}</p>
+        </div>
+        <div class="code-block p-6 rounded-lg">
+            <pre class="text-gray-300 whitespace-pre-wrap">${pattern.code}</pre>
+        </div>
+    `;
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+render();
+    </script>
+</body>
+</html>
