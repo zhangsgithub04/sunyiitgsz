@@ -1,6 +1,7 @@
 <head>
   
   <script>
+    function change1() {
     var name="John"
     var age;
     const YOUTH=18;
@@ -18,14 +19,15 @@
     }
     target=document.getElementById(id1)
   target.innerhtml=output
-    
+    }
   </script>
 
   
 </head>
 <body>
-
+<button onclick="change1()">Change Old Heading!</button>
   <h1 id="id1"> Old Heading</h1>
+  
   
 </body>
 
