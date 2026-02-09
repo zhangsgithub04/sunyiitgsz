@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Docs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen">
+
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">Σ</div>
+                <span class="text-xl font-bold tracking-tight text-slate-800">DevKnowledge<span class="text-indigo-600">.</span></span>
+            </div>
+            <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-500">
+                <a href="#" class="hover:text-indigo-600 transition">Reference</a>
+                <a href="#" class="hover:text-indigo-600 transition">Patterns</a>
+                <a href="#" class="hover:text-indigo-600 transition">Principles</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div class="mb-12">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">Documentation Hub</h1>
+            <p class="text-lg text-slate-600 max-w-2xl">A curated collection of core software engineering concepts, methodologies, and architectural patterns.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <a href="designpattern/designpatterns1.html" class="group relative bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+                <div class="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Design Patterns</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Reusable solutions to common problems in software design.</p>
+                <span class="absolute top-4 right-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Folder</span>
+            </a>
+
+            <a href="solid-principles-collabboard.html" class="group bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+                <div class="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">SOLID Principles</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Five essential principles for object-oriented design and maintenance.</p>
+            </a>
+
+            <a href="agile-manifesto.html" class="group bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+                <div class="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Agile Manifesto</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">The foundational values for iterative and collaborative development.</p>
+            </a>
+
+            <a href="scrum-essentials.html" class="group bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+                <div class="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Scrum Essentials</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Roles, ceremonies, and artifacts for the Scrum framework.</p>
+            </a>
+
+            <a href="uml/index.html" class="group relative bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+                <div class="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-slate-100 text-slate-600 group-hover:bg-slate-800 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">UML Diagrams</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Visual documentation for class structures and system behavior.</p>
+                <span class="absolute top-4 right-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Folder</span>
+            </a>
+
+            <a href="software-engineering-principles.html" class="group bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+                <div class="mb-4 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">SE Principles</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Foundational concepts for building high-quality software systems.</p>
+            </a>
+
+        </div>
+    </main>
+
+    <footer class="mt-20 border-t border-slate-200 py-10 text-center">
+        <p class="text-sm text-slate-400">&copy; 2026 Engineering Knowledge Hub. Built with Tailwind CSS.</p>
+    </footer>
+
+</body>
+</html>
