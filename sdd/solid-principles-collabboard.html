@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOLID Principles - CollabBoard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --solid-s: #f59e0b;
+            --solid-o: #10b981;
+            --solid-l: #3b82f6;
+            --solid-i: #8b5cf6;
+            --solid-d: #ec4899;
+            --bg-dark: #1a1a2e;
+            --bg-darker: #0f0f1e;
+        }
+        body { font-family: 'JetBrains Mono', monospace; background: var(--bg-darker); color: #e4e4e7; }
+        .hero-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(3rem, 12vw, 8rem);
+            font-weight: 900;
+            line-height: 0.9;
+            background: linear-gradient(135deg, var(--solid-s), var(--solid-o), var(--solid-l), var(--solid-i), var(--solid-d));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.1em;
+        }
+        .principle-card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .principle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .principle-card:hover::before {
+            width: 100%;
+            opacity: 0.1;
+        }
+        .principle-card:hover {
+            transform: translateY(-4px);
+        }
+        .card-s::before { background: var(--solid-s); }
+        .card-o::before { background: var(--solid-o); }
+        .card-l::before { background: var(--solid-l); }
+        .card-i::before { background: var(--solid-i); }
+        .card-d::before { background: var(--solid-d); }
+        .card-s:hover { border-color: var(--solid-s); box-shadow: 0 10px 40px rgba(245,158,11,0.3); }
+        .card-o:hover { border-color: var(--solid-o); box-shadow: 0 10px 40px rgba(16,185,129,0.3); }
+        .card-l:hover { border-color: var(--solid-l); box-shadow: 0 10px 40px rgba(59,130,246,0.3); }
+        .card-i:hover { border-color: var(--solid-i); box-shadow: 0 10px 40px rgba(139,92,246,0.3); }
+        .card-d:hover { border-color: var(--solid-d); box-shadow: 0 10px 40px rgba(236,72,153,0.3); }
+        .code-block {
+            background: var(--bg-darker);
+            border-left: 4px solid;
+            font-size: 0.875rem;
+            position: relative;
+        }
+        .code-violation { border-left-color: #ef4444; }
+        .code-correct { border-left-color: #10b981; }
+        .letter-badge {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 900;
+            font-family: 'Playfair Display', serif;
+            border-radius: 16px;
+            border: 3px solid;
+        }
+        .badge-s { background: rgba(245,158,11,0.1); border-color: var(--solid-s); color: var(--solid-s); }
+        .badge-o { background: rgba(16,185,129,0.1); border-color: var(--solid-o); color: var(--solid-o); }
+        .badge-l { background: rgba(59,130,246,0.1); border-color: var(--solid-l); color: var(--solid-l); }
+        .badge-i { background: rgba(139,92,246,0.1); border-color: var(--solid-i); color: var(--solid-i); }
+        .badge-d { background: rgba(236,72,153,0.1); border-color: var(--solid-d); color: var(--solid-d); }
+        .benefit-item {
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: rgba(16,185,129,0.1);
+            border-left: 3px solid var(--solid-o);
+        }
+    </style>
+</head>
+<body>
+    <header class="py-20 px-6" style="background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="hero-title mb-8">SOLID</h1>
+            <p class="text-2xl md:text-3xl text-gray-300 mb-4">The 5 Principles of Object-Oriented Design</p>
+            <p class="text-xl text-gray-400 mb-8">Master Clean Architecture Through Building CollabBoard</p>
+            <div class="flex justify-center gap-4 flex-wrap">
+                <div class="text-center">
+                    <div class="text-5xl font-bold mb-2" style="color: var(--solid-s)">S</div>
+                    <div class="text-xs text-gray-400">Single<br/>Responsibility</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold mb-2" style="color: var(--solid-o)">O</div>
+                    <div class="text-xs text-gray-400">Open/Closed</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold mb-2" style="color: var(--solid-l)">L</div>
+                    <div class="text-xs text-gray-400">Liskov<br/>Substitution</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold mb-2" style="color: var(--solid-i)">I</div>
+                    <div class="text-xs text-gray-400">Interface<br/>Segregation</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold mb-2" style="color: var(--solid-d)">D</div>
+                    <div class="text-xs text-gray-400">Dependency<br/>Inversion</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-16 px-6 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid gap-8" id="content"></div>
+        </div>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,15,30,0.95);">
+        <div class="relative max-w-6xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-8" style="background: rgba(22,33,62,0.98);">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-white">×</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <footer class="py-12 px-6 border-t border-gray-800" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-xl text-gray-300 mb-2">Write Clean, Maintainable, Scalable Code</p>
+            <p class="text-sm text-gray-500">SOLID principles applied to real-world CollabBoard scenarios</p>
+        </div>
+    </footer>
+
+    <script>
+const principles = [
+    {
+        letter: 'S',
+        color: 'amber',
+        cssVar: 'solid-s',
+        name: 'Single Responsibility Principle',
+        definition: 'A class should have only one reason to change',
+        explanation: 'Each class should do one thing and do it well. When a class handles multiple responsibilities, changes to one part can break another.',
+        benefits: [
+            'Easier to understand - clear purpose',
+            'Simpler to test - focused behavior',
+            'Less likely to break - changes are isolated',
+            'More reusable - single-purpose classes'
+        ],
+        scenario: 'A Shape class that draws itself, saves to database, validates data, and broadcasts updates has 4 reasons to change. Split it!',
+        violation: `// ❌ Shape does EVERYTHING - too many responsibilities
+class Shape {
+    constructor(
+        public x: number, 
+        public y: number, 
+        public color: string
+    ) {}
+    
+    // 1. Rendering (UI concern)
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, 100, 100);
+    }
+    
+    // 2. Persistence (data concern)
+    async save() {
+        await fetch('/api/shapes', {
+            method: 'POST',
+            body: JSON.stringify(this)
+        });
+    }
+    
+    // 3. Validation (business logic)
+    isValid(): boolean {
+        return this.x >= 0 && this.y >= 0;
+    }
+    
+    // 4. Real-time collaboration (networking)
+    broadcast() {
+        websocket.send(JSON.stringify(this));
+    }
+}
+
+// Problems:
+// - UI changes → must touch Shape
+// - API changes → must touch Shape  
+// - Validation rules change → must touch Shape
+// - WebSocket protocol changes → must touch Shape`,
+        correct: `// ✅ Each class has ONE clear responsibility
+
+// 1. Shape - just data
+class Shape {
+    constructor(
+        public x: number,
+        public y: number,
+        public color: string
+    ) {}
+}
+
+// 2. ShapeRenderer - handles drawing
+class ShapeRenderer {
+    draw(shape: Shape, ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = shape.color;
+        ctx.fillRect(shape.x, shape.y, 100, 100);
+    }
+}
+
+// 3. ShapeRepository - handles persistence
+class ShapeRepository {
+    async save(shape: Shape) {
+        await fetch('/api/shapes', {
+            method: 'POST',
+            body: JSON.stringify(shape)
+        });
+    }
+}
+
+// 4. ShapeValidator - handles validation
+class ShapeValidator {
+    isValid(shape: Shape): boolean {
+        return shape.x >= 0 && shape.y >= 0;
+    }
+}
+
+// 5. CollaborationService - handles real-time sync
+class CollaborationService {
+    broadcast(shape: Shape) {
+        websocket.send(JSON.stringify(shape));
+    }
+}
+
+// Now: Change rendering? Touch ShapeRenderer only.
+//      Change API? Touch ShapeRepository only.
+//      Each class has exactly ONE reason to change!`
+    },
+    {
+        letter: 'O',
+        color: 'green',
+        cssVar: 'solid-o',
+        name: 'Open/Closed Principle',
+        definition: 'Open for extension, closed for modification',
+        explanation: 'Add new features by extending code, not by modifying existing tested code. Use abstraction and polymorphism.',
+        benefits: [
+            'Add features without breaking existing code',
+            'Tested code stays unchanged',
+            'No regression bugs from modifications',
+            'Easy to add new shape types, tools, exporters'
+        ],
+        scenario: 'Adding new shape types (Triangle, Star, Arrow) should not require modifying the renderer or exporter classes.',
+        violation: `// ❌ Must modify this class for EVERY new shape type
+class ShapeDrawer {
+    draw(shape: any, ctx: CanvasRenderingContext2D) {
+        // Hardcoded type checking - BAD!
+        if (shape.type === 'rectangle') {
+            ctx.fillRect(shape.x, shape.y, shape.w, shape.h);
+        } else if (shape.type === 'circle') {
+            ctx.beginPath();
+            ctx.arc(shape.x, shape.y, shape.r, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (shape.type === 'triangle') {
+            // Add triangle drawing code here...
+        }
+        // Need to add more else-if for every new shape!
+    }
+}
+
+// Want to add Star? Must modify ShapeDrawer
+// Want to add Arrow? Must modify ShapeDrawer
+// Want to add Heart? Must modify ShapeDrawer
+// This violates Open/Closed - class not closed for modification`,
+        correct: `// ✅ Extend with new classes, don't modify existing ones
+
+// Abstract interface - CLOSED for modification
+abstract class Shape {
+    abstract draw(ctx: CanvasRenderingContext2D): void;
+}
+
+// Concrete shapes - EXTEND the base
+class Rectangle extends Shape {
+    constructor(
+        private x: number, 
+        private y: number, 
+        private w: number, 
+        private h: number
+    ) { super(); }
+    
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+    }
+}
+
+class Circle extends Shape {
+    constructor(
+        private x: number, 
+        private y: number, 
+        private r: number
+    ) { super(); }
+    
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+// Add new shape? Just extend - NO modification needed!
+class Star extends Shape {
+    draw(ctx: CanvasRenderingContext2D) {
+        // Star drawing logic
+    }
+}
+
+// Drawer works with abstraction - NEVER needs modification
+class ShapeDrawer {
+    draw(shape: Shape, ctx: CanvasRenderingContext2D) {
+        shape.draw(ctx); // Polymorphism magic!
+    }
+}
+
+// Open for extension (add Star, Arrow, Heart...)
+// Closed for modification (ShapeDrawer never changes)`
+    },
+    {
+        letter: 'L',
+        color: 'blue',
+        cssVar: 'solid-l',
+        name: 'Liskov Substitution Principle',
+        definition: 'Subtypes must be substitutable for their base types',
+        explanation: 'If S is a subtype of T, you should be able to use S anywhere T is expected without breaking the program. Don\'t surprise users!',
+        benefits: [
+            'Inheritance works correctly',
+            'No surprising subclass behavior',
+            'Polymorphism is safe to use',
+            'Contracts are honored by all subtypes'
+        ],
+        scenario: 'A ReadOnlyShape that throws errors on setColor() breaks the Shape contract. Users expect all shapes to be modifiable.',
+        violation: `// ❌ Subclass breaks parent class contract
+class Shape {
+    constructor(public color: string) {}
+    
+    setColor(color: string) {
+        this.color = color;
+    }
+    
+    draw(ctx: CanvasRenderingContext2D) {}
+}
+
+// ReadOnlyShape VIOLATES the contract
+class ReadOnlyShape extends Shape {
+    setColor(color: string) {
+        throw new Error('Cannot modify read-only shape!');
+        // VIOLATION: Parent says setColor() works,
+        // but subclass throws error!
+    }
+}
+
+// This function expects ANY Shape to work
+function changeShapeColor(shape: Shape) {
+    shape.setColor('#FF0000'); // Should work for any Shape
+}
+
+const normal = new Shape('#000000');
+changeShapeColor(normal); // ✓ Works
+
+const readonly = new ReadOnlyShape('#000000');
+changeShapeColor(readonly); // ✗ THROWS ERROR!
+// ReadOnlyShape cannot substitute for Shape - LSP violated`,
+        correct: `// ✅ All subtypes honor the contract
+
+// Option 1: Remove mutation from base
+abstract class Shape {
+    constructor(public readonly color: string) {}
+    abstract draw(ctx: CanvasRenderingContext2D): void;
+}
+
+class Rectangle extends Shape {
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(0, 0, 100, 100);
+    }
+}
+
+class Circle extends Shape {
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(50, 50, 50, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+// Both work the same way - LSP satisfied!
+function drawShape(shape: Shape, ctx: CanvasRenderingContext2D) {
+    shape.draw(ctx); // Works for ALL shapes
+}
+
+// Option 2: Separate mutable and immutable hierarchies
+interface ImmutableShape {
+    readonly color: string;
+    draw(ctx: CanvasRenderingContext2D): void;
+}
+
+interface MutableShape extends ImmutableShape {
+    setColor(color: string): void;
+}
+
+// Now clear contracts - no surprises!
+// Use ImmutableShape when you don't need mutation
+// Use MutableShape when you do`
+    },
+    {
+        letter: 'I',
+        color: 'purple',
+        cssVar: 'solid-i',
+        name: 'Interface Segregation Principle',
+        definition: 'Don\'t force clients to depend on methods they don\'t use',
+        explanation: 'Split large interfaces into smaller, specific ones. Classes should only implement what they actually need.',
+        benefits: [
+            'No unused method implementations',
+            'Simpler class interfaces',
+            'More flexible composition',
+            'Clear contracts - only what\'s needed'
+        ],
+        scenario: 'Not all shapes can be animated or exported to PDF. Don\'t force Circle to implement exportToPDF() if it doesn\'t support it.',
+        violation: `// ❌ Fat interface forces unnecessary implementations
+interface CollabShape {
+    // Drawing
+    draw(ctx: CanvasRenderingContext2D): void;
+    
+    // Animation - not all shapes animate!
+    animate(duration: number): void;
+    stopAnimation(): void;
+    
+    // Export - not all formats supported!
+    exportToPNG(): Blob;
+    exportToPDF(): Blob;
+    exportToSVG(): string;
+    
+    // Collaboration - not all shapes sync!
+    sync(): void;
+    onUpdate(callback: Function): void;
+}
+
+// Circle forced to implement EVERYTHING
+class Circle implements CollabShape {
+    draw(ctx: CanvasRenderingContext2D) {
+        // Actually needed ✓
+    }
+    
+    animate(duration: number) {
+        throw new Error('Not supported'); // ✗
+    }
+    
+    stopAnimation() {
+        throw new Error('Not supported'); // ✗
+    }
+    
+    exportToPNG(): Blob {
+        throw new Error('Not supported'); // ✗
+    }
+    
+    exportToPDF(): Blob {
+        throw new Error('Not supported'); // ✗
+    }
+    
+    exportToSVG(): string {
+        return '<circle ... />'; // Maybe ✓
+    }
+    
+    sync() {
+        throw new Error('Not supported'); // ✗
+    }
+    
+    onUpdate(callback: Function) {
+        throw new Error('Not supported'); // ✗
+    }
+}
+
+// 5 out of 8 methods throw errors - BAD!`,
+        correct: `// ✅ Small, focused interfaces
+
+// Core - ALL shapes need this
+interface Drawable {
+    draw(ctx: CanvasRenderingContext2D): void;
+}
+
+// Optional - only animated shapes
+interface Animatable {
+    animate(duration: number): void;
+    stopAnimation(): void;
+}
+
+// Optional - only exportable shapes
+interface Exportable {
+    toSVG(): string;
+}
+
+// Optional - only collaborative shapes
+interface Syncable {
+    sync(): void;
+    onUpdate(callback: Function): void;
+}
+
+// Simple circle - only what it needs
+class Circle implements Drawable, Exportable {
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.beginPath();
+        ctx.arc(50, 50, 50, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    toSVG(): string {
+        return '<circle cx="50" cy="50" r="50" />';
+    }
+}
+
+// Advanced shape - composes multiple interfaces
+class AnimatedCircle implements Drawable, Animatable, Exportable {
+    draw(ctx: CanvasRenderingContext2D) { /* ... */ }
+    animate(duration: number) { /* ... */ }
+    stopAnimation() { /* ... */ }
+    toSVG(): string { /* ... */ }
+}
+
+// Collaborative shape
+class SyncedRectangle implements Drawable, Syncable, Exportable {
+    draw(ctx: CanvasRenderingContext2D) { /* ... */ }
+    sync() { /* ... */ }
+    onUpdate(callback: Function) { /* ... */ }
+    toSVG(): string { /* ... */ }
+}
+
+// No "throw new Error" - only implement what you use!`
+    },
+    {
+        letter: 'D',
+        color: 'pink',
+        cssVar: 'solid-d',
+        name: 'Dependency Inversion Principle',
+        definition: 'Depend on abstractions, not concretions',
+        explanation: 'High-level modules should not depend on low-level modules. Both should depend on abstractions. This enables flexibility and testability.',
+        benefits: [
+            'Easy to swap implementations',
+            'Testable with mocks',
+            'Loose coupling',
+            'Flexible architecture'
+        ],
+        scenario: 'Whiteboard should depend on a Database interface, not directly on MongoDB. Then you can swap MongoDB for PostgreSQL easily.',
+        violation: `// ❌ Whiteboard tightly coupled to MongoDB
+class Whiteboard {
+    private mongoClient: MongoClient;
+    private websocket: WebSocket;
+    
+    constructor() {
+        // Direct dependency on MongoDB - BAD!
+        this.mongoClient = new MongoClient('mongodb://localhost');
+        // Direct dependency on WebSocket - BAD!
+        this.websocket = new WebSocket('ws://localhost:8080');
+    }
+    
+    async saveShape(shape: Shape) {
+        // Hardcoded MongoDB calls
+        const db = this.mongoClient.db('collabboard');
+        await db.collection('shapes').insertOne(shape);
+    }
+    
+    broadcastUpdate(shape: Shape) {
+        // Hardcoded WebSocket calls
+        this.websocket.send(JSON.stringify(shape));
+    }
+}
+
+// Problems:
+// - Can't switch to PostgreSQL without rewriting Whiteboard
+// - Can't switch to Server-Sent Events
+// - Can't test without real MongoDB and WebSocket
+// - Whiteboard knows too much about infrastructure`,
+        correct: `// ✅ Depend on abstractions, inject dependencies
+
+// Define abstractions (interfaces)
+interface Database {
+    save(collection: string, data: any): Promise<void>;
+    find(collection: string, id: string): Promise<any>;
+}
+
+interface RealtimeChannel {
+    send(data: any): void;
+    subscribe(handler: Function): void;
+}
+
+// High-level Whiteboard depends on abstractions
+class Whiteboard {
+    constructor(
+        private db: Database,           // Abstraction!
+        private channel: RealtimeChannel // Abstraction!
+    ) {}
+    
+    async saveShape(shape: Shape) {
+        await this.db.save('shapes', shape);
+    }
+    
+    broadcastUpdate(shape: Shape) {
+        this.channel.send(shape);
+    }
+}
+
+// Low-level implementations
+class MongoDatabase implements Database {
+    private client: MongoClient;
+    
+    async save(collection: string, data: any) {
+        const db = this.client.db('collabboard');
+        await db.collection(collection).insertOne(data);
+    }
+    
+    async find(collection: string, id: string) {
+        const db = this.client.db('collabboard');
+        return await db.collection(collection).findOne({ id });
+    }
+}
+
+class WebSocketChannel implements RealtimeChannel {
+    private socket: WebSocket;
+    
+    send(data: any) {
+        this.socket.send(JSON.stringify(data));
+    }
+    
+    subscribe(handler: Function) {
+        this.socket.onmessage = (e) => handler(JSON.parse(e.data));
+    }
+}
+
+// Dependency Injection - assemble at runtime
+const db = new MongoDatabase();
+const channel = new WebSocketChannel();
+const whiteboard = new Whiteboard(db, channel);
+
+// Easy to swap implementations!
+// const whiteboard = new Whiteboard(
+//     new PostgresDatabase(),  // Swap MongoDB → Postgres
+//     new SSEChannel()         // Swap WebSocket → SSE
+// );
+
+// Easy to test with mocks!
+// const whiteboard = new Whiteboard(
+//     new MockDatabase(),
+//     new MockChannel()
+// );`
+    }
+];
+
+function render() {
+    const html = principles.map(p => `
+        <div class="principle-card card-${p.letter.toLowerCase()} p-8 rounded-xl cursor-pointer" onclick="openModal('${p.letter}')">
+            <div class="flex items-start gap-6">
+                <div class="letter-badge badge-${p.letter.toLowerCase()}">${p.letter}</div>
+                <div class="flex-1">
+                    <h2 class="text-2xl font-bold mb-2" style="color: var(--${p.cssVar})">${p.name}</h2>
+                    <p class="text-lg text-gray-300 mb-4 italic">"${p.definition}"</p>
+                    <p class="text-gray-400 mb-4">${p.explanation}</p>
+                    <div class="text-sm" style="color: var(--${p.cssVar})">
+                        💡 Scenario: ${p.scenario}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('content').innerHTML = html;
+}
+
+function openModal(letter) {
+    const p = principles.find(pr => pr.letter === letter);
+    const modal = document.getElementById('modal');
+    
+    const html = `
+        <div class="flex items-center gap-4 mb-6">
+            <div class="letter-badge badge-${p.letter.toLowerCase()}">${p.letter}</div>
+            <div>
+                <h2 class="text-3xl font-bold" style="color: var(--${p.cssVar})">${p.name}</h2>
+                <p class="text-xl text-gray-400 italic mt-2">"${p.definition}"</p>
+            </div>
+        </div>
+        
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(16,185,129,0.1); border-left: 4px solid var(--solid-o);">
+            <p class="text-lg text-gray-300">${p.explanation}</p>
+        </div>
+        
+        <div class="p-4 rounded-lg mb-6" style="background: rgba(139,92,246,0.1); border: 2px solid var(--solid-i);">
+            <h3 class="font-bold mb-2" style="color: var(--${p.cssVar})">🎨 CollabBoard Scenario</h3>
+            <p class="text-gray-300">${p.scenario}</p>
+        </div>
+        
+        <div class="mb-6">
+            <h3 class="text-xl font-bold mb-3" style="color: var(--${p.cssVar})">✨ Benefits</h3>
+            <div class="grid md:grid-cols-2 gap-3">
+                ${p.benefits.map(b => `<div class="benefit-item">${b}</div>`).join('')}
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-red-400">❌ Violation Example</h3>
+                <div class="code-block code-violation p-4 rounded-lg">
+                    <pre class="text-gray-300 text-sm whitespace-pre">${p.violation.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-green-400">✅ Correct Implementation</h3>
+                <div class="code-block code-correct p-4 rounded-lg">
+                    <pre class="text-gray-300 text-sm whitespace-pre">${p.correct.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </div>
+            </div>
+        </div>
+    `;
+    document.getElementById('modal-content').innerHTML = html;
+    modal.classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+render();
+    </script>
+</body>
+</html>
