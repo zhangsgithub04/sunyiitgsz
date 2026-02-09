@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refactoring Techniques - Complete Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --refactor-red: #ef4444;
+            --refactor-green: #10b981;
+            --refactor-blue: #3b82f6;
+            --refactor-purple: #8b5cf6;
+            --refactor-amber: #f59e0b;
+            --refactor-pink: #ec4899;
+            --refactor-teal: #14b8a6;
+            --bg-dark: #1a1a2e;
+            --bg-darker: #0f0f1e;
+        }
+        body { font-family: 'JetBrains Mono', monospace; background: var(--bg-darker); color: #e4e4e7; line-height: 1.6; }
+        .hero-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--refactor-red), var(--refactor-green), var(--refactor-blue), var(--refactor-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-tab {
+            padding: 12px 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+        .nav-tab.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
+        
+        .technique-card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .technique-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .technique-card:hover::before { width: 100%; opacity: 0.1; }
+        .technique-card:hover { transform: translateY(-4px); }
+        
+        .card-composing::before { background: var(--refactor-red); }
+        .card-moving::before { background: var(--refactor-green); }
+        .card-organizing::before { background: var(--refactor-blue); }
+        .card-simplifying::before { background: var(--refactor-purple); }
+        .card-generalization::before { background: var(--refactor-amber); }
+        .card-api::before { background: var(--refactor-pink); }
+        
+        .card-composing:hover { border-color: var(--refactor-red); box-shadow: 0 10px 40px rgba(239,68,68,0.3); }
+        .card-moving:hover { border-color: var(--refactor-green); box-shadow: 0 10px 40px rgba(16,185,129,0.3); }
+        .card-organizing:hover { border-color: var(--refactor-blue); box-shadow: 0 10px 40px rgba(59,130,246,0.3); }
+        .card-simplifying:hover { border-color: var(--refactor-purple); box-shadow: 0 10px 40px rgba(139,92,246,0.3); }
+        .card-generalization:hover { border-color: var(--refactor-amber); box-shadow: 0 10px 40px rgba(245,158,11,0.3); }
+        .card-api:hover { border-color: var(--refactor-pink); box-shadow: 0 10px 40px rgba(236,72,153,0.3); }
+        
+        .code-block {
+            background: var(--bg-darker);
+            border-left: 4px solid;
+            font-size: 0.875rem;
+        }
+        .code-before { border-left-color: var(--refactor-red); }
+        .code-after { border-left-color: var(--refactor-green); }
+        
+        .smell-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(239,68,68,0.2);
+            color: var(--refactor-red);
+            display: inline-block;
+            margin: 4px;
+        }
+        
+        .benefit-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(16,185,129,0.2);
+            color: var(--refactor-green);
+            display: inline-block;
+            margin: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header class="py-20 px-6" style="background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="hero-title mb-6">Refactoring Techniques</h1>
+            <p class="text-2xl md:text-3xl text-gray-300 mb-4">Master Code Improvement Through Systematic Refactoring</p>
+            <p class="text-xl text-gray-400 mb-8">
+                Learn 60+ techniques to transform messy code into clean, maintainable software
+            </p>
+            <div class="max-w-4xl mx-auto p-6 rounded-lg" style="background: rgba(59,130,246,0.1); border: 2px solid var(--refactor-blue);">
+                <p class="text-lg text-gray-300 mb-2">
+                    <strong style="color: var(--refactor-blue)">Refactoring:</strong> Improving the internal structure of code without changing its external behavior
+                </p>
+                <p class="text-sm text-gray-400">
+                    - Martin Fowler, "Refactoring: Improving the Design of Existing Code"
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sticky top-0 z-40 backdrop-blur-lg bg-opacity-80 border-b border-gray-800 py-4 px-6" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto flex gap-2 justify-center flex-wrap">
+            <button onclick="show('composing')" class="nav-tab active text-red-500" id="btn-composing">Composing Methods</button>
+            <button onclick="show('moving')" class="nav-tab text-green-500" id="btn-moving">Moving Features</button>
+            <button onclick="show('organizing')" class="nav-tab text-blue-500" id="btn-organizing">Organizing Data</button>
+            <button onclick="show('simplifying')" class="nav-tab text-purple-500" id="btn-simplifying">Simplifying</button>
+            <button onclick="show('generalization')" class="nav-tab text-amber-500" id="btn-generalization">Generalization</button>
+            <button onclick="show('api')" class="nav-tab text-pink-500" id="btn-api">API Refactoring</button>
+        </div>
+    </nav>
+
+    <main class="py-16 px-6 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div id="content"></div>
+        </div>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,15,30,0.95);">
+        <div class="relative max-w-6xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-8" style="background: rgba(22,33,62,0.98); border: 2px solid var(--refactor-blue);">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-white">×</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <footer class="py-12 px-6 border-t border-gray-800" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-xl text-gray-300 mb-2">Refactor with Confidence</p>
+            <p class="text-sm text-gray-500">Systematic techniques for improving code quality</p>
+        </div>
+    </footer>
+
+    <script>
+const refactoringContent = {
+    composing: {
+        title: 'Composing Methods',
+        color: 'red',
+        description: 'Techniques for streamlining methods, removing duplication, and improving readability',
+        techniques: [
+            {
+                name: 'Extract Method',
+                smell: 'Long Method, Duplicate Code',
+                mechanics: 'Create new method, move code fragment into it, replace old code with call to new method',
+                when: 'Code fragment that can be grouped together, or you have duplicate code',
+                before: `function printOwing() {
+    printBanner();
+    
+    // Print details
+    console.log("name: " + this.name);
+    console.log("amount: " + this.getOutstanding());
+}`,
+                after: `function printOwing() {
+    printBanner();
+    printDetails(this.getOutstanding());
+}
+
+function printDetails(outstanding) {
+    console.log("name: " + this.name);
+    console.log("amount: " + outstanding);
+}`,
+                benefits: ['Reduces method complexity', 'Improves readability', 'Enables reuse', 'Makes code self-documenting'],
+                inverseOf: 'Inline Method'
+            },
+            {
+                name: 'Inline Method',
+                smell: 'Needless indirection',
+                mechanics: 'Replace calls to method with method body, then remove method',
+                when: 'Method body is as clear as its name, or method is overly simple',
+                before: `function getRating() {
+    return moreThanFiveLateDeliveries() ? 2 : 1;
+}
+
+function moreThanFiveLateDeliveries() {
+    return this.numberOfLateDeliveries > 5;
+}`,
+                after: `function getRating() {
+    return this.numberOfLateDeliveries > 5 ? 2 : 1;
+}`,
+                benefits: ['Removes unnecessary indirection', 'Simplifies code', 'Reduces method count'],
+                inverseOf: 'Extract Method'
+            },
+            {
+                name: 'Extract Variable',
+                smell: 'Complex expression',
+                mechanics: 'Put result of expression in temporary variable with meaningful name',
+                when: 'Expression is hard to understand',
+                before: `if ((platform.toUpperCase().indexOf("MAC") > -1) &&
+    (browser.toUpperCase().indexOf("IE") > -1) &&
+    wasInitialized() && resize > 0) {
+    // do something
+}`,
+                after: `const isMacOs = platform.toUpperCase().indexOf("MAC") > -1;
+const isIE = browser.toUpperCase().indexOf("IE") > -1;
+const wasResized = resize > 0;
+
+if (isMacOs && isIE && wasInitialized() && wasResized) {
+    // do something
+}`,
+                benefits: ['Makes code self-documenting', 'Improves readability', 'Easier to debug'],
+                inverseOf: 'Inline Temp'
+            },
+            {
+                name: 'Inline Temp',
+                smell: 'Temp variable that obscures refactoring',
+                mechanics: 'Replace all references to temp with expression',
+                when: 'Temp is assigned once with simple expression, or temp prevents other refactorings',
+                before: `const basePrice = anOrder.basePrice();
+return basePrice > 1000;`,
+                after: `return anOrder.basePrice() > 1000;`,
+                benefits: ['Simplifies code', 'Enables further refactorings'],
+                inverseOf: 'Extract Variable'
+            },
+            {
+                name: 'Replace Temp with Query',
+                smell: 'Temp variable that should be a method',
+                mechanics: 'Extract expression into method, replace temp references with query',
+                when: 'Calculating value in temp multiple times, or temp is used in multiple methods',
+                before: `const basePrice = quantity * itemPrice;
+if (basePrice > 1000) {
+    return basePrice * 0.95;
+} else {
+    return basePrice * 0.98;
+}`,
+                after: `if (basePrice() > 1000) {
+    return basePrice() * 0.95;
+} else {
+    return basePrice() * 0.98;
+}
+
+function basePrice() {
+    return quantity * itemPrice;
+}`,
+                benefits: ['Eliminates duplication', 'Enables Extract Method', 'Makes logic accessible'],
+                inverseOf: 'Inline Method on the query'
+            },
+            {
+                name: 'Split Temporary Variable',
+                smell: 'Temp assigned to more than once',
+                mechanics: 'Make separate temp for each assignment',
+                when: 'Temp is assigned more than once (not a loop variable or collecting temp)',
+                before: `let temp = 2 * (height + width);
+console.log(temp);
+temp = height * width;
+console.log(temp);`,
+                after: `const perimeter = 2 * (height + width);
+console.log(perimeter);
+
+const area = height * width;
+console.log(area);`,
+                benefits: ['Each variable has single purpose', 'Clearer code intent', 'Easier to reason about'],
+                inverseOf: null
+            },
+            {
+                name: 'Remove Assignments to Parameters',
+                smell: 'Assigning to parameter',
+                mechanics: 'Use temp variable instead of parameter',
+                when: 'Code assigns to parameter value',
+                before: `function discount(inputVal, quantity) {
+    if (inputVal > 50) inputVal -= 2;
+    if (quantity > 100) inputVal -= 1;
+    return inputVal;
+}`,
+                after: `function discount(inputVal, quantity) {
+    let result = inputVal;
+    if (inputVal > 50) result -= 2;
+    if (quantity > 100) result -= 1;
+    return result;
+}`,
+                benefits: ['Clearer code intent', 'Avoids confusion', 'Parameters stay constant'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Method with Method Object',
+                smell: 'Long method with many local variables',
+                mechanics: 'Turn method into its own object',
+                when: 'Method has too many local variables preventing Extract Method',
+                before: `function complexCalculation(a, b, c) {
+    let temp1 = a + b;
+    let temp2 = c * 2;
+    let temp3 = temp1 - temp2;
+    let result = temp3 / (a - c);
+    // 50 more lines...
+    return result;
+}`,
+                after: `class ComplexCalculation {
+    constructor(a, b, c) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+    
+    compute() {
+        let temp1 = this.step1();
+        let temp2 = this.step2();
+        let temp3 = this.step3(temp1, temp2);
+        return this.finalStep(temp3);
+    }
+    
+    step1() { return this.a + this.b; }
+    step2() { return this.c * 2; }
+    step3(t1, t2) { return t1 - t2; }
+    finalStep(t3) { return t3 / (this.a - this.c); }
+}`,
+                benefits: ['Enables decomposition', 'Clearer structure', 'Easier to test'],
+                inverseOf: 'Inline Method'
+            },
+            {
+                name: 'Substitute Algorithm',
+                smell: 'Complicated algorithm',
+                mechanics: 'Replace body of method with new algorithm',
+                when: 'Clearer way to do something exists',
+                before: `function foundPerson(people) {
+    for (let i = 0; i < people.length; i++) {
+        if (people[i] === "Don") return "Don";
+        if (people[i] === "John") return "John";
+        if (people[i] === "Kent") return "Kent";
+    }
+    return "";
+}`,
+                after: `function foundPerson(people) {
+    const candidates = ["Don", "John", "Kent"];
+    return people.find(p => candidates.includes(p)) || "";
+}`,
+                benefits: ['Simpler implementation', 'More maintainable', 'Leverages built-ins'],
+                inverseOf: null
+            }
+        ]
+    },
+    moving: {
+        title: 'Moving Features Between Objects',
+        color: 'green',
+        description: 'Techniques for moving functionality between classes to improve cohesion and coupling',
+        techniques: [
+            {
+                name: 'Move Method',
+                smell: 'Method uses more of another class',
+                mechanics: 'Create new method in target class, turn old method into delegation or remove',
+                when: 'Method is used more by another class than its own',
+                before: `class Account {
+    overdraftCharge() {
+        if (this.type.isPremium()) {
+            return this.daysOverdrawn * 2.5;
+        }
+        return this.daysOverdrawn * 1.75;
+    }
+}`,
+                after: `class Account {
+    overdraftCharge() {
+        return this.type.overdraftCharge(this.daysOverdrawn);
+    }
+}
+
+class AccountType {
+    overdraftCharge(daysOverdrawn) {
+        if (this.isPremium()) {
+            return daysOverdrawn * 2.5;
+        }
+        return daysOverdrawn * 1.75;
+    }
+}`,
+                benefits: ['Improves cohesion', 'Reduces coupling', 'Better organization'],
+                inverseOf: null
+            },
+            {
+                name: 'Move Field',
+                smell: 'Field used more by another class',
+                mechanics: 'Create field in target class, redirect all users',
+                when: 'Field is used more by another class',
+                before: `class Account {
+    constructor() {
+        this.interestRate = 0.05; // Used by AccountType
+    }
+}
+
+class AccountType {
+    getInterestRate(account) {
+        return account.interestRate;
+    }
+}`,
+                after: `class Account {
+    constructor(type) {
+        this.type = type;
+    }
+    
+    getInterestRate() {
+        return this.type.interestRate;
+    }
+}
+
+class AccountType {
+    constructor() {
+        this.interestRate = 0.05;
+    }
+}`,
+                benefits: ['Data near its behavior', 'Clearer ownership', 'Better encapsulation'],
+                inverseOf: null
+            },
+            {
+                name: 'Extract Class',
+                smell: 'Class doing work of two',
+                mechanics: 'Create new class, move relevant fields and methods',
+                when: 'Class has too many responsibilities',
+                before: `class Person {
+    constructor() {
+        this.name = "";
+        this.officeAreaCode = "";
+        this.officeNumber = "";
+    }
+    
+    getTelephoneNumber() {
+        return "(" + this.officeAreaCode + ") " + this.officeNumber;
+    }
+}`,
+                after: `class Person {
+    constructor() {
+        this.name = "";
+        this.officeTelephone = new TelephoneNumber();
+    }
+    
+    getTelephoneNumber() {
+        return this.officeTelephone.getTelephoneNumber();
+    }
+}
+
+class TelephoneNumber {
+    constructor() {
+        this.areaCode = "";
+        this.number = "";
+    }
+    
+    getTelephoneNumber() {
+        return "(" + this.areaCode + ") " + this.number;
+    }
+}`,
+                benefits: ['Single Responsibility', 'Easier to understand', 'More reusable'],
+                inverseOf: 'Inline Class'
+            },
+            {
+                name: 'Inline Class',
+                smell: 'Class not doing much',
+                mechanics: 'Move all features to another class, delete original',
+                when: 'Class no longer pulling its weight',
+                before: `class Person {
+    constructor() {
+        this.name = "";
+        this.telephone = new TelephoneNumber();
+    }
+}
+
+class TelephoneNumber {
+    constructor() {
+        this.number = "";
+    }
+    getNumber() { return this.number; }
+}`,
+                after: `class Person {
+    constructor() {
+        this.name = "";
+        this.telephoneNumber = "";
+    }
+    
+    getTelephoneNumber() {
+        return this.telephoneNumber;
+    }
+}`,
+                benefits: ['Reduces complexity', 'Fewer classes to maintain', 'Simpler structure'],
+                inverseOf: 'Extract Class'
+            },
+            {
+                name: 'Hide Delegate',
+                smell: 'Client calling delegate through server',
+                mechanics: 'Create methods on server to hide delegate',
+                when: 'Client needs to know about delegation',
+                before: `// Client code
+manager = john.getDepartment().getManager();`,
+                after: `// Person class
+getManager() {
+    return this.department.getManager();
+}
+
+// Client code
+manager = john.getManager();`,
+                benefits: ['Reduces coupling', 'Encapsulation', 'Easier to change'],
+                inverseOf: 'Remove Middle Man'
+            },
+            {
+                name: 'Remove Middle Man',
+                smell: 'Class doing too much delegation',
+                mechanics: 'Get client to call delegate directly',
+                when: 'Half the methods are delegating',
+                before: `class Person {
+    getManager() { return this.department.getManager(); }
+    getBudget() { return this.department.getBudget(); }
+    getHeadcount() { return this.department.getHeadcount(); }
+    // 10 more delegating methods...
+}`,
+                after: `class Person {
+    getDepartment() { return this.department; }
+}
+
+// Client code
+manager = john.getDepartment().getManager();`,
+                benefits: ['Reduces unnecessary indirection', 'Simpler code', 'Clearer intent'],
+                inverseOf: 'Hide Delegate'
+            }
+        ]
+    },
+    organizing: {
+        title: 'Organizing Data',
+        color: 'blue',
+        description: 'Techniques for better organizing data structures and improving data handling',
+        techniques: [
+            {
+                name: 'Self Encapsulate Field',
+                smell: 'Direct field access',
+                mechanics: 'Create getter/setter for field, use only those',
+                when: 'Need to add validation or logic around field access',
+                before: `class Rectangle {
+    constructor() {
+        this.width = 0;
+        this.height = 0;
+    }
+    
+    getArea() {
+        return this.width * this.height;
+    }
+}`,
+                after: `class Rectangle {
+    constructor() {
+        this._width = 0;
+        this._height = 0;
+    }
+    
+    get width() { return this._width; }
+    set width(value) {
+        if (value < 0) throw new Error("Width cannot be negative");
+        this._width = value;
+    }
+    
+    get height() { return this._height; }
+    set height(value) {
+        if (value < 0) throw new Error("Height cannot be negative");
+        this._height = value;
+    }
+    
+    getArea() {
+        return this.width * this.height;
+    }
+}`,
+                benefits: ['Enables validation', 'Encapsulation', 'Flexibility for future changes'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Data Value with Object',
+                smell: 'Data item needs behavior',
+                mechanics: 'Turn data item into object',
+                when: 'Data item needs additional data or behavior',
+                before: `class Order {
+    constructor(customer) {
+        this.customer = customer; // Just a string
+    }
+}`,
+                after: `class Order {
+    constructor(customerName) {
+        this.customer = new Customer(customerName);
+    }
+}
+
+class Customer {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    // Can now add methods, validation, etc.
+    getDiscount() { /* ... */ }
+}`,
+                benefits: ['Encapsulates behavior', 'Type safety', 'More maintainable'],
+                inverseOf: 'Replace Object with Data Value'
+            },
+            {
+                name: 'Change Value to Reference',
+                smell: 'Multiple copies of same data',
+                mechanics: 'Turn value object into reference object',
+                when: 'Many equal instances, want to ensure single instance',
+                before: `// Multiple Order objects each create new Customer
+const order1 = new Order(new Customer("John"));
+const order2 = new Order(new Customer("John"));
+// order1.customer !== order2.customer`,
+                after: `class CustomerRegistry {
+    static instances = new Map();
+    
+    static get(name) {
+        if (!this.instances.has(name)) {
+            this.instances.set(name, new Customer(name));
+        }
+        return this.instances.get(name);
+    }
+}
+
+const order1 = new Order(CustomerRegistry.get("John"));
+const order2 = new Order(CustomerRegistry.get("John"));
+// order1.customer === order2.customer`,
+                benefits: ['Single source of truth', 'Consistency', 'Memory efficient'],
+                inverseOf: 'Change Reference to Value'
+            },
+            {
+                name: 'Replace Array with Object',
+                smell: 'Array elements mean different things',
+                mechanics: 'Replace array with object with fields for each element',
+                when: 'Array elements have different meanings',
+                before: `const row = [];
+row[0] = "Liverpool";
+row[1] = 15;
+
+const name = row[0];
+const wins = row[1];`,
+                after: `class Team {
+    constructor(name, wins) {
+        this.name = name;
+        this.wins = wins;
+    }
+}
+
+const team = new Team("Liverpool", 15);
+const name = team.name;
+const wins = team.wins;`,
+                benefits: ['Self-documenting', 'Type safe', 'Enables methods'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Magic Number with Symbolic Constant',
+                smell: 'Literal number with special meaning',
+                mechanics: 'Create constant with clear name',
+                when: 'Number has special meaning',
+                before: `function potentialEnergy(mass, height) {
+    return mass * 9.81 * height;
+}`,
+                after: `const GRAVITATIONAL_CONSTANT = 9.81;
+
+function potentialEnergy(mass, height) {
+    return mass * GRAVITATIONAL_CONSTANT * height;
+}`,
+                benefits: ['Self-documenting', 'Single place to change', 'Searchable'],
+                inverseOf: null
+            },
+            {
+                name: 'Encapsulate Field',
+                smell: 'Public field',
+                mechanics: 'Make field private, provide accessors',
+                when: 'Field is public',
+                before: `class Person {
+    constructor() {
+        this.name = "";
+    }
+}
+
+person.name = "John";`,
+                after: `class Person {
+    constructor() {
+        this._name = "";
+    }
+    
+    get name() { return this._name; }
+    set name(value) { this._name = value; }
+}
+
+person.name = "John";`,
+                benefits: ['Encapsulation', 'Can add validation', 'Hide implementation'],
+                inverseOf: null
+            },
+            {
+                name: 'Encapsulate Collection',
+                smell: 'Method returns collection',
+                mechanics: 'Return read-only view, provide add/remove methods',
+                when: 'Getter returns collection reference',
+                before: `class Course {
+    constructor() {
+        this.students = [];
+    }
+    
+    getStudents() {
+        return this.students; // Direct reference!
+    }
+}
+
+// Client can modify directly
+course.getStudents().push(newStudent);`,
+                after: `class Course {
+    constructor() {
+        this._students = [];
+    }
+    
+    getStudents() {
+        return [...this._students]; // Copy
+    }
+    
+    addStudent(student) {
+        this._students.push(student);
+    }
+    
+    removeStudent(student) {
+        const index = this._students.indexOf(student);
+        if (index > -1) this._students.splice(index, 1);
+    }
+}
+
+course.addStudent(newStudent);`,
+                benefits: ['Prevents external modification', 'Controlled access', 'Can add validation'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Type Code with Class',
+                smell: 'Type code that doesn\'t affect behavior',
+                mechanics: 'Replace type code with class',
+                when: 'Numeric or string type code',
+                before: `class Person {
+    static BLOOD_TYPE_O = 0;
+    static BLOOD_TYPE_A = 1;
+    static BLOOD_TYPE_B = 2;
+    static BLOOD_TYPE_AB = 3;
+    
+    constructor(bloodType) {
+        this.bloodType = bloodType;
+    }
+}
+
+const person = new Person(Person.BLOOD_TYPE_A);`,
+                after: `class BloodType {
+    static O = new BloodType(0);
+    static A = new BloodType(1);
+    static B = new BloodType(2);
+    static AB = new BloodType(3);
+    
+    constructor(code) {
+        this.code = code;
+    }
+}
+
+class Person {
+    constructor(bloodType) {
+        this.bloodType = bloodType;
+    }
+}
+
+const person = new Person(BloodType.A);`,
+                benefits: ['Type safety', 'Can add behavior', 'Better semantics'],
+                inverseOf: null
+            }
+        ]
+    },
+    simplifying: {
+        title: 'Simplifying Conditional Expressions',
+        color: 'purple',
+        description: 'Techniques for making conditional logic clearer and easier to understand',
+        techniques: [
+            {
+                name: 'Decompose Conditional',
+                smell: 'Complex conditional logic',
+                mechanics: 'Extract condition and branches into methods',
+                when: 'Complicated conditional (if-then-else)',
+                before: `if (date.before(SUMMER_START) || date.after(SUMMER_END)) {
+    charge = quantity * winterRate + winterServiceCharge;
+} else {
+    charge = quantity * summerRate;
+}`,
+                after: `if (isNotSummer(date)) {
+    charge = winterCharge(quantity);
+} else {
+    charge = summerCharge(quantity);
+}
+
+function isNotSummer(date) {
+    return date.before(SUMMER_START) || date.after(SUMMER_END);
+}`,
+                benefits: ['Clearer intent', 'Easier to understand', 'More testable'],
+                inverseOf: null
+            },
+            {
+                name: 'Consolidate Conditional Expression',
+                smell: 'Multiple conditionals with same result',
+                mechanics: 'Combine into single conditional expression',
+                when: 'Sequence of conditional tests all have same result',
+                before: `function disabilityAmount(employee) {
+    if (employee.seniority < 2) return 0;
+    if (employee.monthsDisabled > 12) return 0;
+    if (employee.isPartTime) return 0;
+    // compute disability amount
+}`,
+                after: `function disabilityAmount(employee) {
+    if (isNotEligibleForDisability(employee)) return 0;
+    // compute disability amount
+}
+
+function isNotEligibleForDisability(employee) {
+    return employee.seniority < 2 || 
+           employee.monthsDisabled > 12 || 
+           employee.isPartTime;
+}`,
+                benefits: ['Shows intent', 'Single check', 'Easier to extract'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Nested Conditional with Guard Clauses',
+                smell: 'Deeply nested conditionals',
+                mechanics: 'Use guard clauses for special cases',
+                when: 'Conditional behavior obscures normal path',
+                before: `function getPayAmount(employee) {
+    let result;
+    if (employee.isSeparated) {
+        result = { amount: 0, reason: "SEP" };
+    } else {
+        if (employee.isRetired) {
+            result = { amount: 0, reason: "RET" };
+        } else {
+            // Normal pay logic
+            result = calculatePay(employee);
+        }
+    }
+    return result;
+}`,
+                after: `function getPayAmount(employee) {
+    if (employee.isSeparated) {
+        return { amount: 0, reason: "SEP" };
+    }
+    if (employee.isRetired) {
+        return { amount: 0, reason: "RET" };
+    }
+    // Normal pay logic clearly visible
+    return calculatePay(employee);
+}`,
+                benefits: ['Highlights unusual conditions', 'Clearer normal path', 'Less nesting'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Conditional with Polymorphism',
+                smell: 'Type-based conditional',
+                mechanics: 'Move each leg to override in subclass',
+                when: 'Conditional based on object type',
+                before: `class Bird {
+    getSpeed() {
+        switch (this.type) {
+            case "EUROPEAN":
+                return this.getBaseSpeed();
+            case "AFRICAN":
+                return this.getBaseSpeed() - this.getLoadFactor();
+            case "NORWEGIAN_BLUE":
+                return this.isNailed ? 0 : this.getBaseSpeed();
+        }
+    }
+}`,
+                after: `class Bird {
+    abstract getSpeed();
+}
+
+class European extends Bird {
+    getSpeed() {
+        return this.getBaseSpeed();
+    }
+}
+
+class African extends Bird {
+    getSpeed() {
+        return this.getBaseSpeed() - this.getLoadFactor();
+    }
+}
+
+class NorwegianBlue extends Bird {
+    getSpeed() {
+        return this.isNailed ? 0 : this.getBaseSpeed();
+    }
+}`,
+                benefits: ['Eliminates conditionals', 'Extensible', 'Better OO design'],
+                inverseOf: null
+            },
+            {
+                name: 'Introduce Null Object',
+                smell: 'Repeated null checks',
+                mechanics: 'Create null object that provides default behavior',
+                when: 'Repeated checks for null',
+                before: `if (customer === null) {
+    plan = BillingPlan.basic();
+} else {
+    plan = customer.getPlan();
+}`,
+                after: `class NullCustomer extends Customer {
+    getPlan() {
+        return BillingPlan.basic();
+    }
+    
+    isNull() { return true; }
+}
+
+// Usage
+plan = customer.getPlan(); // Works for both`,
+                benefits: ['Eliminates null checks', 'Cleaner code', 'Polymorphic behavior'],
+                inverseOf: null
+            },
+            {
+                name: 'Introduce Assertion',
+                smell: 'Assumptions not explicit',
+                mechanics: 'Replace assumption with assertion',
+                when: 'Section of code assumes something about state',
+                before: `function getExpenseLimit() {
+    // Assumes this.expenseLimit !== null or this.primaryProject !== null
+    return this.expenseLimit !== null ? 
+        this.expenseLimit : 
+        this.primaryProject.getMemberExpenseLimit();
+}`,
+                after: `function getExpenseLimit() {
+    console.assert(this.expenseLimit !== null || this.primaryProject !== null);
+    return this.expenseLimit !== null ? 
+        this.expenseLimit : 
+        this.primaryProject.getMemberExpenseLimit();
+}`,
+                benefits: ['Documents assumptions', 'Catches bugs early', 'Clearer invariants'],
+                inverseOf: null
+            }
+        ]
+    },
+    generalization: {
+        title: 'Dealing with Generalization',
+        color: 'amber',
+        description: 'Techniques for managing inheritance hierarchies and abstraction',
+        techniques: [
+            {
+                name: 'Pull Up Field',
+                smell: 'Same field in subclasses',
+                mechanics: 'Move field to superclass',
+                when: 'Subclasses have same field',
+                before: `class Salesman {
+    constructor() {
+        this.name = "";
+    }
+}
+
+class Engineer {
+    constructor() {
+        this.name = "";
+    }
+}`,
+                after: `class Employee {
+    constructor() {
+        this.name = "";
+    }
+}
+
+class Salesman extends Employee {}
+class Engineer extends Employee {}`,
+                benefits: ['Eliminates duplication', 'Shared state', 'Cleaner hierarchy'],
+                inverseOf: 'Push Down Field'
+            },
+            {
+                name: 'Pull Up Method',
+                smell: 'Identical methods in subclasses',
+                mechanics: 'Move method to superclass',
+                when: 'Methods in subclasses do the same thing',
+                before: `class Salesman {
+    getName() {
+        return this.name;
+    }
+}
+
+class Engineer {
+    getName() {
+        return this.name;
+    }
+}`,
+                after: `class Employee {
+    getName() {
+        return this.name;
+    }
+}
+
+class Salesman extends Employee {}
+class Engineer extends Employee {}`,
+                benefits: ['Eliminates duplication', 'Single implementation', 'DRY principle'],
+                inverseOf: 'Push Down Method'
+            },
+            {
+                name: 'Pull Up Constructor Body',
+                smell: 'Similar constructor code',
+                mechanics: 'Create superclass constructor, call from subclasses',
+                when: 'Constructors mostly identical',
+                before: `class Manager {
+    constructor(name, id, grade) {
+        this.name = name;
+        this.id = id;
+        this.grade = grade;
+    }
+}
+
+class Engineer {
+    constructor(name, id) {
+        this.name = name;
+        this.id = id;
+    }
+}`,
+                after: `class Employee {
+    constructor(name, id) {
+        this.name = name;
+        this.id = id;
+    }
+}
+
+class Manager extends Employee {
+    constructor(name, id, grade) {
+        super(name, id);
+        this.grade = grade;
+    }
+}
+
+class Engineer extends Employee {
+    constructor(name, id) {
+        super(name, id);
+    }
+}`,
+                benefits: ['Shared initialization', 'DRY principle', 'Consistent setup'],
+                inverseOf: null
+            },
+            {
+                name: 'Push Down Field',
+                smell: 'Field only used by some subclasses',
+                mechanics: 'Move field to subclasses',
+                when: 'Field only relevant to some subclasses',
+                before: `class Employee {
+    constructor() {
+        this.quota = 0; // Only salesmen have quotas
+    }
+}`,
+                after: `class Employee {}
+
+class Salesman extends Employee {
+    constructor() {
+        super();
+        this.quota = 0;
+    }
+}`,
+                benefits: ['Cleaner interface', 'More focused classes', 'Less confusion'],
+                inverseOf: 'Pull Up Field'
+            },
+            {
+                name: 'Push Down Method',
+                smell: 'Method only relevant to some subclasses',
+                mechanics: 'Move method to relevant subclasses',
+                when: 'Behavior only relevant to some subclasses',
+                before: `class Employee {
+    getQuota() {
+        return this.quota;
+    }
+}
+
+class Engineer extends Employee {} // Doesn't need quota`,
+                after: `class Employee {}
+
+class Salesman extends Employee {
+    getQuota() {
+        return this.quota;
+    }
+}`,
+                benefits: ['Clearer responsibilities', 'Focused interfaces', 'Less confusion'],
+                inverseOf: 'Pull Up Method'
+            },
+            {
+                name: 'Extract Subclass',
+                smell: 'Features used only in some instances',
+                mechanics: 'Create subclass for subset of features',
+                when: 'Class has features used only sometimes',
+                before: `class JobItem {
+    constructor(quantity, employee, isLabor, unitPrice) {
+        this.quantity = quantity;
+        this.employee = employee;
+        this.isLabor = isLabor;
+        this.unitPrice = unitPrice;
+    }
+    
+    getTotalPrice() {
+        return this.getUnitPrice() * this.quantity;
+    }
+    
+    getUnitPrice() {
+        return this.isLabor ? 
+            this.employee.getRate() : 
+            this.unitPrice;
+    }
+}`,
+                after: `class JobItem {
+    constructor(quantity, unitPrice) {
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+    
+    getTotalPrice() {
+        return this.getUnitPrice() * this.quantity;
+    }
+    
+    getUnitPrice() {
+        return this.unitPrice;
+    }
+}
+
+class LaborItem extends JobItem {
+    constructor(quantity, employee) {
+        super(quantity, 0);
+        this.employee = employee;
+    }
+    
+    getUnitPrice() {
+        return this.employee.getRate();
+    }
+}`,
+                benefits: ['Clearer variants', 'No conditional logic', 'Easier to extend'],
+                inverseOf: null
+            },
+            {
+                name: 'Extract Superclass',
+                smell: 'Similar features in multiple classes',
+                mechanics: 'Create superclass, move common features',
+                when: 'Two classes have similar features',
+                before: `class Department {
+    getTotalAnnualCost() { /* ... */ }
+    getName() { /* ... */ }
+    getHeadCount() { /* ... */ }
+}
+
+class Employee {
+    getAnnualCost() { /* ... */ }
+    getName() { /* ... */ }
+    getId() { /* ... */ }
+}`,
+                after: `class Party {
+    getName() { /* ... */ }
+    getAnnualCost() { /* ... */ }
+}
+
+class Department extends Party {
+    getHeadCount() { /* ... */ }
+}
+
+class Employee extends Party {
+    getId() { /* ... */ }
+}`,
+                benefits: ['Eliminates duplication', 'Clear abstraction', 'Better hierarchy'],
+                inverseOf: null
+            },
+            {
+                name: 'Extract Interface',
+                smell: 'Multiple clients use subset of class',
+                mechanics: 'Extract interface for subset',
+                when: 'Several clients use same subset of features',
+                before: `class Employee {
+    getRate() { /* ... */ }
+    hasSpecialSkill() { /* ... */ }
+    getName() { /* ... */ }
+    getDepartment() { /* ... */ }
+}
+
+// Client only needs getRate and hasSpecialSkill`,
+                after: `interface Billable {
+    getRate();
+    hasSpecialSkill();
+}
+
+class Employee implements Billable {
+    getRate() { /* ... */ }
+    hasSpecialSkill() { /* ... */ }
+    getName() { /* ... */ }
+    getDepartment() { /* ... */ }
+}
+
+// Client depends on Billable interface only`,
+                benefits: ['Clear contracts', 'Reduced coupling', 'Interface segregation'],
+                inverseOf: null
+            },
+            {
+                name: 'Collapse Hierarchy',
+                smell: 'Subclass not adding value',
+                mechanics: 'Merge subclass into superclass',
+                when: 'Subclass and superclass not very different',
+                before: `class Employee {}
+
+class Salesman extends Employee {
+    // Barely different from Employee
+}`,
+                after: `class Employee {
+    // Merged features
+}`,
+                benefits: ['Simpler structure', 'Less overhead', 'Clearer design'],
+                inverseOf: 'Extract Subclass'
+            },
+            {
+                name: 'Form Template Method',
+                smell: 'Similar algorithm in subclasses',
+                mechanics: 'Move steps to superclass, override varying parts',
+                when: 'Subclasses implement similar algorithm',
+                before: `class Site {}
+
+class ResidentialSite extends Site {
+    getBillableAmount() {
+        const base = this.units * this.rate;
+        const tax = base * Site.TAX_RATE;
+        return base + tax;
+    }
+}
+
+class LifelineSite extends Site {
+    getBillableAmount() {
+        const base = this.units * this.rate * 0.5;
+        const tax = base * Site.TAX_RATE * 0.2;
+        return base + tax;
+    }
+}`,
+                after: `class Site {
+    getBillableAmount() {
+        return this.getBaseAmount() + this.getTaxAmount();
+    }
+    
+    abstract getBaseAmount();
+    abstract getTaxAmount();
+}
+
+class ResidentialSite extends Site {
+    getBaseAmount() {
+        return this.units * this.rate;
+    }
+    
+    getTaxAmount() {
+        return this.getBaseAmount() * Site.TAX_RATE;
+    }
+}
+
+class LifelineSite extends Site {
+    getBaseAmount() {
+        return this.units * this.rate * 0.5;
+    }
+    
+    getTaxAmount() {
+        return this.getBaseAmount() * Site.TAX_RATE * 0.2;
+    }
+}`,
+                benefits: ['Eliminates duplication', 'Clear algorithm structure', 'Template Method pattern'],
+                inverseOf: null
+            }
+        ]
+    },
+    api: {
+        title: 'Simplifying Method Calls (API)',
+        color: 'pink',
+        description: 'Techniques for making interfaces easier to understand and use',
+        techniques: [
+            {
+                name: 'Rename Method',
+                smell: 'Method name doesn\'t reveal intent',
+                mechanics: 'Change name to better express purpose',
+                when: 'Method name doesn\'t say what it does',
+                before: `class Person {
+    get() {
+        return this.name;
+    }
+}`,
+                after: `class Person {
+    getName() {
+        return this.name;
+    }
+}`,
+                benefits: ['Self-documenting', 'Clearer intent', 'Better readability'],
+                inverseOf: null
+            },
+            {
+                name: 'Add Parameter',
+                smell: 'Method needs more information',
+                mechanics: 'Add parameter for needed information',
+                when: 'Method needs information from caller',
+                before: `function getContact() {
+    return this.contacts[0];
+}`,
+                after: `function getContact(index) {
+    return this.contacts[index];
+}`,
+                benefits: ['More flexible', 'Better parameterization', 'Reusable'],
+                inverseOf: 'Remove Parameter'
+            },
+            {
+                name: 'Remove Parameter',
+                smell: 'Parameter no longer needed',
+                mechanics: 'Remove the parameter',
+                when: 'Parameter is unused or unnecessary',
+                before: `function getContact(index, fullName) {
+    // fullName never used
+    return this.contacts[index];
+}`,
+                after: `function getContact(index) {
+    return this.contacts[index];
+}`,
+                benefits: ['Simpler interface', 'Less confusion', 'Cleaner signature'],
+                inverseOf: 'Add Parameter'
+            },
+            {
+                name: 'Separate Query from Modifier',
+                smell: 'Method returns value and changes state',
+                mechanics: 'Split into query and modifier',
+                when: 'Method both returns value and has side effects',
+                before: `function getTotalOutstandingAndSetReadyForSummaries() {
+    const result = this.customers.reduce((sum, c) => {
+        c.setReadyForSummaries();
+        return sum + c.getOutstanding();
+    }, 0);
+    return result;
+}`,
+                after: `function getTotalOutstanding() {
+    return this.customers.reduce((sum, c) => 
+        sum + c.getOutstanding(), 0);
+}
+
+function setReadyForSummaries() {
+    this.customers.forEach(c => c.setReadyForSummaries());
+}`,
+                benefits: ['No side effects in queries', 'Clearer intent', 'More testable'],
+                inverseOf: null
+            },
+            {
+                name: 'Parameterize Method',
+                smell: 'Multiple methods do similar things',
+                mechanics: 'Replace with single method using parameter',
+                when: 'Several methods differ only by values',
+                before: `function tenPercentRaise() {
+    this.salary *= 1.1;
+}
+
+function fivePercentRaise() {
+    this.salary *= 1.05;
+}`,
+                after: `function raise(percentage) {
+    this.salary *= (1 + percentage / 100);
+}`,
+                benefits: ['Less duplication', 'More flexible', 'Fewer methods'],
+                inverseOf: 'Replace Parameter with Explicit Methods'
+            },
+            {
+                name: 'Replace Parameter with Explicit Methods',
+                smell: 'Parameter selects different behavior',
+                mechanics: 'Create separate method for each parameter value',
+                when: 'Parameter drives completely different behavior',
+                before: `function setValue(name, value) {
+    if (name === "height") {
+        this.height = value;
+    } else if (name === "width") {
+        this.width = value;
+    }
+}`,
+                after: `function setHeight(value) {
+    this.height = value;
+}
+
+function setWidth(value) {
+    this.width = value;
+}`,
+                benefits: ['Clearer interface', 'Type safe', 'Self-documenting'],
+                inverseOf: 'Parameterize Method'
+            },
+            {
+                name: 'Preserve Whole Object',
+                smell: 'Getting several values from object to pass',
+                mechanics: 'Pass whole object instead',
+                when: 'Getting multiple values from same object',
+                before: `const low = daysTempRange.getLow();
+const high = daysTempRange.getHigh();
+const withinPlan = plan.withinRange(low, high);`,
+                after: `const withinPlan = plan.withinRange(daysTempRange);`,
+                benefits: ['Simpler calls', 'Less coupling to object internals', 'Easier to extend'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Parameter with Method',
+                smell: 'Object gets value to pass to method',
+                mechanics: 'Remove parameter, let receiver call method',
+                when: 'Parameter obtained by invoking method on known object',
+                before: `const basePrice = this.quantity * this.itemPrice;
+const discountLevel = this.getDiscountLevel();
+const finalPrice = discountedPrice(basePrice, discountLevel);`,
+                after: `const basePrice = this.quantity * this.itemPrice;
+const finalPrice = discountedPrice(basePrice);
+
+function discountedPrice(basePrice) {
+    const discountLevel = this.getDiscountLevel();
+    // use discountLevel
+}`,
+                benefits: ['Simpler calls', 'Less parameter passing', 'Clearer responsibility'],
+                inverseOf: null
+            },
+            {
+                name: 'Introduce Parameter Object',
+                smell: 'Group of parameters go together',
+                mechanics: 'Replace with object',
+                when: 'Same group of parameters in multiple methods',
+                before: `function amountInvoiced(startDate, endDate) { /* ... */ }
+function amountReceived(startDate, endDate) { /* ... */ }
+function amountOverdue(startDate, endDate) { /* ... */ }`,
+                after: `class DateRange {
+    constructor(startDate, endDate) {
+        this.start = startDate;
+        this.end = endDate;
+    }
+}
+
+function amountInvoiced(dateRange) { /* ... */ }
+function amountReceived(dateRange) { /* ... */ }
+function amountOverdue(dateRange) { /* ... */ }`,
+                benefits: ['Shorter parameter lists', 'Clearer grouping', 'Can add behavior'],
+                inverseOf: null
+            },
+            {
+                name: 'Remove Setting Method',
+                smell: 'Field should only be set at construction',
+                mechanics: 'Remove setter, set in constructor only',
+                when: 'Field should not change after object creation',
+                before: `class Account {
+    setId(id) {
+        this.id = id;
+    }
+}`,
+                after: `class Account {
+    constructor(id) {
+        this.id = id;
+    }
+    
+    // No setId method - id is immutable
+}`,
+                benefits: ['Immutability', 'Thread safety', 'Clearer invariants'],
+                inverseOf: null
+            },
+            {
+                name: 'Hide Method',
+                smell: 'Method not used by other classes',
+                mechanics: 'Make method private',
+                when: 'Method should not be part of public interface',
+                before: `class Employee {
+    public calculateBonus() { /* ... */ }
+    public calculatePay() {
+        // ...
+        this.calculateBonus();
+    }
+}`,
+                after: `class Employee {
+    public calculatePay() {
+        // ...
+        this.calculateBonus();
+    }
+    
+    private calculateBonus() { /* ... */ }
+}`,
+                benefits: ['Smaller interface', 'Less coupling', 'More encapsulation'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Constructor with Factory Method',
+                smell: 'Complex object creation',
+                mechanics: 'Replace constructor call with factory method',
+                when: 'Constructor does more than simple construction',
+                before: `class Employee {
+    constructor(type) {
+        this.type = type;
+        // Complex logic based on type
+    }
+}
+
+const eng = new Employee(Employee.ENGINEER);`,
+                after: `class Employee {
+    static createEngineer() {
+        return new Employee(Employee.ENGINEER);
+    }
+    
+    static createSalesman() {
+        return new Employee(Employee.SALESMAN);
+    }
+    
+    private constructor(type) {
+        this.type = type;
+    }
+}
+
+const eng = Employee.createEngineer();`,
+                benefits: ['Clearer intent', 'Can return subclasses', 'More flexible'],
+                inverseOf: null
+            },
+            {
+                name: 'Replace Error Code with Exception',
+                smell: 'Method returns special code for error',
+                mechanics: 'Throw exception instead',
+                when: 'Method returns error code rather than exception',
+                before: `function withdraw(amount) {
+    if (amount > this.balance) {
+        return -1; // Error code
+    }
+    this.balance -= amount;
+    return 0;
+}
+
+if (account.withdraw(100) === -1) {
+    // Handle error
+}`,
+                after: `function withdraw(amount) {
+    if (amount > this.balance) {
+        throw new InsufficientFundsError();
+    }
+    this.balance -= amount;
+}
+
+try {
+    account.withdraw(100);
+} catch (e) {
+    if (e instanceof InsufficientFundsError) {
+        // Handle error
+    }
+}`,
+                benefits: ['Clear error handling', 'No special values', 'Forced handling'],
+                inverseOf: 'Replace Exception with Test'
+            },
+            {
+                name: 'Replace Exception with Test',
+                smell: 'Exception for expected condition',
+                mechanics: 'Replace exception with conditional test',
+                when: 'Exception thrown for preventable condition',
+                before: `function getValueForPeriod(periodNumber) {
+    try {
+        return this.values[periodNumber];
+    } catch (ArrayIndexOutOfBoundsException) {
+        return 0;
+    }
+}`,
+                after: `function getValueForPeriod(periodNumber) {
+    if (periodNumber >= this.values.length) {
+        return 0;
+    }
+    return this.values[periodNumber];
+}`,
+                benefits: ['Better performance', 'Clearer intent', 'No exception overhead'],
+                inverseOf: 'Replace Error Code with Exception'
+            }
+        ]
+    }
+};
+
+let currentCategory = 'composing';
+
+function render() {
+    const cat = refactoringContent[currentCategory];
+    
+    const html = `
+        <div class="mb-12">
+            <h2 class="text-4xl font-bold mb-4" style="color: var(--refactor-${cat.color})">${cat.title}</h2>
+            <p class="text-xl text-gray-400 mb-8">${cat.description}</p>
+            <div class="text-lg text-gray-300 mb-4">
+                <strong style="color: var(--refactor-${cat.color})">${cat.techniques.length} techniques</strong> in this category
+            </div>
+        </div>
+        
+        <div class="grid gap-6">
+            ${cat.techniques.map(tech => `
+                <div class="technique-card card-${currentCategory} p-6 rounded-xl cursor-pointer" onclick="openTechniqueModal('${tech.name.replace(/'/g, "\\'")}')">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-2xl font-bold" style="color: var(--refactor-${cat.color})">${tech.name}</h3>
+                        <span class="smell-badge">🦨 ${tech.smell}</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">${tech.mechanics}</p>
+                    <div class="flex flex-wrap gap-2">
+                        ${tech.benefits.slice(0, 3).map(b => `
+                            <span class="benefit-badge">✓ ${b}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    document.getElementById('content').innerHTML = html;
+}
+
+function show(category) {
+    currentCategory = category;
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + category).classList.add('active');
+    render();
+}
+
+function openTechniqueModal(name) {
+    const cat = refactoringContent[currentCategory];
+    const tech = cat.techniques.find(t => t.name === name);
+    
+    const html = `
+        <div class="mb-6">
+            <h2 class="text-3xl font-bold mb-3" style="color: var(--refactor-${cat.color})">${tech.name}</h2>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="smell-badge">🦨 Code Smell: ${tech.smell}</span>
+                ${tech.inverseOf ? `<span class="text-sm px-3 py-1 rounded" style="background: rgba(139,92,246,0.2); color: var(--refactor-purple)">↔️ Inverse: ${tech.inverseOf}</span>` : ''}
+            </div>
+        </div>
+        
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(59,130,246,0.1); border-left: 4px solid var(--refactor-blue);">
+            <h3 class="text-xl font-bold mb-2 text-blue-400">Mechanics</h3>
+            <p class="text-gray-300">${tech.mechanics}</p>
+        </div>
+        
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(245,158,11,0.1); border-left: 4px solid var(--refactor-amber);">
+            <h3 class="text-xl font-bold mb-2 text-amber-400">When to Apply</h3>
+            <p class="text-gray-300">${tech.when}</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-red-400">❌ Before Refactoring</h3>
+                <div class="code-block code-before p-4 rounded-lg">
+                    <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${tech.before.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-green-400">✅ After Refactoring</h3>
+                <div class="code-block code-after p-4 rounded-lg">
+                    <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${tech.after.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-6 rounded-lg" style="background: rgba(16,185,129,0.1); border: 2px solid var(--refactor-green);">
+            <h3 class="text-xl font-bold mb-3 text-green-400">✨ Benefits</h3>
+            <div class="grid md:grid-cols-2 gap-3">
+                ${tech.benefits.map(b => `
+                    <div class="benefit-badge">${b}</div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('modal-content').innerHTML = html;
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+render();
+    </script>
+</body>
+</html>
