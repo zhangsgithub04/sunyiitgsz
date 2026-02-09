@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>React Chess (CDN)</title>
+
+    <!-- chessboard.js CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/chessboardjs@1.0.0/www/css/chessboard.css"
+    />
+
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding: 16px; }
+      .row { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+      #board { width: 420px; }
+      .panel { min-width: 320px; }
+      .buttons { display: flex; gap: 8px; margin: 8px 0; flex-wrap: wrap; }
+      button { padding: 8px 10px; cursor: pointer; }
+      pre { background: #f6f6f6; padding: 10px; border-radius: 8px; overflow: auto; max-height: 420px; }
+      .status { margin-top: 8px; }
+      .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #eee; margin-left: 6px; }
+    </style>
+  </head>
+
+  <body>
+    <h1>React Chess (CDN)</h1>
+    <div id="root"></div>
+
+    <!-- React (UMD) -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel (so we can write JSX in the browser) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- chess.js -->
+    <script src="https://unpkg.com/chess.js@1.0.0/dist/chess.js"></script>
+
+    <!-- chessboard.js (depends on jQuery) -->
+    <script src="https://unpkg.com/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/chessboardjs@1.0.0/www/js/chessboard.js"></script>
+
+    <script type="text/babel">
+      const { useEffect, useMemo, useRef, useState } = React;
+
+      function ChessApp() {
+        const boardElRef = useRef(null);
+        const boardApiRef = useRef(null);
+
+        // chess.js game instance
+        const game = useMemo(() => new Chess(), []);
+        const [fen, setFen] = useState(game.fen());
+        const [pgn, setPgn] = useState(game.pgn());
+        const [status, setStatus] = useState("");
+
+        const updateUiFromGame = () => {
+          const nextFen = game.fen();
+          setFen(nextFen);
+          setPgn(game.pgn());
+
+          if (boardApiRef.current) boardApiRef.current.position(nextFen);
+
+          // Status text
+          let s = "";
+          if (game.isCheckmate()) s = "Checkmate.";
+          else if (game.isDraw()) s = "Draw.";
+          else {
+            s = (game.turn() === "w" ? "White" : "Black") + " to move.";
+            if (game.inCheck()) s += " (Check!)";
+          }
+          setStatus(s);
+        };
+
+        useEffect(() => {
+          // Initialize chessboard.js once
+          const cfg = {
+            position: fen,
+            draggable: true,
+            onDrop: (source, target) => {
+              // Try to make a move (queen promotion by default if needed)
+              const move = game.move({ from: source, to: target, promotion: "q" });
+              if (move == null) return "snapback"; // illegal
+              updateUiFromGame();
+            },
+            onSnapEnd: () => {
+              // keep board synced with game after animation
+              if (boardApiRef.current) boardApiRef.current.position(game.fen());
+            },
+          };
+
+          boardApiRef.current = Chessboard(boardElRef.current, cfg);
+          updateUiFromGame();
+
+          const onResize = () => boardApiRef.current && boardApiRef.current.resize();
+          window.addEventListener("resize", onResize);
+
+          return () => {
+            window.removeEventListener("resize", onResize);
+            try {
+              boardApiRef.current && boardApiRef.current.destroy();
+            } catch {}
+            boardApiRef.current = null;
+          };
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []);
+
+        const reset = () => {
+          game.reset();
+          updateUiFromGame();
+        };
+
+        const undo = () => {
+          game.undo();
+          updateUiFromGame();
+        };
+
+        const randomMove = () => {
+          const moves = game.moves();
+          if (!moves.length) return;
+          const mv = moves[Math.floor(Math.random() * moves.length)];
+          game.move(mv);
+          updateUiFromGame();
+        };
+
+        return (
+          <div className="row">
+            <div>
+              <div id="board" ref={boardElRef}></div>
+              <div className="status">
+                <strong>Status:</strong> {status}
+                <span className="badge">{game.turn() === "w" ? "White" : "Black"}</span>
+              </div>
+            </div>
+
+            <div className="panel">
+              <div className="buttons">
+                <button onClick={reset}>Reset</button>
+                <button onClick={undo}>Undo</button>
+                <button onClick={randomMove}>Play Random Move</button>
+              </div>
+
+              <div>
+                <div><strong>FEN</strong></div>
+                <pre>{fen}</pre>
+              </div>
+
+              <div>
+                <div><strong>PGN</strong></div>
+                <pre>{pgn || "(no moves yet)"}</pre>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<ChessApp />);
+    </script>
+  </body>
+</html>
