@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content-width, initial-scale=1.0">
+    <title>Software Engineering Principles - Beyond SOLID</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --principle-red: #ef4444;
+            --principle-blue: #3b82f6;
+            --principle-green: #10b981;
+            --principle-purple: #a855f7;
+            --principle-amber: #f59e0b;
+            --principle-pink: #ec4899;
+            --bg-dark: #1a1a2e;
+            --bg-darker: #0f0f1e;
+        }
+        body { font-family: 'JetBrains Mono', monospace; background: var(--bg-darker); color: #e4e4e7; line-height: 1.6; }
+        .hero-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(2.5rem, 10vw, 5.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--principle-red), var(--principle-blue), var(--principle-green), var(--principle-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .principle-card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .principle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .principle-card:hover::before { width: 100%; opacity: 0.1; }
+        .principle-card:hover { transform: translateY(-4px); }
+        
+        .card-kiss::before { background: var(--principle-red); }
+        .card-dry::before { background: var(--principle-blue); }
+        .card-composition::before { background: var(--principle-green); }
+        .card-yagni::before { background: var(--principle-purple); }
+        .card-separation::before { background: var(--principle-amber); }
+        .card-lift::before { background: var(--principle-pink); }
+        .card-first::before { background: var(--principle-green); }
+        
+        .card-kiss:hover { border-color: var(--principle-red); box-shadow: 0 10px 40px rgba(239,68,68,0.3); }
+        .card-dry:hover { border-color: var(--principle-blue); box-shadow: 0 10px 40px rgba(59,130,246,0.3); }
+        .card-composition:hover { border-color: var(--principle-green); box-shadow: 0 10px 40px rgba(16,185,129,0.3); }
+        .card-yagni:hover { border-color: var(--principle-purple); box-shadow: 0 10px 40px rgba(168,85,247,0.3); }
+        .card-separation:hover { border-color: var(--principle-amber); box-shadow: 0 10px 40px rgba(245,158,11,0.3); }
+        .card-lift:hover { border-color: var(--principle-pink); box-shadow: 0 10px 40px rgba(236,72,153,0.3); }
+        .card-first:hover { border-color: var(--principle-green); box-shadow: 0 10px 40px rgba(16,185,129,0.3); }
+        
+        .code-block {
+            background: var(--bg-darker);
+            border-left: 4px solid;
+            font-size: 0.875rem;
+        }
+        .code-bad { border-left-color: #ef4444; }
+        .code-good { border-left-color: #10b981; }
+        
+        .acronym-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            border: 3px solid;
+        }
+        
+        .badge-kiss { background: rgba(239,68,68,0.1); border-color: var(--principle-red); color: var(--principle-red); }
+        .badge-dry { background: rgba(59,130,246,0.1); border-color: var(--principle-blue); color: var(--principle-blue); }
+        .badge-composition { background: rgba(16,185,129,0.1); border-color: var(--principle-green); color: var(--principle-green); }
+        .badge-yagni { background: rgba(168,85,247,0.1); border-color: var(--principle-purple); color: var(--principle-purple); }
+        .badge-separation { background: rgba(245,158,11,0.1); border-color: var(--principle-amber); color: var(--principle-amber); }
+        .badge-lift { background: rgba(236,72,153,0.1); border-color: var(--principle-pink); color: var(--principle-pink); }
+        .badge-first { background: rgba(16,185,129,0.1); border-color: var(--principle-green); color: var(--principle-green); }
+        
+        .benefit-box {
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(16,185,129,0.1);
+            border-left: 4px solid var(--principle-green);
+        }
+        
+        .warning-box {
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(239,68,68,0.1);
+            border-left: 4px solid var(--principle-red);
+        }
+    </style>
+</head>
+<body>
+    <header class="py-20 px-6" style="background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="hero-title mb-6">Software Engineering Principles</h1>
+            <p class="text-2xl md:text-3xl text-gray-300 mb-4">Essential Principles Beyond SOLID</p>
+            <p class="text-xl text-gray-400 mb-8">
+                Practical guidelines for writing clean, maintainable, and efficient code
+            </p>
+            <div class="flex justify-center gap-4 flex-wrap">
+                <span class="acronym-badge badge-kiss">KISS</span>
+                <span class="acronym-badge badge-dry">DRY</span>
+                <span class="acronym-badge badge-yagni">YAGNI</span>
+                <span class="acronym-badge badge-lift">LIFT</span>
+                <span class="acronym-badge badge-first">FIRST</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-16 px-6 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div id="content"></div>
+        </div>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,15,30,0.95);">
+        <div class="relative max-w-6xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-8" style="background: rgba(22,33,62,0.98);">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-white">×</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <footer class="py-12 px-6 border-t border-gray-800" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-xl text-gray-300 mb-2">Master These Principles for Better Code</p>
+            <p class="text-sm text-gray-500">Used alongside SOLID for comprehensive software design</p>
+        </div>
+    </footer>
+
+    <script>
+const principles = [
+    {
+        id: 'kiss',
+        acronym: 'KISS',
+        name: 'Keep It Simple, Stupid',
+        tagline: 'Simplicity is the ultimate sophistication',
+        color: 'red',
+        cssVar: 'principle-red',
+        definition: 'Design systems and write code that is as simple as possible. Avoid unnecessary complexity.',
+        origin: 'U.S. Navy in 1960. The principle states that most systems work best if they are kept simple rather than made complicated.',
+        coreIdea: 'Simple code is easier to understand, maintain, debug, and extend. Complexity should be added only when absolutely necessary.',
+        whenToApply: [
+            'Choosing between multiple implementation approaches',
+            'Designing system architecture',
+            'Writing functions and methods',
+            'Selecting frameworks and libraries',
+            'Refactoring complex code'
+        ],
+        bad: `// ❌ OVERLY COMPLEX - "Clever" but hard to understand
+class UserAuthenticationManager {
+    validateAndAuthenticateUser(credentials: any) {
+        return new Promise((resolve, reject) => {
+            ((creds) => {
+                const validator = {
+                    check: (c) => !!(c.username && c.password),
+                    process: function(c) {
+                        return this.check(c) ? 
+                            ((u, p) => ({
+                                user: u,
+                                token: btoa(\`\${u}:\${p}:\${Date.now()}\`)
+                            }))(c.username, c.password) : null;
+                    }
+                };
+                const result = validator.process(creds);
+                result ? resolve(result) : reject('Invalid');
+            })(credentials);
+        });
+    }
+}
+
+// Nested functions, arrow functions, ternaries all mixed together
+// Hard to debug, hard to test, hard to understand`,
+        good: `// ✅ SIMPLE - Clear and straightforward
+class UserAuthenticator {
+    async authenticate(username: string, password: string) {
+        if (!this.isValid(username, password)) {
+            throw new Error('Invalid credentials');
+        }
+        
+        const token = this.generateToken(username, password);
+        return { username, token };
+    }
+    
+    private isValid(username: string, password: string): boolean {
+        return username.length > 0 && password.length > 0;
+    }
+    
+    private generateToken(username: string, password: string): string {
+        const data = \`\${username}:\${password}:\${Date.now()}\`;
+        return btoa(data);
+    }
+}
+
+// Each method has one clear purpose
+// Easy to read, test, and maintain`,
+        example: `Real-World Example - Data Filtering:
+
+COMPLEX (Don't do this):
+const filtered = users
+    .reduce((acc, user) => {
+        const condition = ((u) => 
+            [u.age, u.role].every(v => v) && 
+            u.age >= 18 && 
+            ['admin', 'user'].includes(u.role)
+        )(user);
+        return condition ? [...acc, user] : acc;
+    }, [])
+    .map(u => ({...u, displayName: \`\${u.firstName} \${u.lastName}\`}));
+
+SIMPLE (Do this instead):
+const activeAdults = users.filter(user => {
+    return user.age >= 18 && 
+           user.role === 'admin' || user.role === 'user';
+});
+
+const usersWithDisplayNames = activeAdults.map(user => ({
+    ...user,
+    displayName: \`\${user.firstName} \${user.lastName}\`
+}));
+
+Why Simple is Better:
+✓ Each step is clear
+✓ Easy to modify filter criteria
+✓ Easy to debug if something goes wrong
+✓ Teammates can understand instantly`,
+        antipatterns: [
+            '❌ Writing one-liners that do too much',
+            '❌ Using obscure language features to show off',
+            '❌ Creating deep nested structures',
+            '❌ Over-engineering simple requirements',
+            '❌ Adding abstraction layers "just in case"'
+        ],
+        benefits: [
+            '✓ Faster onboarding for new developers',
+            '✓ Fewer bugs due to clearer logic',
+            '✓ Easier maintenance and updates',
+            '✓ Better performance (often)',
+            '✓ Reduced cognitive load'
+        ]
+    },
+    {
+        id: 'dry',
+        acronym: 'DRY',
+        name: 'Don\'t Repeat Yourself',
+        tagline: 'Every piece of knowledge must have a single, authoritative representation',
+        color: 'blue',
+        cssVar: 'principle-blue',
+        definition: 'Avoid duplicating code, logic, or data. Each piece of knowledge should exist in exactly one place.',
+        origin: 'Andy Hunt and Dave Thomas in "The Pragmatic Programmer" (1999)',
+        coreIdea: 'When you need to change something, you should only need to change it in one place. Duplication leads to maintenance nightmares.',
+        whenToApply: [
+            'Same code appears in multiple places',
+            'Similar logic with minor variations',
+            'Repeated validation rules',
+            'Duplicated configuration or constants',
+            'Copy-pasted code blocks'
+        ],
+        bad: `// ❌ WET (Write Everything Twice) - Duplication everywhere
+function createUser(userData) {
+    if (!userData.email || !userData.email.includes('@')) {
+        throw new Error('Invalid email');
+    }
+    if (!userData.password || userData.password.length < 8) {
+        throw new Error('Password too short');
+    }
+    // Create user...
+}
+
+function updateUser(userId, userData) {
+    if (!userData.email || !userData.email.includes('@')) {
+        throw new Error('Invalid email');
+    }
+    if (!userData.password || userData.password.length < 8) {
+        throw new Error('Password too short');
+    }
+    // Update user...
+}
+
+function registerUser(userData) {
+    if (!userData.email || !userData.email.includes('@')) {
+        throw new Error('Invalid email');
+    }
+    if (!userData.password || userData.password.length < 8) {
+        throw new Error('Password too short');
+    }
+    // Register user...
+}
+
+// Same validation logic repeated 3 times!
+// If validation rules change, must update 3 places
+// Easy to create inconsistencies`,
+        good: `// ✅ DRY - Single source of truth
+class UserValidator {
+    static validateEmail(email: string): void {
+        if (!email || !email.includes('@')) {
+            throw new Error('Invalid email');
+        }
+    }
+    
+    static validatePassword(password: string): void {
+        if (!password || password.length < 8) {
+            throw new Error('Password must be at least 8 characters');
+        }
+    }
+    
+    static validateUserData(userData: any): void {
+        this.validateEmail(userData.email);
+        this.validatePassword(userData.password);
+    }
+}
+
+function createUser(userData) {
+    UserValidator.validateUserData(userData);
+    // Create user...
+}
+
+function updateUser(userId, userData) {
+    UserValidator.validateUserData(userData);
+    // Update user...
+}
+
+function registerUser(userData) {
+    UserValidator.validateUserData(userData);
+    // Register user...
+}
+
+// Validation logic in ONE place
+// Change once, affects everywhere
+// Consistent behavior guaranteed`,
+        example: `Real-World Example - API Response Formatting:
+
+WET APPROACH (Repetitive):
+app.get('/users/:id', (req, res) => {
+    const user = getUserById(req.params.id);
+    res.status(200).json({
+        success: true,
+        data: user,
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/posts/:id', (req, res) => {
+    const post = getPostById(req.params.id);
+    res.status(200).json({
+        success: true,
+        data: post,
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/comments/:id', (req, res) => {
+    const comment = getCommentById(req.params.id);
+    res.status(200).json({
+        success: true,
+        data: comment,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Response format repeated everywhere!
+
+DRY APPROACH (Reusable):
+function successResponse(data: any) {
+    return {
+        success: true,
+        data: data,
+        timestamp: new Date().toISOString()
+    };
+}
+
+app.get('/users/:id', (req, res) => {
+    const user = getUserById(req.params.id);
+    res.status(200).json(successResponse(user));
+});
+
+app.get('/posts/:id', (req, res) => {
+    const post = getPostById(req.params.id);
+    res.status(200).json(successResponse(post));
+});
+
+app.get('/comments/:id', (req, res) => {
+    const comment = getCommentById(req.params.id);
+    res.status(200).json(successResponse(comment));
+});
+
+// Format defined once, used everywhere
+// Want to add "version" field? Change one function!`,
+        antipatterns: [
+            '❌ Copy-pasting code instead of extracting functions',
+            '❌ Hardcoding same values in multiple files',
+            '❌ Over-abstraction (DRY takentoo far)',
+            '❌ Duplicating business logic in frontend and backend',
+            '❌ Repeating SQL queries instead of using repositories'
+        ],
+        benefits: [
+            '✓ Single point of change for updates',
+            '✓ Reduced code volume and complexity',
+            '✓ Consistent behavior across application',
+            '✓ Easier to fix bugs (fix once, works everywhere)',
+            '✓ Better testability'
+        ]
+    },
+    {
+        id: 'composition',
+        acronym: 'COMPOSITION',
+        name: 'Composition Over Inheritance',
+        tagline: 'Favor object composition over class inheritance',
+        color: 'green',
+        cssVar: 'principle-green',
+        definition: 'Build functionality by composing objects rather than inheriting from base classes. This provides more flexibility.',
+        origin: 'Gang of Four "Design Patterns" book (1994)',
+        coreIdea: 'Inheritance creates tight coupling and rigid hierarchies. Composition allows flexibility by combining behaviors from multiple sources.',
+        whenToApply: [
+            'Need to share behavior between unrelated classes',
+            'Want to change behavior at runtime',
+            'Inheritance hierarchy becomes complex',
+            'Multiple inheritance would be useful',
+            'Need to avoid fragile base class problem'
+        ],
+        bad: `// ❌ INHERITANCE - Rigid hierarchy
+class Vehicle {
+    engine: Engine;
+    wheels: number;
+    
+    start() { /* ... */ }
+    stop() { /* ... */ }
+}
+
+class Car extends Vehicle {
+    doors: number;
+    
+    openDoors() { /* ... */ }
+}
+
+class ElectricCar extends Car {
+    battery: Battery;
+    
+    charge() { /* ... */ }
+    
+    // Problem: ElectricCar inherits start() that assumes gas engine!
+    // Problem: Can't share electric behavior with ElectricBike
+}
+
+class Boat extends Vehicle {
+    propeller: Propeller;
+    
+    // Problem: Boat has wheels from Vehicle!
+}
+
+class FlyingCar extends Car {
+    wings: Wings;
+    
+    fly() { /* ... */ }
+    
+    // Problem: Multiple behaviors hard to model with inheritance
+    // What if we want FlyingBoat? Create another class?
+}
+
+// Inheritance hierarchy becomes rigid and illogical`,
+        good: `// ✅ COMPOSITION - Flexible building blocks
+interface Engine {
+    start(): void;
+    stop(): void;
+}
+
+interface Movable {
+    move(direction: string): void;
+}
+
+class GasEngine implements Engine {
+    start() { console.log('Gas engine starting...'); }
+    stop() { console.log('Gas engine stopping...'); }
+}
+
+class ElectricEngine implements Engine {
+    start() { console.log('Electric engine starting...'); }
+    stop() { console.log('Electric engine stopping...'); }
+    charge() { console.log('Charging battery...'); }
+}
+
+class WheelMovement implements Movable {
+    move(direction: string) {
+        console.log(\`Rolling on wheels \${direction}\`);
+    }
+}
+
+class PropellerMovement implements Movable {
+    move(direction: string) {
+        console.log(\`Propelling through water \${direction}\`);
+    }
+}
+
+class WingMovement implements Movable {
+    move(direction: string) {
+        console.log(\`Flying \${direction}\`);
+    }
+}
+
+// Compose vehicles from behaviors
+class Car {
+    constructor(
+        private engine: Engine,
+        private movement: Movable
+    ) {}
+    
+    start() { this.engine.start(); }
+    stop() { this.engine.stop(); }
+    drive(direction: string) { this.movement.move(direction); }
+}
+
+// Mix and match any combination!
+const gasCar = new Car(new GasEngine(), new WheelMovement());
+const electricCar = new Car(new ElectricEngine(), new WheelMovement());
+const boat = new Car(new GasEngine(), new PropellerMovement());
+const flyingCar = new Car(new GasEngine(), new WingMovement());
+
+// Flexible! Can create any combination at runtime`,
+        example: `Real-World Example - User Capabilities:
+
+INHERITANCE APPROACH (Rigid):
+class User {
+    login() {}
+}
+
+class Editor extends User {
+    edit() {}
+}
+
+class Admin extends Editor {
+    delete() {}
+    manageUsers() {}
+}
+
+// Problem: What if user can edit but not manage users?
+// Problem: Can't give moderator delete but not manage users
+// Problem: Can't change permissions at runtime
+
+COMPOSITION APPROACH (Flexible):
+interface Capability {
+    execute(): void;
+}
+
+class LoginCapability implements Capability {
+    execute() { /* login logic */ }
+}
+
+class EditCapability implements Capability {
+    execute() { /* edit logic */ }
+}
+
+class DeleteCapability implements Capability {
+    execute() { /* delete logic */ }
+}
+
+class ManageUsersCapability implements Capability {
+    execute() { /* manage users logic */ }
+}
+
+class User {
+    private capabilities: Capability[] = [];
+    
+    addCapability(capability: Capability) {
+        this.capabilities.push(capability);
+    }
+    
+    hasCapability(type: any): boolean {
+        return this.capabilities.some(c => c instanceof type);
+    }
+}
+
+// Build users with exact capabilities needed
+const viewer = new User();
+viewer.addCapability(new LoginCapability());
+
+const editor = new User();
+editor.addCapability(new LoginCapability());
+editor.addCapability(new EditCapability());
+
+const moderator = new User();
+moderator.addCapability(new LoginCapability());
+moderator.addCapability(new EditCapability());
+moderator.addCapability(new DeleteCapability());
+// Note: No ManageUsersCapability!
+
+const admin = new User();
+admin.addCapability(new LoginCapability());
+admin.addCapability(new EditCapability());
+admin.addCapability(new DeleteCapability());
+admin.addCapability(new ManageUsersCapability());
+
+// Capabilities can be added/removed at runtime!
+// Any combination possible!`,
+        antipatterns: [
+            '❌ Deep inheritance hierarchies (>3 levels)',
+            '❌ Base classes that are never used directly',
+            '❌ Inheriting to reuse code (use composition)',
+            '❌ Modifying base class breaks subclasses (fragile base)',
+            '❌ Forcing unnatural is-a relationships'
+        ],
+        benefits: [
+            '✓ More flexible - compose any combination',
+            '✓ Change behavior at runtime',
+            '✓ Avoid fragile base class problem',
+            '✓ Easier to test (mock composed objects)',
+            '✓ Better separation of concerns'
+        ]
+    },
+    {
+        id: 'yagni',
+        acronym: 'YAGNI',
+        name: 'You Aren\'t Gonna Need It',
+        tagline: 'Don\'t implement something until you actually need it',
+        color: 'purple',
+        cssVar: 'principle-purple',
+        definition: 'Don\'t add functionality or complexity based on what you think you might need in the future. Implement only what\'s required now.',
+        origin: 'Extreme Programming (XP) methodology',
+        coreIdea: 'Speculative features waste time, add complexity, and often never get used. Build what you need today, add more when actually needed.',
+        whenToApply: [
+            'Considering adding "future-proof" features',
+            'Thinking "we might need this later"',
+            'Designing overly flexible systems',
+            'Adding configuration for unknown use cases',
+            'Building abstraction layers before needed'
+        ],
+        bad: `// ❌ OVER-ENGINEERING - Building for imagined futures
+class UserService {
+    private cache: Map<string, User>;
+    private secondaryCache: Map<string, User>;
+    private cacheStrategy: 'LRU' | 'LFU' | 'FIFO';
+    private maxCacheSize: number;
+    private cacheTTL: number;
+    private cacheWarming: boolean;
+    private distributedCache: RedisClient;
+    
+    constructor() {
+        // "We might need caching in the future"
+        this.cache = new Map();
+        this.secondaryCache = new Map();
+        this.cacheStrategy = 'LRU';
+        this.maxCacheSize = 1000;
+        this.cacheTTL = 3600;
+        this.cacheWarming = false;
+        // Setup complex caching infrastructure...
+    }
+    
+    async getUser(id: string): Promise<User> {
+        // Complex cache lookup logic
+        if (this.cache.has(id)) {
+            return this.cache.get(id)!;
+        }
+        
+        if (this.secondaryCache.has(id)) {
+            const user = this.secondaryCache.get(id)!;
+            this.promoteToMainCache(user);
+            return user;
+        }
+        
+        // Distributed cache check...
+        const fromDistributed = await this.distributedCache.get(id);
+        if (fromDistributed) {
+            this.addToCache(fromDistributed);
+            return fromDistributed;
+        }
+        
+        // Finally, database
+        const user = await db.findUserById(id);
+        this.addToCache(user);
+        return user;
+    }
+    
+    // Tons of caching code that may never be needed!
+    // App has 100 users, caching is premature
+}`,
+        good: `// ✅ YAGNI - Build what you need NOW
+class UserService {
+    async getUser(id: string): Promise<User> {
+        return await db.findUserById(id);
+    }
+}
+
+// Simple! Does exactly what's needed right now.
+// If caching becomes necessary later (proven by metrics),
+// THEN add it. Not before.
+
+// When you actually need caching:
+class UserService {
+    private cache = new Map<string, User>();
+    
+    async getUser(id: string): Promise<User> {
+        // Add simple caching only when proven necessary
+        if (this.cache.has(id)) {
+            return this.cache.get(id)!;
+        }
+        
+        const user = await db.findUserById(id);
+        this.cache.set(id, user);
+        return user;
+    }
+}
+
+// Start simple, add complexity when needed`,
+        example: `Real-World Example - Configuration System:
+
+YAGNI VIOLATION (Over-engineered):
+class AppConfig {
+    // "We might need different config sources"
+    private sources: ConfigSource[] = [];
+    private mergeStrategy: 'override' | 'deep-merge' | 'shallow-merge';
+    private reloadStrategy: 'hot' | 'cold' | 'lazy';
+    private encryptionEnabled: boolean;
+    private validationSchema: any;
+    
+    constructor() {
+        // Support environment variables
+        this.sources.push(new EnvConfigSource());
+        // Support JSON files
+        this.sources.push(new JSONConfigSource());
+        // Support remote config server
+        this.sources.push(new RemoteConfigSource());
+        // Support database config
+        this.sources.push(new DatabaseConfigSource());
+        
+        // Complex merging logic
+        // Encryption setup
+        // Validation setup
+        // Hot reloading setup
+        // ...hundreds of lines of code
+    }
+}
+
+// Spent 2 weeks building this.
+// Reality: App only uses environment variables.
+// All other sources never used.
+
+YAGNI APPROACH (Build what you need):
+class AppConfig {
+    get(key: string): string {
+        return process.env[key] || '';
+    }
+}
+
+// Done! 5 minutes of work.
+// Works perfectly for current needs.
+
+// Later, if you actually need JSON file support:
+class AppConfig {
+    private envConfig = process.env;
+    private fileConfig = {};
+    
+    constructor() {
+        // NOW we add file support because we need it
+        this.fileConfig = JSON.parse(
+            fs.readFileSync('config.json', 'utf-8')
+        );
+    }
+    
+    get(key: string): string {
+        return this.fileConfig[key] || this.envConfig[key] || '';
+    }
+}
+
+// Add features when actually needed, not "just in case"`,
+        antipatterns: [
+            '❌ "We might need to support X in the future"',
+            '❌ Building plugin systems before second plugin exists',
+            '❌ Generic solutions before specific need',
+            '❌ Configurability for every possible scenario',
+            '❌ "This will make it more flexible"'
+        ],
+        benefits: [
+            '✓ Faster development - build only what\'s needed',
+            '✓ Less code to maintain',
+            '✓ Simpler, clearer codebase',
+            '✓ Avoid wasting time on unused features',
+            '✓ Easier to change (less code to modify)'
+        ]
+    },
+    {
+        id: 'separation',
+        acronym: 'SoC',
+        name: 'Separation of Concerns',
+        tagline: 'Different concerns belong in different places',
+        color: 'amber',
+        cssVar: 'principle-amber',
+        definition: 'Organize code so that each section addresses a separate concern. UI, business logic, and data access should be separate.',
+        origin: 'Edsger W. Dijkstra (1974)',
+        coreIdea: 'When concerns are mixed, changes to one affect others. Separating them makes code easier to understand, test, and modify.',
+        whenToApply: [
+            'Designing application architecture',
+            'Organizing code within files',
+            'Deciding what belongs in a function/class',
+            'Splitting frontend and backend logic',
+            'Structuring tests'
+        ],
+        bad: `// ❌ MIXED CONCERNS - Everything in one place
+class UserComponent {
+    async saveUser() {
+        // UI concern: Get form data
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        
+        // Validation concern (business logic)
+        if (!email.includes('@')) {
+            document.getElementById('error').innerText = 'Invalid email';
+            return;
+        }
+        
+        // Data access concern (backend communication)
+        const response = await fetch('https://api.example.com/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email })
+        });
+        
+        // UI concern: Display result
+        if (response.ok) {
+            document.getElementById('success').innerText = 'User saved!';
+            document.getElementById('username').value = '';
+            document.getElementById('email').value = '';
+        } else {
+            document.getElementById('error').innerText = 'Save failed';
+        }
+    }
+}
+
+// Problems:
+// - Can't test validation without DOM
+// - Can't reuse validation logic
+// - Can't change API without touching UI
+// - Can't unit test without mocking fetch AND DOM`,
+        good: `// ✅ SEPARATED CONCERNS - Each concern in its place
+
+// 1. DATA ACCESS LAYER
+class UserRepository {
+    async save(user: User): Promise<User> {
+        const response = await fetch('https://api.example.com/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+        });
+        return response.json();
+    }
+}
+
+// 2. BUSINESS LOGIC LAYER
+class UserValidator {
+    static validate(user: User): string[] {
+        const errors: string[] = [];
+        
+        if (!user.email.includes('@')) {
+            errors.push('Invalid email');
+        }
+        
+        if (user.username.length < 3) {
+            errors.push('Username too short');
+        }
+        
+        return errors;
+    }
+}
+
+// 3. PRESENTATION LAYER
+class UserForm {
+    constructor(
+        private validator: typeof UserValidator,
+        private repository: UserRepository
+    ) {}
+    
+    async handleSubmit() {
+        const user = this.getFormData();
+        
+        const errors = this.validator.validate(user);
+        if (errors.length > 0) {
+            this.displayErrors(errors);
+            return;
+        }
+        
+        try {
+            await this.repository.save(user);
+            this.displaySuccess('User saved!');
+            this.clearForm();
+        } catch (error) {
+            this.displayError('Save failed');
+        }
+    }
+    
+    private getFormData(): User {
+        return {
+            username: (document.getElementById('username') as HTMLInputElement).value,
+            email: (document.getElementById('email') as HTMLInputElement).value
+        };
+    }
+    
+    private displayErrors(errors: string[]) {
+        document.getElementById('error')!.innerText = errors.join(', ');
+    }
+    
+    private displaySuccess(message: string) {
+        document.getElementById('success')!.innerText = message;
+    }
+    
+    private displayError(message: string) {
+        document.getElementById('error')!.innerText = message;
+    }
+    
+    private clearForm() {
+        (document.getElementById('username') as HTMLInputElement).value = '';
+        (document.getElementById('email') as HTMLInputElement).value = '';
+    }
+}
+
+// Benefits:
+// ✓ UserValidator can be tested without DOM or network
+// ✓ UserRepository can be tested independently
+// ✓ Can reuse validation in different components
+// ✓ Can swap API implementation easily
+// ✓ Clear responsibilities`,
+        example: `Real-World Example - E-commerce Checkout:
+
+MIXED CONCERNS:
+function checkout() {
+    // Get cart items from DOM
+    const items = [];
+    document.querySelectorAll('.cart-item').forEach(el => {
+        items.push({
+            id: el.dataset.id,
+            price: parseFloat(el.dataset.price),
+            quantity: parseInt(el.querySelector('.quantity').value)
+        });
+    });
+    
+    // Calculate total (business logic)
+    let total = 0;
+    items.forEach(item => {
+        total += item.price * item.quantity;
+    });
+    
+    // Apply discount (business logic)
+    const coupon = document.getElementById('coupon').value;
+    if (coupon === 'SAVE10') {
+        total *= 0.9;
+    }
+    
+    // Save order (data access)
+    fetch('/api/orders', {
+        method: 'POST',
+        body: JSON.stringify({ items, total })
+    }).then(() => {
+        // Update UI
+        document.getElementById('cart').innerHTML = '';
+        document.getElementById('success').innerText = 'Order placed!';
+    });
+}
+
+SEPARATED CONCERNS:
+// Business Logic
+class OrderCalculator {
+    calculateTotal(items: CartItem[]): number {
+        return items.reduce((sum, item) => 
+            sum + (item.price * item.quantity), 0
+        );
+    }
+    
+    applyDiscount(total: number, coupon: string): number {
+        const discounts = { 'SAVE10': 0.1, 'SAVE20': 0.2 };
+        const discount = discounts[coupon] || 0;
+        return total * (1 - discount);
+    }
+}
+
+// Data Access
+class OrderRepository {
+    async create(order: Order): Promise<Order> {
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            body: JSON.stringify(order)
+        });
+        return response.json();
+    }
+}
+
+// UI
+class CheckoutComponent {
+    constructor(
+        private calculator: OrderCalculator,
+        private repository: OrderRepository
+    ) {}
+    
+    async handleCheckout() {
+        const items = this.getCartItems();
+        let total = this.calculator.calculateTotal(items);
+        
+        const coupon = this.getCouponCode();
+        if (coupon) {
+            total = this.calculator.applyDiscount(total, coupon);
+        }
+        
+        const order = await this.repository.create({ items, total });
+        this.displaySuccess(order);
+    }
+}
+
+// Each concern isolated and testable!`,
+        antipatterns: [
+            '❌ Database queries in UI components',
+            '❌ Business logic in controllers',
+            '❌ Validation logic scattered everywhere',
+            '❌ Mixing HTML with business logic',
+            '❌ God classes that do everything'
+        ],
+        benefits: [
+            '✓ Each layer independently testable',
+            '✓ Easy to swap implementations',
+            '✓ Clearer code organization',
+            '✓ Better reusability',
+            '✓ Easier parallel development'
+        ]
+    },
+    {
+        id: 'lift',
+        acronym: 'LIFT',
+        name: 'LIFT Principle',
+        tagline: 'Locate code quickly, Identify at a glance, Flat structure, Try to be DRY',
+        color: 'pink',
+        cssVar: 'principle-pink',
+        definition: 'Structure frontend code (especially Angular/React) for easy location and identification. Particularly important for large applications.',
+        origin: 'John Papa (Angular Style Guide)',
+        coreIdea: 'Code organization should help developers find and understand code quickly, especially in large codebases.',
+        whenToApply: [
+            'Organizing Angular, React, or Vue projects',
+            'Structuring component libraries',
+            'Setting up new frontend projects',
+            'Refactoring messy project structures',
+            'Creating coding standards'
+        ],
+        bad: `// ❌ POOR STRUCTURE - Hard to find anything
+src/
+  components/
+    a.tsx
+    b.tsx
+    c.tsx
+    d.tsx
+    e.tsx
+    f.tsx
+    utils.ts
+    helpers.ts
+    stuff.ts
+  styles/
+    style1.css
+    style2.css
+    styles.css
+  pages/
+    page1.tsx
+    page2.tsx
+
+// Problems:
+// - What does 'a.tsx' do? (not identifiable)
+// - Where is the user profile component? (hard to locate)
+// - Is utils.ts for component 'a' or 'b'? (not organized)
+// - Flat structure becomes huge with 100+ files`,
+        good: `// ✅ LIFT STRUCTURE - Clear and organized
+
+src/
+  features/
+    user-profile/               // LOCATE: Feature-based folders
+      components/
+        UserAvatar.tsx          // IDENTIFY: Clear naming
+        UserBio.tsx
+        UserSettings.tsx
+      hooks/
+        useUserData.ts
+      UserProfile.tsx
+      UserProfile.test.tsx
+      UserProfile.module.css
+      
+    shopping-cart/              // LOCATE: Each feature self-contained
+      components/
+        CartItem.tsx            // IDENTIFY: Descriptive names
+        CartSummary.tsx
+      hooks/
+        useCart.ts
+      ShoppingCart.tsx
+      ShoppingCart.test.tsx
+      
+    product-catalog/
+      components/
+        ProductCard.tsx
+        ProductFilters.tsx
+        ProductGrid.tsx
+      hooks/
+        useProducts.ts
+      ProductCatalog.tsx
+      
+  shared/                       // TRY DRY: Shared code in one place
+    components/
+      Button.tsx
+      Modal.tsx
+      Input.tsx
+    hooks/
+      useApi.ts
+      useAuth.ts
+    utils/
+      formatters.ts
+      validators.ts
+
+// Benefits:
+// ✓ LOCATE: Feature folders group related code
+// ✓ IDENTIFY: Clear names (UserProfile, not 'a.tsx')
+// ✓ FLAT: Each feature folder stays flat
+// ✓ DRY: Shared code in 'shared' folder`,
+        example: `DETAILED LIFT EXAMPLE:
+
+L - LOCATE code quickly:
+✓ Feature-based structure: user-profile, shopping-cart
+✓ Related files grouped together
+✓ Consistent folder structure across features
+
+BAD:
+src/components/
+  user-thing.tsx
+  user-other.tsx
+  cart-something.tsx
+  // Where is the user profile? Who knows!
+
+GOOD:
+src/features/
+  user-profile/
+    UserProfile.tsx           // Here!
+    components/
+    hooks/
+
+I - IDENTIFY code at a glance:
+✓ Descriptive file names
+✓ Clear component names
+✓ Consistent naming conventions
+
+BAD:
+utils.ts          // What utils?
+helpers.ts        // What helpers?
+a.tsx            // What's 'a'?
+
+GOOD:
+formatCurrency.ts     // Clear purpose
+useUserData.ts        // Clear purpose
+UserAvatar.tsx        // Clear purpose
+
+F - FLAT structure as long as possible:
+✓ Avoid deep nesting (max 3-4 levels)
+✓ When folder gets >7 files, consider splitting
+
+BAD:
+features/
+  user/
+    profile/
+      personal/
+        info/
+          basic/
+            name/
+              FirstName.tsx  // Too deep!
+
+GOOD:
+features/
+  user-profile/
+    components/
+      PersonalInfo.tsx
+      ContactInfo.tsx
+    UserProfile.tsx
+
+T - TRY to be DRY:
+✓ Extract common code to shared/
+✓ Don't duplicate components
+✓ Reuse hooks and utilities
+
+BAD:
+user-profile/formatDate.ts
+shopping-cart/formatDate.ts
+// Same code duplicated!
+
+GOOD:
+shared/
+  utils/
+    formatDate.ts
+// Used by all features`,
+        antipatterns: [
+            '❌ Organizing by file type instead of feature',
+            '❌ Generic names (utils.ts, helpers.ts, stuff.ts)',
+            '❌ Deeply nested folder structures (>4 levels)',
+            '❌ Mixing feature code with shared code',
+            '❌ No clear naming conventions'
+        ],
+        benefits: [
+            '✓ New developers onboard faster',
+            '✓ Find files in seconds, not minutes',
+            '✓ Understand code purpose at a glance',
+            '✓ Scale to hundreds of components',
+            '✓ Easier to refactor and maintain'
+        ]
+    },
+    {
+        id: 'first',
+        acronym: 'FIRST',
+        name: 'FIRST Testing Principles',
+        tagline: 'Fast, Independent, Repeatable, Self-validating, Timely',
+        color: 'green',
+        cssVar: 'principle-green',
+        definition: 'Guidelines for writing effective unit tests. Each test should be fast, independent, repeatable, self-validating, and written timely.',
+        origin: 'Tim Ottinger and Jeff Langr',
+        coreIdea: 'Good tests catch bugs early, run quickly, and don\'t interfere with each other. FIRST principles ensure test quality.',
+        whenToApply: [
+            'Writing unit tests',
+            'Reviewing test code',
+            'Setting up test suites',
+            'TDD (Test-Driven Development)',
+            'CI/CD pipeline optimization'
+        ],
+        bad: `// ❌ VIOLATES ALL FIRST PRINCIPLES
+describe('User API', () => {
+    let userId;
+    
+    // NOT FAST - Takes 5 seconds per test
+    test('should create user', async () => {
+        const response = await fetch('https://api.example.com/users', {
+            method: 'POST',
+            body: JSON.stringify({ name: 'Test User' })
+        });
+        const user = await response.json();
+        userId = user.id; // NOT INDEPENDENT - stores state!
+        
+        // NOT SELF-VALIDATING - requires manual check
+        console.log('User created:', user);
+        // No assertion!
+    });
+    
+    // NOT INDEPENDENT - depends on previous test
+    test('should update user', async () => {
+        const response = await fetch(\`https://api.example.com/users/\${userId}\`, {
+            method: 'PUT',
+            body: JSON.stringify({ name: 'Updated' })
+        });
+        
+        // NOT REPEATABLE - might fail if API is down
+        expect(response.ok).toBe(true);
+    });
+    
+    // NOT TIMELY - written after production code deployed
+});
+
+// Problems:
+// - Tests take minutes to run (slow feedback)
+// - Tests fail if run in different order
+// - Tests fail randomly due to network
+// - Hard to know if tests passed
+// - Tests written after bugs found`,
+        good: `// ✅ FOLLOWS ALL FIRST PRINCIPLES
+describe('UserService', () => {
+    let userService: UserService;
+    let mockRepository: jest.Mock;
+    
+    beforeEach(() => {
+        // INDEPENDENT - Fresh setup for each test
+        mockRepository = jest.fn();
+        userService = new UserService(mockRepository);
+    });
+    
+    // FAST - Runs in milliseconds (no network/DB)
+    test('should create user', () => {
+        const userData = { name: 'Test User', email: 'test@example.com' };
+        mockRepository.mockResolvedValue({ id: '123', ...userData });
+        
+        const result = userService.createUser(userData);
+        
+        // SELF-VALIDATING - Clear pass/fail
+        expect(result).resolves.toEqual({
+            id: '123',
+            name: 'Test User',
+            email: 'test@example.com'
+        });
+    });
+    
+    // INDEPENDENT - Doesn't rely on other tests
+    test('should validate email format', () => {
+        const userData = { name: 'Test', email: 'invalid-email' };
+        
+        // REPEATABLE - Same input = same output
+        expect(() => userService.createUser(userData))
+            .toThrow('Invalid email format');
+    });
+    
+    // TIMELY - Written during development (TDD)
+    test('should hash password before storage', () => {
+        const userData = {
+            name: 'Test',
+            email: 'test@example.com',
+            password: 'plaintext'
+        };
+        
+        userService.createUser(userData);
+        
+        const savedData = mockRepository.mock.calls[0][0];
+        expect(savedData.password).not.toBe('plaintext');
+        expect(savedData.password).toMatch(/^\\$2[aby]\\$/); // bcrypt hash
+    });
+});
+
+// Benefits:
+// ✓ FAST: Entire suite runs in <1 second
+// ✓ INDEPENDENT: Tests can run in any order
+// ✓ REPEATABLE: Always same result
+// ✓ SELF-VALIDATING: Clear assertions
+// ✓ TIMELY: Written with code (TDD)`,
+        example: `DETAILED FIRST BREAKDOWN:
+
+F - FAST:
+Slow (❌):
+test('fetch users', async () => {
+    const users = await fetch('https://api.example.com/users');
+    // 2-5 seconds per test = 10 minutes for 200 tests
+});
+
+Fast (✅):
+test('fetch users', () => {
+    mockApi.getUsers.mockResolvedValue([{id: 1}, {id: 2}]);
+    const users = service.getUsers();
+    expect(users).resolves.toHaveLength(2);
+    // <10ms per test = <2 seconds for 200 tests
+});
+
+I - INDEPENDENT:
+Dependent (❌):
+let sharedUser;
+test('create', () => {
+    sharedUser = createUser(); // Test 2 depends on this!
+});
+test('update', () => {
+    updateUser(sharedUser); // Fails if test 1 skipped!
+});
+
+Independent (✅):
+test('create', () => {
+    const user = createUser();
+    expect(user).toBeDefined();
+});
+test('update', () => {
+    const user = createUser(); // Creates own data
+    updateUser(user);
+    expect(user.updated).toBe(true);
+});
+
+R - REPEATABLE:
+Not Repeatable (❌):
+test('should work', () => {
+    const result = Math.random() > 0.5; // Non-deterministic!
+    expect(result).toBe(true); // Sometimes fails
+});
+
+test('current time', () => {
+    const now = Date.now();
+    expect(now).toBe(1234567890); // Fails tomorrow!
+});
+
+Repeatable (✅):
+test('should work', () => {
+    const result = calculateTotal([1, 2, 3]);
+    expect(result).toBe(6); // Always same
+});
+
+test('formats date', () => {
+    const date = new Date('2024-01-01');
+    expect(formatDate(date)).toBe('Jan 1, 2024');
+});
+
+S - SELF-VALIDATING:
+Not Self-Validating (❌):
+test('should work', () => {
+    const result = getUserName();
+    console.log('Result:', result);
+    // Did it pass? Who knows!
+});
+
+Self-Validating (✅):
+test('should work', () => {
+    const result = getUserName();
+    expect(result).toBe('John Doe'); // Clear pass/fail
+});
+
+T - TIMELY:
+Not Timely (❌):
+// Code written weeks ago
+// Bug found in production
+// NOW write test to prevent regression
+// Too late!
+
+Timely (✅):
+// TDD approach:
+// 1. Write test first (fails)
+test('calculateTax', () => {
+    expect(calculateTax(100, 0.1)).toBe(10);
+});
+
+// 2. Write code to make it pass
+function calculateTax(amount, rate) {
+    return amount * rate;
+}
+
+// 3. Test passes, confidence high!`,
+        antipatterns: [
+            '❌ Tests that hit real database/API (slow)',
+            '❌ Tests that depend on each other (fragile)',
+            '❌ Tests with random data (flaky)',
+            '❌ Tests without assertions (useless)',
+            '❌ Tests written months after code (too late)'
+        ],
+        benefits: [
+            '✓ Fast feedback loop (run tests constantly)',
+            '✓ Reliable (tests don\'t randomly fail)',
+            '✓ Can run in parallel (independent)',
+            '✓ Clear results (know immediately if broken)',
+            '✓ Prevent bugs before production (timely)'
+        ]
+    }
+];
+
+function render() {
+    const html = `
+        <div class="mb-12 text-center">
+            <h2 class="text-4xl font-bold mb-4" style="color: var(--principle-blue)">Essential Software Engineering Principles</h2>
+            <p class="text-xl text-gray-400 mb-6">Complementary principles to SOLID for writing excellent code</p>
+        </div>
+        
+        <div class="grid gap-8">
+            ${principles.map(p => `
+                <div class="principle-card card-${p.id} p-8 rounded-xl cursor-pointer" onclick="openModal('${p.id}')">
+                    <div class="flex items-start gap-6">
+                        <div class="acronym-badge badge-${p.id}">${p.acronym}</div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--${p.cssVar})">${p.name}</h3>
+                            <p class="text-lg text-gray-300 mb-3 italic">${p.tagline}</p>
+                            <p class="text-gray-400 mb-4">${p.definition}</p>
+                            <div class="text-sm" style="color: var(--${p.cssVar})">
+                                Origin: ${p.origin}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+        
+        <div class="mt-16 p-8 rounded-xl" style="background: rgba(59,130,246,0.1); border: 2px solid var(--principle-blue);">
+            <h3 class="text-2xl font-bold mb-4" style="color: var(--principle-blue)">How These Principles Relate to SOLID</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="benefit-box">
+                    <h4 class="font-bold mb-2 text-green-400">Complementary</h4>
+                    <p class="text-gray-300">SOLID focuses on object-oriented design and architecture. These principles (KISS, DRY, YAGNI) focus on simplicity, maintainability, and practical development.</p>
+                </div>
+                <div class="benefit-box">
+                    <h4 class="font-bold mb-2 text-green-400">Use Together</h4>
+                    <p class="text-gray-300">Apply both SOLID and these principles together. For example: use SOLID for class design, KISS for implementation, DRY for code organization, and FIRST for testing.</p>
+                </div>
+                <div class="benefit-box">
+                    <h4 class="font-bold mb-2 text-green-400">Different Scopes</h4>
+                    <p class="text-gray-300">SOLID = architecture and design patterns. KISS/DRY/YAGNI = implementation and coding practices. LIFT = project structure. FIRST = testing quality.</p>
+                </div>
+                <div class="benefit-box">
+                    <h4 class="font-bold mb-2 text-green-400">Shared Goal</h4>
+                    <p class="text-gray-300">All principles aim for the same goal: maintainable, understandable, flexible software that's easy to change and extend.</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('content').innerHTML = html;
+}
+
+function openModal(id) {
+    const p = principles.find(pr => pr.id === id);
+    
+    const whenToApplyHtml = p.whenToApply.map(item => 
+        `<li class="text-gray-300">▸ ${item}</li>`
+    ).join('');
+    
+    const antipatternsHtml = p.antipatterns.map(item =>
+        `<div class="warning-box mb-2">${item}</div>`
+    ).join('');
+    
+    const benefitsHtml = p.benefits.map(item =>
+        `<div class="benefit-box mb-2">${item}</div>`
+    ).join('');
+    
+    const html = `
+        <div class="flex items-center gap-4 mb-6">
+            <div class="acronym-badge badge-${p.id}">${p.acronym}</div>
+            <div>
+                <h2 class="text-3xl font-bold" style="color: var(--${p.cssVar})">${p.name}</h2>
+                <p class="text-xl text-gray-400 italic mt-2">${p.tagline}</p>
+            </div>
+        </div>
+        
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(59,130,246,0.1); border-left: 4px solid var(--principle-blue);">
+            <h3 class="text-xl font-bold mb-2 text-blue-400">Definition</h3>
+            <p class="text-lg text-gray-300 mb-3">${p.definition}</p>
+            <p class="text-sm text-gray-400"><strong>Core Idea:</strong> ${p.coreIdea}</p>
+        </div>
+        
+        <div class="mb-6">
+            <h3 class="text-xl font-bold mb-3" style="color: var(--${p.cssVar})">When to Apply</h3>
+            <ul class="space-y-2">
+                ${whenToApplyHtml}
+            </ul>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-red-400">❌ Bad Example</h3>
+                <div class="code-block code-bad p-4 rounded-lg">
+                    <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${p.bad.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-green-400">✅ Good Example</h3>
+                <div class="code-block code-good p-4 rounded-lg">
+                    <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${p.good.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(139,92,246,0.1); border: 2px solid var(--principle-purple);">
+            <h3 class="text-xl font-bold mb-3 text-purple-400">Real-World Example</h3>
+            <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${p.example.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+        </div>
+        
+        <div class="mb-6">
+            <h3 class="text-xl font-bold mb-3 text-red-400">Common Anti-Patterns</h3>
+            ${antipatternsHtml}
+        </div>
+        
+        <div>
+            <h3 class="text-xl font-bold mb-3 text-green-400">Benefits</h3>
+            ${benefitsHtml}
+        </div>
+    `;
+    
+    document.getElementById('modal-content').innerHTML = html;
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+render();
+    </script>
+</body>
+</html>
