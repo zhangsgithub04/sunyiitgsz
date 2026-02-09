@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agile Manifesto - Software Development</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --agile-cyan: #06b6d4;
+            --agile-emerald: #10b981;
+            --agile-violet: #8b5cf6;
+            --agile-amber: #f59e0b;
+            --bg-dark: #1a1a2e;
+            --bg-darker: #0f0f1e;
+        }
+        body { font-family: 'JetBrains Mono', monospace; background: var(--bg-darker); color: #e4e4e7; line-height: 1.6; }
+        .hero-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--agile-cyan), var(--agile-emerald), var(--agile-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .manifesto-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            line-height: 1.4;
+            font-style: italic;
+        }
+        .value-card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--agile-cyan);
+            transition: width 0.3s ease;
+        }
+        .value-card:hover::before { width: 100%; opacity: 0.1; }
+        .value-card:hover { 
+            transform: translateY(-4px);
+            border-color: var(--agile-cyan);
+            box-shadow: 0 10px 40px rgba(6,182,212,0.3);
+        }
+        .principle-card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--agile-emerald);
+        }
+        .principle-card:hover {
+            transform: translateY(-2px);
+            border-left-width: 6px;
+            box-shadow: 0 8px 30px rgba(16,185,129,0.2);
+        }
+        .vs-divider {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--agile-violet);
+            font-family: 'Playfair Display', serif;
+        }
+        .preferred { 
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--agile-cyan);
+        }
+        .acknowledged {
+            color: #9ca3af;
+        }
+        .example-box {
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(139,92,246,0.1);
+            border: 2px solid var(--agile-violet);
+            margin: 16px 0;
+        }
+        .nav-tab {
+            padding: 12px 24px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+        .nav-tab.active { 
+            border-color: currentColor;
+            background: rgba(255,255,255,0.05);
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            padding-bottom: 30px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--agile-cyan);
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--agile-emerald);
+            border: 3px solid var(--bg-darker);
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .signatories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .signatory {
+            padding: 8px 12px;
+            background: rgba(6,182,212,0.1);
+            border-radius: 6px;
+            border-left: 3px solid var(--agile-cyan);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="py-20 px-6" style="background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="hero-title mb-6">Agile Manifesto</h1>
+            <p class="text-2xl md:text-3xl text-gray-300 mb-4">The Foundation of Modern Software Development</p>
+            <p class="text-lg text-gray-400 mb-8">
+                Born in Snowbird, Utah - February 2001
+            </p>
+            <div class="max-w-4xl mx-auto p-8 rounded-xl" style="background: rgba(6,182,212,0.1); border: 3px solid var(--agile-cyan);">
+                <p class="manifesto-quote text-gray-200 mb-4">
+                    "We are uncovering better ways of developing software by doing it and helping others do it."
+                </p>
+                <p class="text-sm text-gray-400">— The 17 Original Signatories</p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sticky top-0 z-40 backdrop-blur-lg bg-opacity-80 border-b border-gray-800 py-4 px-6" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto flex gap-2 justify-center flex-wrap">
+            <button onclick="show('values')" class="nav-tab active text-cyan-500 text-sm" id="btn-values">4 Values</button>
+            <button onclick="show('principles')" class="nav-tab text-emerald-500 text-sm" id="btn-principles">12 Principles</button>
+            <button onclick="show('history')" class="nav-tab text-violet-500 text-sm" id="btn-history">History</button>
+            <button onclick="show('practice')" class="nav-tab text-amber-500 text-sm" id="btn-practice">In Practice</button>
+        </div>
+    </nav>
+
+    <main class="py-16 px-6 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div id="content"></div>
+        </div>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,15,30,0.95);">
+        <div class="relative max-w-5xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-8" style="background: rgba(22,33,62,0.98); border: 2px solid var(--agile-cyan);">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-white">×</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <footer class="py-12 px-6 border-t border-gray-800" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-xl text-gray-300 mb-2">Agile: A Mindset, Not a Methodology</p>
+            <p class="text-sm text-gray-500">Visit agilemanifesto.org for the official manifesto</p>
+        </div>
+    </footer>
+
+    <script>
+const agileContent = {
+    values: {
+        title: 'The Four Values',
+        subtitle: 'Core principles that define the Agile approach',
+        intro: 'Through this work we have come to value:',
+        items: [
+            {
+                number: 1,
+                preferred: 'Individuals and interactions',
+                over: 'processes and tools',
+                icon: '👥',
+                explanation: 'People are the most important factor in software development success. The best processes and tools cannot overcome a team that does not communicate well.',
+                context: 'While processes and tools are necessary, they should support the team, not constrain them. A team that communicates effectively can overcome tool limitations, but the best tools cannot fix a dysfunctional team.',
+                waterfall: `TRADITIONAL (Waterfall) APPROACH:
+- Strict adherence to SDLC process
+- Heavy documentation required before coding
+- Developers communicate through formal documents
+- Tools dictate how team works
+- "Follow the process, not the people"
+
+Example:
+Developer: "I found a critical issue in requirements."
+Manager: "We're in the coding phase. File a change request and wait for approval."
+[3 weeks later, change request approved]
+Result: Problem discovered early, fixed late`,
+                agile: `AGILE APPROACH:
+- Team collaboration over rigid process
+- Face-to-face communication preferred
+- Processes adapted to team needs
+- Tools serve the team's workflow
+- "Trust the team to self-organize"
+
+Example:
+Developer: "I found a critical issue in requirements."
+Product Owner (sitting nearby): "Let's discuss it now."
+[5-minute conversation]
+Team pivots immediately, fixes issue same day
+Result: Problem discovered early, fixed early`,
+                realWorld: `Real Project Example - E-commerce Checkout:
+
+SCENARIO:
+Team discovers payment gateway doesn't support Apple Pay (a new requirement from customers).
+
+PROCESS-HEAVY RESPONSE:
+1. Formal change request submitted
+2. Change control board meets (next Tuesday)
+3. Impact analysis document created
+4. Approval chain: PM → Director → VP
+5. Timeline: 2-3 weeks
+Result: Delay, frustrated customers
+
+PEOPLE-FOCUSED RESPONSE:
+1. Developer talks to Product Owner immediately
+2. Quick huddle with payment team
+3. Spike solution explored same day
+4. Decision made in 1 hour
+5. Implementation starts next day
+Result: Fast pivot, happy customers
+
+KEY: The team's ability to communicate and make decisions together was more valuable than following a rigid change management process.`,
+                antipatterns: [
+                    '❌ "We can\'t talk until it\'s documented in Jira"',
+                    '❌ Using tools that create barriers to collaboration',
+                    '❌ Valuing process compliance over problem-solving',
+                    '❌ Preventing team from adapting their workflow'
+                ]
+            },
+            {
+                number: 2,
+                preferred: 'Working software',
+                over: 'comprehensive documentation',
+                icon: '💻',
+                explanation: 'The primary measure of progress is working software that delivers value to users. Documentation is important but should be sufficient, not comprehensive.',
+                context: 'Documentation has its place, but it should serve the software, not vice versa. Write documentation that adds value: API docs for developers, user guides for end-users, architecture decisions for maintainers.',
+                waterfall: `TRADITIONAL APPROACH:
+- 200-page requirements specification
+- Detailed design documents for every module
+- No coding until all docs approved
+- Documentation updated separately from code
+- Measuring progress by documents completed
+
+Example Project Timeline:
+Month 1-2: Requirements (150 pages)
+Month 3-4: Design (100 pages)
+Month 5-6: Coding begins
+Month 7: Integration
+Month 8: Testing discovers requirements misunderstood
+
+Result: Months of documentation, delayed working software`,
+                agile: `AGILE APPROACH:
+- User stories with acceptance criteria
+- Just-enough documentation
+- Working software every 2 weeks
+- Documentation generated from code (API docs)
+- Measuring progress by working features
+
+Example Project Timeline:
+Week 1-2: First feature working
+Week 3-4: Second feature working
+Week 5-6: Third feature working
+Each iteration: stakeholders see and use software
+Continuous feedback loop
+
+Result: Fast value delivery, early validation`,
+                realWorld: `Real Project Example - Mobile Banking App:
+
+COMPREHENSIVE DOCUMENTATION APPROACH:
+Project: Add money transfer feature
+Documentation Created:
+• 50-page requirements specification
+• 30-page UI/UX design document
+• 25-page technical architecture document
+• 20-page API specification
+• 15-page test plan
+
+Timeline: 6 weeks of documentation
+Then: Started coding
+Problem: When users saw prototype, they wanted completely different flow
+Result: 6 weeks of documentation wasted, major rework
+
+WORKING SOFTWARE APPROACH:
+Week 1: Built basic transfer prototype
+Week 2: Users tested and provided feedback
+   "We want to save favorite recipients"
+   "Add a confirmation step"
+Week 3: Implemented feedback, deployed to beta
+Week 4: Production release
+Documentation: 
+   - API docs auto-generated from code
+   - User guide (5 pages)
+   - Architecture decision records (3 pages)
+
+Result: Feature in production in 4 weeks with exactly what users needed`,
+                antipatterns: [
+                    '❌ Writing documentation for documentation\'s sake',
+                    '❌ Documentation becomes out of sync with code',
+                    '❌ Spending more time documenting than building',
+                    '❌ "We\'ll ship when documentation is complete"'
+                ]
+            },
+            {
+                number: 3,
+                preferred: 'Customer collaboration',
+                over: 'contract negotiation',
+                icon: '🤝',
+                explanation: 'Success requires ongoing partnership with customers, not just adherence to a contract. Requirements emerge and evolve through collaboration.',
+                context: 'Fixed contracts assume you can predict all requirements upfront, which is rarely true in software. Collaboration allows for discovery and adaptation as you learn.',
+                waterfall: `TRADITIONAL APPROACH:
+- Fixed-price, fixed-scope contract
+- All requirements locked in upfront
+- Change requests expensive and slow
+- Adversarial relationship when changes needed
+- Success = meeting original spec
+
+Example Contract:
+"Build e-commerce platform with these 50 features for $500K"
+Month 6: Customer sees demo
+Customer: "Can we add wish lists? Our competitors have it."
+Vendor: "That's a change request. $50K and 2 months."
+Customer: "But we're paying you $500K!"
+Vendor: "You signed the contract."
+
+Result: Unhappy customer, rigid scope, missed opportunities`,
+                agile: `AGILE APPROACH:
+- Collaborative partnership
+- Flexible scope within budget/time
+- Customer involved throughout
+- Regular feedback and adaptation
+- Success = delivering value
+
+Example Partnership:
+"Build e-commerce platform for $500K over 12 months"
+Sprint 3: Customer sees first features
+Customer: "Wish lists would be valuable. Can we prioritize it?"
+Team: "Yes! Let's move it up and deprioritize the advanced search."
+Sprint 4: Wish lists delivered
+
+Result: Happy customer, evolving scope, maximum value`,
+                realWorld: `Real Project Example - Hospital Management System:
+
+CONTRACT NEGOTIATION APPROACH:
+Client signs $2M contract for:
+  ✓ Patient registration
+  ✓ Appointment scheduling  
+  ✓ Electronic health records
+  ✓ Billing system
+  ✓ Inventory management
+
+Month 8 (during testing):
+Client: "We need COVID-19 screening workflows!"
+[Global pandemic changed everything]
+
+Vendor: "That's not in the contract. Change order: $200K, 4 months."
+Client: "But we need this NOW for patient safety!"
+Vendor: "We're building what you signed."
+
+Result: System delivered on time, immediately obsolete
+
+COLLABORATION APPROACH:
+Client partners with team for $2M, 18-month timeline
+
+Monthly reviews with priorities:
+Sprint 10 (when pandemic hits):
+Client: "COVID screening is now our #1 priority."
+Team: "Let's pause inventory management and build screening."
+Sprint 11: COVID screening live
+Sprint 12: Contact tracing added
+
+Result: System adapted to reality, delivered life-saving value`,
+                antipatterns: [
+                    '❌ "That\'s not in the contract" mentality',
+                    '❌ Hiding problems from customer until too late',
+                    '❌ Making customer wait for scheduled reviews',
+                    '❌ Treating customer as adversary, not partner'
+                ]
+            },
+            {
+                number: 4,
+                preferred: 'Responding to change',
+                over: 'following a plan',
+                icon: '🔄',
+                explanation: 'Agile accepts that requirements change. The ability to adapt to change is more valuable than following an outdated plan.',
+                context: 'Plans are useful for setting direction, but reality always differs from the plan. Agile teams plan continuously and adjust based on learning and feedback.',
+                waterfall: `TRADITIONAL APPROACH:
+- Detailed 18-month Gantt chart
+- All features planned upfront
+- Resist change to protect the plan
+- "Scope creep" is the enemy
+- Success = executing the plan
+
+Example:
+Month 0: Create detailed plan
+Month 6: Competitor launches superior feature
+PM: "We can't change now. We're on track to the plan."
+Month 12: Market has shifted
+PM: "Stay the course. We committed to this plan."
+Month 18: Deliver product that no longer fits market
+
+Result: Delivered as planned, failed in market`,
+                agile: `AGILE APPROACH:
+- High-level roadmap, detailed 2-week plans
+- Prioritize continuously
+- Welcome change as learning
+- Adapt to market/user feedback
+- Success = delivering value
+
+Example:
+Sprint 1-3: Build core features
+Sprint 4: Competitor launches superior feature
+Team: "Let's pivot! This is more important."
+Sprint 5-6: Deliver competitive feature
+Sprint 7: Market feedback → adjust priorities
+Continuous value delivery
+
+Result: Stayed relevant, delivered value`,
+                realWorld: `Real Project Example - Social Media Platform:
+
+FOLLOWING THE PLAN:
+January 2020 Plan:
+Q1: User profiles and friends
+Q2: Photo sharing
+Q3: Events and groups
+Q4: Marketplace
+
+March 2020: Pandemic hits
+Users need: Video calls, virtual events, online collaboration
+Plan says: Build marketplace in Q4
+
+Leadership: "Stick to the plan. Marketplace is scheduled for Q4."
+[Team builds features nobody needs while competitors add video]
+December: Marketplace launches
+Reality: Users have moved to competitors with video features
+
+Result: Followed plan perfectly, lost market share
+
+RESPONDING TO CHANGE:
+January 2020 Plan (flexible):
+Vision: Connect people
+Next: User profiles and friends
+
+March 2020: Pandemic hits, sprint review reveals:
+Users: "We need to stay connected remotely!"
+Team: "Let's pivot to video calls immediately."
+
+Response:
+Sprint 8: Basic video calls
+Sprint 9: Screen sharing
+Sprint 10: Virtual events
+Sprint 11: Online collaboration tools
+December: Marketplace re-prioritized to next year
+
+Result: Adapted to reality, gained market share`,
+                antipatterns: [
+                    '❌ "We can\'t change - it\'s in the roadmap"',
+                    '❌ Treating change as failure rather than learning',
+                    '❌ Punishing teams for adapting to reality',
+                    '❌ Creating plans so detailed they can\'t change'
+                ]
+            }
+        ]
+    },
+    principles: {
+        title: 'The Twelve Principles',
+        subtitle: 'Principles behind the Agile Manifesto',
+        principles: [
+            {
+                number: 1,
+                text: 'Our highest priority is to satisfy the customer through early and continuous delivery of valuable software.',
+                category: 'Customer Value',
+                explanation: 'Deliver working software frequently (weeks, not months) so customers get value early and can provide feedback.',
+                example: `Mobile app startup:
+
+TRADITIONAL:
+- Build entire app over 12 months
+- Launch complete product
+- Hope users like it
+- If they don't, you've wasted 12 months
+
+AGILE:
+- Week 2: Core login + basic feature live
+- Week 4: Second feature added
+- Week 6: Third feature added
+- Users provide feedback at every step
+- Adjust based on real usage data
+
+Result: Value delivered from week 2, built what users actually need`
+            },
+            {
+                number: 2,
+                text: 'Welcome changing requirements, even late in development. Agile processes harness change for the customer\'s competitive advantage.',
+                category: 'Embrace Change',
+                explanation: 'Changes in requirements mean you\'re learning. Late changes prevent building the wrong thing.',
+                example: `E-commerce platform, Month 10 of 12:
+
+LATE REQUIREMENT:
+"Competitor just added one-click checkout. We need this!"
+
+TRADITIONAL RESPONSE:
+"Too late. We're in user acceptance testing. File it for version 2.0."
+[Ships without one-click]
+[Loses customers to competitor]
+
+AGILE RESPONSE:
+"What can we deprioritize to add this?"
+[Team and PO negotiate scope]
+[Drops less critical feature]
+[Adds one-click checkout]
+[Ships competitive product]
+
+Result: Harnessed change for competitive advantage`
+            },
+            {
+                number: 3,
+                text: 'Deliver working software frequently, from a couple of weeks to a couple of months, with a preference for the shorter timescale.',
+                category: 'Frequent Delivery',
+                explanation: 'Short iterations provide faster feedback, reduce risk, and demonstrate real progress.',
+                example: `Project management tool development:
+
+2-WEEK SPRINTS:
+Sprint 1: User auth + project creation → Demo to users
+Sprint 2: Task management → Users test, feedback
+Sprint 3: Team collaboration → Adjust based on Sprint 2 feedback
+Sprint 4: Notifications → Live beta testing
+Sprint 5: Polish + production release
+
+Benefits:
+- Users see progress every 2 weeks
+- Each sprint could deploy if needed
+- Feedback incorporated immediately
+- Risk minimized with small increments`
+            },
+            {
+                number: 4,
+                text: 'Business people and developers must work together daily throughout the project.',
+                category: 'Collaboration',
+                explanation: 'Daily collaboration prevents misunderstandings and enables quick decisions.',
+                example: `Healthcare application development:
+
+DAILY COLLABORATION IN ACTION:
+
+Monday 9 AM:
+Doctor (Business): "Patients want to message their doctors."
+Developer: "Let's sketch the workflow together."
+[15-minute collaboration]
+Developer: "I'll have a prototype by Wednesday."
+
+Wednesday:
+Developer demos prototype
+Doctor: "Perfect! But add message read receipts."
+Developer: "Easy, I'll add it today."
+
+Friday:
+Feature complete, doctor approves
+Deployed to pilot users
+
+WITHOUT DAILY COLLABORATION:
+Developer interprets requirement alone
+Builds wrong thing over 2 weeks
+Discovery at review → wasted 2 weeks`
+            },
+            {
+                number: 5,
+                text: 'Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done.',
+                category: 'Trust & Empowerment',
+                explanation: 'Motivated, trusted teams outperform micromanaged teams. Create conditions for success, then trust them.',
+                example: `Fintech startup:
+
+MICROMANAGEMENT APPROACH:
+Manager assigns every task
+Requires daily status reports
+Reviews every code commit
+Makes all technical decisions
+Team morale: Low
+Turnover: High
+Velocity: Slow
+
+TRUST & EMPOWERMENT APPROACH:
+Manager: "We need fraud detection. Here's the goal."
+Team: "We'll figure out the best approach."
+[Team self-organizes]
+[Chooses tech stack]
+[Makes implementation decisions]
+Team morale: High
+Turnover: Low  
+Velocity: Fast
+
+Result: Empowered team delivers better solution faster`
+            },
+            {
+                number: 6,
+                text: 'The most efficient and effective method of conveying information to and within a development team is face-to-face conversation.',
+                category: 'Communication',
+                explanation: 'Rich, synchronous communication prevents misunderstandings. Use video calls if remote.',
+                example: `Bug fix communication:
+
+EMAIL/TICKET APPROACH:
+Dev: "Bug in payment flow" [sends email]
+QA: "Which step?" [replies next day]
+Dev: "After confirmation" [replies next day]
+QA: "Can you reproduce?" [replies next day]
+Dev: "Yes, with Chrome only" [replies next day]
+Timeline: 4 days to understand bug
+
+FACE-TO-FACE APPROACH:
+Dev: "Hey, can you look at this payment bug?"
+QA: [walks over]
+Dev: [shows bug on screen]
+QA: "Oh, I see. It's Chrome-specific."
+Dev: "Can you test Safari?"
+QA: [tests immediately] "Works in Safari."
+Timeline: 5 minutes to understand and verify
+
+Result: 4 days → 5 minutes`
+            },
+            {
+                number: 7,
+                text: 'Working software is the primary measure of progress.',
+                category: 'Measure Progress',
+                explanation: 'Don\'t measure progress by documents, meetings, or code written. Measure by working features delivered.',
+                example: `Sprint Review:
+
+BAD PROGRESS METRICS:
+PM: "We're 60% done!"
+Stakeholder: "Can I see it?"
+PM: "We wrote 10,000 lines of code!"
+Stakeholder: "But what does it do?"
+PM: "We completed 47 tasks!"
+Stakeholder: "Can users use it?"
+PM: "Not yet..."
+
+GOOD PROGRESS METRICS:
+PM: "Here's what users can do now:"
+[Demos working features]
+✓ Users can create accounts
+✓ Users can log in
+✓ Users can create projects
+✓ Users can invite team members
+
+Stakeholder: "Great! I can see the progress."
+Result: Working software = undeniable progress`
+            },
+            {
+                number: 8,
+                text: 'Agile processes promote sustainable development. The sponsors, developers, and users should be able to maintain a constant pace indefinitely.',
+                category: 'Sustainable Pace',
+                explanation: 'Avoid burnout through sustainable pace. Sprint marathons lead to poor quality and team turnover.',
+                example: `Project under pressure:
+
+UNSUSTAINABLE PACE:
+Week 1-4: Team works 60-hour weeks
+Week 5: Two developers quit (burnout)
+Week 6-8: Remaining team works 70 hours  
+Week 9: Quality collapses, bugs everywhere
+Week 10: Customer unhappy with buggy product
+Result: Burned out team, failed project
+
+SUSTAINABLE PACE:
+Week 1-4: Team works 40-hour weeks
+Week 5: All developers still motivated
+Week 6-8: Consistent 40-hour weeks
+Week 9: Quality remains high
+Week 10: Customer happy with reliable product
+Week 11-20: Team continues strong
+
+Result: Happy team, successful project, long-term success`
+            },
+            {
+                number: 9,
+                text: 'Continuous attention to technical excellence and good design enhances agility.',
+                category: 'Technical Excellence',
+                explanation: 'Poor technical quality slows you down over time. Invest in quality to maintain speed.',
+                example: `Technical debt impact:
+
+IGNORING TECHNICAL EXCELLENCE:
+Sprint 1: 10 features delivered (no tests, messy code)
+Sprint 2: 8 features (slowing down, bugs appearing)
+Sprint 3: 5 features (debugging Sprint 1 & 2 code)
+Sprint 4: 3 features (technical debt overwhelming)
+Sprint 5: 2 features (most time fixing old bugs)
+
+MAINTAINING TECHNICAL EXCELLENCE:
+Sprint 1: 6 features (with tests, clean code)
+Sprint 2: 7 features (codebase clean, easy to work with)
+Sprint 3: 7 features (consistent pace)
+Sprint 4: 8 features (refactoring paying off)
+Sprint 5: 8 features (sustainable velocity)
+
+Result: Technical excellence enables sustained agility`
+            },
+            {
+                number: 10,
+                text: 'Simplicity—the art of maximizing the amount of work not done—is essential.',
+                category: 'Simplicity',
+                explanation: 'Build only what\'s needed now. Don\'t build features "just in case" or for future flexibility.',
+                example: `Feature development:
+
+OVER-ENGINEERING:
+"Let's build a flexible, extensible, configurable reporting system that can handle any future requirement!"
+- Spent 3 months building
+- Added complexity for hypothetical needs
+- 80% of code never used
+- Hard to maintain
+
+SIMPLICITY:
+"Let's build a simple dashboard that shows user count and revenue."
+- Built in 1 week
+- Exactly what's needed now
+- Easy to understand and maintain
+- When new needs arise, add then (YAGNI - You Ain't Gonna Need It)
+
+Result: Delivered value 12x faster, less complexity`
+            },
+            {
+                number: 11,
+                text: 'The best architectures, requirements, and designs emerge from self-organizing teams.',
+                category: 'Self-Organization',
+                explanation: 'Teams closest to the work make the best technical decisions. Trust them, don\'t impose solutions.',
+                example: `Architecture decision:
+
+TOP-DOWN APPROACH:
+Architect: "We'll use microservices architecture."
+Team: "But our app is small and simple..."
+Architect: "Microservices are best practice."
+[Team implements complex microservices]
+Result: Over-engineered, hard to maintain
+
+SELF-ORGANIZING APPROACH:
+Team: "We'll start with a monolith - it's simpler."
+Team: "As we grow, we'll extract services if needed."
+[Team builds appropriate architecture]
+6 months later: App is manageable
+12 months later: Team extracts payment service when needed
+Result: Right architecture evolved based on real needs`
+            },
+            {
+                number: 12,
+                text: 'At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly.',
+                category: 'Continuous Improvement',
+                explanation: 'Regular retrospectives enable teams to continuously improve their processes and practices.',
+                example: `Sprint Retrospective improving team:
+
+SPRINT 1 RETRO:
+Team: "Code reviews take 3 days. It's blocking us."
+Action: "Let's set 24-hour review SLA."
+
+SPRINT 2 RETRO:
+Team: "Deployments are manual and error-prone."
+Action: "Automate deployment pipeline this Sprint."
+
+SPRINT 3 RETRO:
+Team: "Morning standups don't work for our remote team."
+Action: "Move to async standup in Slack."
+
+SPRINT 4 RETRO:
+Team: "Technical debt is building up."
+Action: "Reserve 20% of each Sprint for refactoring."
+
+Result: Team continuously evolves and improves
+After 6 months: 2x more productive through small improvements`
+            }
+        ]
+    },
+    history: {
+        title: 'The History of Agile',
+        subtitle: 'How 17 software developers changed the industry',
+        timeline: [
+            {
+                year: '1990s',
+                title: 'Pre-Agile Era',
+                description: 'Software development dominated by heavyweight, documentation-driven processes like Waterfall. High failure rates and long delivery cycles plague the industry.',
+                details: 'Standish Group reports only 16% of projects succeed. Teams frustrated with rigid processes seek alternatives.'
+            },
+            {
+                year: '1995',
+                title: 'Scrum Formalized',
+                description: 'Jeff Sutherland and Ken Schwaber present Scrum at OOPSLA conference.',
+                details: 'Building on Takeuchi and Nonaka\'s 1986 work, Scrum provides iterative framework for complex product development.'
+            },
+            {
+                year: '1999',
+                title: 'Extreme Programming (XP)',
+                description: 'Kent Beck publishes "Extreme Programming Explained," popularizing practices like pair programming, TDD, and continuous integration.',
+                details: 'XP emphasizes technical excellence and customer collaboration through practices still used today.'
+            },
+            {
+                year: 'Feb 11-13, 2001',
+                title: 'The Snowbird Meeting',
+                description: '17 software developers meet at The Lodge at Snowbird ski resort in Utah to discuss lightweight development methods.',
+                details: 'Over three days, they debate and ultimately align on shared values, creating the Agile Manifesto and the term "Agile."'
+            },
+            {
+                year: 'Feb 2001',
+                title: 'Manifesto Published',
+                description: 'The Agile Manifesto is published at agilemanifesto.org with 4 values and 12 principles.',
+                details: 'Within months, it spreads globally, fundamentally changing how software is developed.'
+            },
+            {
+                year: '2001-2005',
+                title: 'Early Adoption',
+                description: 'Agile practices spread through software community. Scrum and XP become most popular frameworks.',
+                details: 'Companies begin experimenting with Agile, often with mixed results as they learn new ways of working.'
+            },
+            {
+                year: '2006-2010',
+                title: 'Mainstream Adoption',
+                description: 'Agile moves from startups to enterprises. Certified Scrum Master training becomes widespread.',
+                details: 'Major corporations start Agile transformations. The industry begins to standardize practices and certifications.'
+            },
+            {
+                year: '2011',
+                title: 'Agile Goes Mainstream',
+                description: 'VersionOne State of Agile report shows 80% of respondents using Agile methods.',
+                details: 'Agile is no longer alternative approach—it becomes the standard for software development.'
+            },
+            {
+                year: '2015-Present',
+                title: 'Agile Everywhere',
+                description: 'Agile expands beyond software into marketing, HR, finance, and general business operations. DevOps emerges as evolution of Agile.',
+                details: 'Organizations pursue "Business Agility" - applying Agile principles across entire organization, not just IT.'
+            },
+            {
+                year: '2020-Present',
+                title: 'Remote & Hybrid Agile',
+                description: 'COVID-19 pandemic forces global remote work. Agile adapts with virtual collaboration tools and practices.',
+                details: 'Teams prove Agile works remotely. New practices emerge for distributed teams, async communication, and hybrid work.'
+            }
+        ],
+        signatories: [
+            'Kent Beck', 'Mike Beedle', 'Arie van Bennekum', 'Alistair Cockburn',
+            'Ward Cunningham', 'Martin Fowler', 'James Grenning', 'Jim Highsmith',
+            'Andrew Hunt', 'Ron Jeffries', 'Jon Kern', 'Brian Marick',
+            'Robert C. Martin', 'Steve Mellor', 'Ken Schwaber', 'Jeff Sutherland',
+            'Dave Thomas'
+        ]
+    },
+    practice: {
+        title: 'Agile in Practice',
+        subtitle: 'How organizations actually implement Agile',
+        sections: [
+            {
+                title: 'Common Agile Frameworks',
+                icon: '🔧',
+                items: [
+                    {
+                        name: 'Scrum',
+                        usage: '70% of Agile teams',
+                        description: 'Most popular framework with defined roles (Product Owner, Scrum Master, Dev Team), events (Sprints, Planning, Daily Standup, Review, Retro), and artifacts (Product Backlog, Sprint Backlog, Increment).',
+                        bestFor: 'Product development with clear customer/stakeholder and cross-functional teams of 3-9 people.'
+                    },
+                    {
+                        name: 'Kanban',
+                        usage: '45% of Agile teams',
+                        description: 'Visual workflow management with WIP limits. Focus on continuous flow rather than time-boxed iterations. No prescribed roles or ceremonies.',
+                        bestFor: 'Support teams, operations, continuous delivery environments, or teams transitioning from Waterfall.'
+                    },
+                    {
+                        name: 'Extreme Programming (XP)',
+                        usage: '10% of Agile teams',
+                        description: 'Engineering-focused with practices like TDD, pair programming, continuous integration, refactoring, and collective code ownership.',
+                        bestFor: 'Development teams prioritizing technical excellence and code quality.'
+                    },
+                    {
+                        name: 'SAFe (Scaled Agile)',
+                        usage: '30% of large enterprises',
+                        description: 'Framework for scaling Agile to large organizations with multiple teams working on same product/program.',
+                        bestFor: 'Large enterprises with 50+ teams needing coordination and alignment.'
+                    }
+                ]
+            },
+            {
+                title: 'Agile Transformation Challenges',
+                icon: '⚠️',
+                items: [
+                    {
+                        challenge: 'Command-and-Control Culture',
+                        manifestation: 'Managers struggle to give up control. "Agile" teams still get top-down task assignments.',
+                        solution: 'Leadership training on servant leadership. Measure outcomes, not activities. Coach managers on new role.'
+                    },
+                    {
+                        challenge: 'Fake Agile / Agile Theater',
+                        manifestation: 'Teams do standups and sprints but keep waterfall mindset. Documentation-heavy, no real collaboration.',
+                        solution: 'Focus on values and principles, not just ceremonies. Measure business outcomes. Get real customer involvement.'
+                    },
+                    {
+                        challenge: 'Scaling Too Fast',
+                        manifestation: 'Organization tries to transform entire company overnight. Chaos and confusion ensue.',
+                        solution: 'Start with pilot teams. Learn, adapt, then expand. Evolution beats revolution.'
+                    },
+                    {
+                        challenge: 'Missing Product Owners',
+                        manifestation: 'No one owns product vision. Teams build random features without strategy.',
+                        solution: 'Invest in Product Owner role. Empower them with authority. Train them on Agile product management.'
+                    },
+                    {
+                        challenge: 'Technical Debt Ignored',
+                        manifestation: 'Pressure for features causes teams to skip quality practices. Velocity collapses.',
+                        solution: 'Allocate time for refactoring. Make technical health visible. Educate stakeholders on long-term impact.'
+                    }
+                ]
+            },
+            {
+                title: 'Measuring Agile Success',
+                icon: '📊',
+                items: [
+                    {
+                        metric: 'Customer Satisfaction',
+                        why: 'The ultimate measure - are customers happy with what we deliver?',
+                        how: 'Net Promoter Score (NPS), user feedback, adoption rates, retention metrics'
+                    },
+                    {
+                        metric: 'Time to Market',
+                        why: 'How quickly can we deliver value to users?',
+                        how: 'Lead time from idea to production, deployment frequency, cycle time'
+                    },
+                    {
+                        metric: 'Quality',
+                        why: 'Are we building things right?',
+                        how: 'Defect rates, production incidents, test coverage, technical debt'
+                    },
+                    {
+                        metric: 'Team Morale',
+                        why: 'Happy teams build better products',
+                        how: 'Team satisfaction surveys, turnover rates, retrospective sentiment'
+                    },
+                    {
+                        metric: 'Business Value Delivered',
+                        why: 'Are we delivering what matters to the business?',
+                        how: 'Features used, revenue impact, cost savings, strategic goals achieved'
+                    }
+                ]
+            }
+        ]
+    }
+};
+
+let currentSection = 'values';
+
+function render() {
+    const section = agileContent[currentSection];
+    let html = '';
+
+    if (currentSection === 'values') {
+        html = `
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4" style="color: var(--agile-cyan)">${section.title}</h2>
+                <p class="text-xl text-gray-400 mb-6">${section.subtitle}</p>
+                <p class="text-lg text-gray-300 italic">${section.intro}</p>
+            </div>
+            ${section.items.map(value => `
+                <div class="value-card p-8 rounded-xl mb-8 cursor-pointer" onclick="openValueModal(${value.number})">
+                    <div class="flex items-start gap-6">
+                        <div class="text-6xl">${value.icon}</div>
+                        <div class="flex-1">
+                            <div class="text-sm text-gray-500 mb-2">Value #${value.number}</div>
+                            <div class="text-2xl mb-4">
+                                <span class="preferred">${value.preferred}</span>
+                                <span class="vs-divider mx-3">over</span>
+                                <span class="acknowledged">${value.over}</span>
+                            </div>
+                            <p class="text-gray-300 mb-4">${value.explanation}</p>
+                            <div class="text-sm" style="color: var(--agile-cyan)">
+                                Click to see detailed examples and anti-patterns →
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+            <div class="mt-12 p-6 rounded-lg" style="background: rgba(245,158,11,0.1); border-left: 4px solid var(--agile-amber);">
+                <p class="text-gray-300">
+                    <strong style="color: var(--agile-amber)">Important:</strong> That is, while there is value in the items on the right, we value the items on the left more.
+                </p>
+            </div>
+        `;
+    } else if (currentSection === 'principles') {
+        const grouped = {};
+        section.principles.forEach(p => {
+            if (!grouped[p.category]) grouped[p.category] = [];
+            grouped[p.category].push(p);
+        });
+
+        html = `
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4" style="color: var(--agile-emerald)">${section.title}</h2>
+                <p class="text-xl text-gray-400">${section.subtitle}</p>
+            </div>
+            ${Object.keys(grouped).map(category => `
+                <div class="mb-10">
+                    <h3 class="text-2xl font-bold mb-6" style="color: var(--agile-emerald)">${category}</h3>
+                    <div class="space-y-4">
+                        ${grouped[category].map(p => `
+                            <div class="principle-card p-6 rounded-lg cursor-pointer" onclick="openPrincipleModal(${p.number})">
+                                <div class="flex items-start gap-4">
+                                    <div class="text-2xl font-bold" style="color: var(--agile-emerald)">${p.number}</div>
+                                    <div class="flex-1">
+                                        <p class="text-lg text-gray-200 mb-2">${p.text}</p>
+                                        <p class="text-sm text-gray-400">${p.explanation}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        `;
+    } else if (currentSection === 'history') {
+        html = `
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4" style="color: var(--agile-violet)">${section.title}</h2>
+                <p class="text-xl text-gray-400">${section.subtitle}</p>
+            </div>
+            
+            <div class="mb-16">
+                ${section.timeline.map(item => `
+                    <div class="timeline-item">
+                        <div class="font-bold text-xl mb-2" style="color: var(--agile-cyan)">${item.year}</div>
+                        <h3 class="text-2xl font-bold mb-2 text-gray-200">${item.title}</h3>
+                        <p class="text-gray-300 mb-2">${item.description}</p>
+                        <p class="text-sm text-gray-500 italic">${item.details}</p>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="p-8 rounded-xl" style="background: rgba(6,182,212,0.1); border: 2px solid var(--agile-cyan);">
+                <h3 class="text-2xl font-bold mb-6" style="color: var(--agile-cyan)">The 17 Original Signatories</h3>
+                <p class="text-gray-300 mb-6">These visionaries gathered at Snowbird and created the Agile Manifesto:</p>
+                <div class="signatories-grid">
+                    ${section.signatories.map(name => `
+                        <div class="signatory">${name}</div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    } else if (currentSection === 'practice') {
+        html = `
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4" style="color: var(--agile-amber)">${section.title}</h2>
+                <p class="text-xl text-gray-400">${section.subtitle}</p>
+            </div>
+            
+            ${section.sections.map(sec => `
+                <div class="mb-16">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="text-4xl">${sec.icon}</div>
+                        <h3 class="text-3xl font-bold" style="color: var(--agile-amber)">${sec.title}</h3>
+                    </div>
+                    
+                    ${sec.items.map(item => `
+                        <div class="value-card p-6 rounded-lg mb-4">
+                            ${item.name ? `
+                                <div class="flex justify-between items-start mb-3">
+                                    <h4 class="text-xl font-bold text-gray-200">${item.name}</h4>
+                                    <span class="text-sm px-3 py-1 rounded" style="background: rgba(6,182,212,0.2); color: var(--agile-cyan)">${item.usage}</span>
+                                </div>
+                                <p class="text-gray-300 mb-2">${item.description}</p>
+                                <p class="text-sm" style="color: var(--agile-emerald)">✓ Best for: ${item.bestFor}</p>
+                            ` : item.challenge ? `
+                                <h4 class="text-xl font-bold text-red-400 mb-2">❌ ${item.challenge}</h4>
+                                <p class="text-gray-400 mb-2"><strong>Manifestation:</strong> ${item.manifestation}</p>
+                                <p class="text-gray-300"><strong style="color: var(--agile-emerald)">Solution:</strong> ${item.solution}</p>
+                            ` : `
+                                <h4 class="text-xl font-bold mb-2" style="color: var(--agile-cyan)">${item.metric}</h4>
+                                <p class="text-gray-300 mb-2"><strong>Why:</strong> ${item.why}</p>
+                                <p class="text-gray-400"><strong>How to measure:</strong> ${item.how}</p>
+                            `}
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('')}
+        `;
+    }
+
+    document.getElementById('content').innerHTML = html;
+}
+
+function show(section) {
+    currentSection = section;
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + section).classList.add('active');
+    render();
+}
+
+function openValueModal(number) {
+    const value = agileContent.values.items.find(v => v.number === number);
+    
+    const html = `
+        <div class="flex items-center gap-4 mb-6">
+            <div class="text-6xl">${value.icon}</div>
+            <div>
+                <div class="text-sm text-gray-500 mb-2">Value #${value.number}</div>
+                <div class="text-3xl">
+                    <span class="preferred">${value.preferred}</span>
+                    <span class="vs-divider mx-3">over</span>
+                    <span class="acknowledged">${value.over}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(6,182,212,0.1); border-left: 4px solid var(--agile-cyan);">
+            <p class="text-lg text-gray-300">${value.explanation}</p>
+        </div>
+
+        <div class="mb-6 p-6 rounded-lg" style="background: rgba(139,92,246,0.1); border: 2px solid var(--agile-violet);">
+            <h3 class="text-xl font-bold mb-3" style="color: var(--agile-violet)">Context</h3>
+            <p class="text-gray-300">${value.context}</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-red-400">❌ Traditional (Waterfall)</h3>
+                <div class="p-4 rounded-lg" style="background: rgba(239,68,68,0.1); border: 2px solid #ef4444;">
+                    <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${value.waterfall}</pre>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-green-400">✅ Agile Approach</h3>
+                <div class="p-4 rounded-lg" style="background: rgba(16,185,129,0.1); border: 2px solid var(--agile-emerald);">
+                    <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${value.agile}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="example-box mb-6">
+            <h3 class="text-xl font-bold mb-3" style="color: var(--agile-violet)">🎯 Real-World Example</h3>
+            <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${value.realWorld}</pre>
+        </div>
+
+        <div class="p-6 rounded-lg" style="background: rgba(239,68,68,0.1); border: 2px solid #ef4444;">
+            <h3 class="text-xl font-bold mb-3 text-red-400">Common Anti-Patterns</h3>
+            <div class="space-y-2">
+                ${value.antipatterns.map(ap => `<div class="text-gray-300">${ap}</div>`).join('')}
+            </div>
+        </div>
+    `;
+
+    document.getElementById('modal-content').innerHTML = html;
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function openPrincipleModal(number) {
+    const principle = agileContent.principles.principles.find(p => p.number === number);
+    
+    const html = `
+        <div class="flex items-start gap-4 mb-6">
+            <div class="text-4xl font-bold" style="color: var(--agile-emerald)">${principle.number}</div>
+            <div>
+                <div class="text-sm px-3 py-1 rounded inline-block mb-3" style="background: rgba(16,185,129,0.2); color: var(--agile-emerald)">
+                    ${principle.category}
+                </div>
+                <p class="text-2xl text-gray-200 italic">"${principle.text}"</p>
+            </div>
+        </div>
+
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(16,185,129,0.1); border-left: 4px solid var(--agile-emerald);">
+            <h3 class="text-xl font-bold mb-3" style="color: var(--agile-emerald)">What This Means</h3>
+            <p class="text-lg text-gray-300">${principle.explanation}</p>
+        </div>
+
+        <div class="example-box">
+            <h3 class="text-xl font-bold mb-3" style="color: var(--agile-violet)">🎯 Real-World Example</h3>
+            <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${principle.example}</pre>
+        </div>
+    `;
+
+    document.getElementById('modal-content').innerHTML = html;
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+render();
+    </script>
+</body>
+</html>

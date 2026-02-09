@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrum Essentials - Software Development</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --scrum-blue: #2563eb;
+            --scrum-green: #10b981;
+            --scrum-purple: #8b5cf6;
+            --scrum-orange: #f59e0b;
+            --scrum-pink: #ec4899;
+            --scrum-teal: #14b8a6;
+            --bg-dark: #1a1a2e;
+            --bg-darker: #0f0f1e;
+        }
+        body { font-family: 'JetBrains Mono', monospace; background: var(--bg-darker); color: #e4e4e7; line-height: 1.6; }
+        .hero-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(3rem, 12vw, 7rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--scrum-blue), var(--scrum-green), var(--scrum-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-tab {
+            padding: 12px 24px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+        .nav-tab.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
+        .concept-card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .concept-card:hover::before { width: 100%; opacity: 0.1; }
+        .concept-card:hover { transform: translateY(-4px); }
+        .card-roles::before { background: var(--scrum-blue); }
+        .card-events::before { background: var(--scrum-green); }
+        .card-artifacts::before { background: var(--scrum-purple); }
+        .card-values::before { background: var(--scrum-orange); }
+        .card-pillars::before { background: var(--scrum-pink); }
+        .card-practices::before { background: var(--scrum-teal); }
+        .card-roles:hover { border-color: var(--scrum-blue); box-shadow: 0 10px 40px rgba(37,99,235,0.3); }
+        .card-events:hover { border-color: var(--scrum-green); box-shadow: 0 10px 40px rgba(16,185,129,0.3); }
+        .card-artifacts:hover { border-color: var(--scrum-purple); box-shadow: 0 10px 40px rgba(139,92,246,0.3); }
+        .card-values:hover { border-color: var(--scrum-orange); box-shadow: 0 10px 40px rgba(245,158,11,0.3); }
+        .card-pillars:hover { border-color: var(--scrum-pink); box-shadow: 0 10px 40px rgba(236,72,153,0.3); }
+        .card-practices:hover { border-color: var(--scrum-teal); box-shadow: 0 10px 40px rgba(20,184,166,0.3); }
+        .example-box {
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(139,92,246,0.1);
+            border-left: 4px solid var(--scrum-purple);
+            margin: 16px 0;
+        }
+        .benefit-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: rgba(16,185,129,0.1);
+            border-left: 3px solid var(--scrum-green);
+            margin-bottom: 8px;
+        }
+        .antipattern-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: rgba(239,68,68,0.1);
+            border-left: 3px solid #ef4444;
+            margin-bottom: 8px;
+        }
+        .icon-badge {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border-radius: 12px;
+            border: 2px solid;
+        }
+        .badge-roles { background: rgba(37,99,235,0.1); border-color: var(--scrum-blue); }
+        .badge-events { background: rgba(16,185,129,0.1); border-color: var(--scrum-green); }
+        .badge-artifacts { background: rgba(139,92,246,0.1); border-color: var(--scrum-purple); }
+        .badge-values { background: rgba(245,158,11,0.1); border-color: var(--scrum-orange); }
+        .badge-pillars { background: rgba(236,72,153,0.1); border-color: var(--scrum-pink); }
+        .badge-practices { background: rgba(20,184,166,0.1); border-color: var(--scrum-teal); }
+    </style>
+</head>
+<body>
+    <header class="py-20 px-6" style="background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="hero-title mb-6">Scrum</h1>
+            <p class="text-2xl md:text-3xl text-gray-300 mb-4">Agile Framework for Software Development</p>
+            <p class="text-lg text-gray-400 mb-8">
+                From Rugby to Software: A framework emphasizing teamwork, collaboration, and iterative progress
+            </p>
+            <div class="max-w-3xl mx-auto p-6 rounded-lg" style="background: rgba(37,99,235,0.1); border: 2px solid var(--scrum-blue);">
+                <p class="text-sm text-gray-300 mb-2">
+                    <strong style="color: var(--scrum-blue)">Etymology:</strong> "Scrum" comes from rugby's "scrummage" - a tight formation to restart play.
+                </p>
+                <p class="text-sm text-gray-300">
+                    <strong style="color: var(--scrum-green)">Origin:</strong> Introduced by Hirotaka Takeuchi & Ikujiro Nonaka (Harvard Business Review, 1986)
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sticky top-0 z-40 backdrop-blur-lg bg-opacity-80 border-b border-gray-800 py-4 px-6" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto flex gap-2 justify-center flex-wrap">
+            <button onclick="show('roles')" class="nav-tab active text-blue-500 text-sm" id="btn-roles">Roles</button>
+            <button onclick="show('events')" class="nav-tab text-green-500 text-sm" id="btn-events">Events</button>
+            <button onclick="show('artifacts')" class="nav-tab text-purple-500 text-sm" id="btn-artifacts">Artifacts</button>
+            <button onclick="show('values')" class="nav-tab text-orange-500 text-sm" id="btn-values">Values</button>
+            <button onclick="show('pillars')" class="nav-tab text-pink-500 text-sm" id="btn-pillars">Pillars</button>
+            <button onclick="show('practices')" class="nav-tab text-teal-500 text-sm" id="btn-practices">Best Practices</button>
+        </div>
+    </nav>
+
+    <main class="py-16 px-6 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div id="content"></div>
+        </div>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,15,30,0.95);">
+        <div class="relative max-w-5xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-8" style="background: rgba(22,33,62,0.98); border: 2px solid var(--scrum-blue);">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-white">×</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <footer class="py-12 px-6 border-t border-gray-800" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-xl text-gray-300 mb-2">Build Better Software with Agile Scrum</p>
+            <p class="text-sm text-gray-500">Essential concepts for software development students</p>
+        </div>
+    </footer>
+
+    <script>
+const scrumConcepts = {
+    roles: {
+        title: 'Scrum Roles',
+        color: 'blue',
+        desc: 'Three core roles that make Scrum work',
+        items: [
+            {
+                name: 'Product Owner',
+                icon: '👔',
+                tagline: 'The Voice of the Customer',
+                description: 'Responsible for maximizing product value by managing the Product Backlog and ensuring the team builds the right thing.',
+                responsibilities: [
+                    'Define and prioritize Product Backlog items',
+                    'Ensure Product Backlog is visible and clear',
+                    'Communicate product vision to the team',
+                    'Accept or reject completed work',
+                    'Make trade-off decisions (scope vs. time)'
+                ],
+                example: `In a mobile banking app project:
+- Sarah (Product Owner) maintains a prioritized backlog
+- Top priority: "As a user, I want to transfer money between accounts"
+- She clarifies: "Must support instant transfers up to $10,000"
+- During Sprint Review, she tests the feature and accepts it
+- Next, she re-prioritizes based on user feedback`,
+                antipatterns: [
+                    '❌ PO unavailable during Sprint - team blocked on questions',
+                    '❌ PO changes priorities mid-Sprint - disrupts commitment',
+                    '❌ Multiple POs with conflicting visions - chaos',
+                    '❌ PO doesn\'t attend Sprint events - team misaligned'
+                ],
+                keyPoints: [
+                    'Single person, not a committee',
+                    'Must have authority to make decisions',
+                    'Available to answer team questions',
+                    'Focuses on WHAT and WHY, not HOW'
+                ]
+            },
+            {
+                name: 'Scrum Master',
+                icon: '🎯',
+                tagline: 'The Servant Leader & Process Coach',
+                description: 'Ensures the team follows Scrum practices, removes impediments, and fosters an environment for high performance.',
+                responsibilities: [
+                    'Coach team on Scrum principles and practices',
+                    'Facilitate Scrum events (not just take notes)',
+                    'Remove impediments blocking the team',
+                    'Shield team from external interruptions',
+                    'Help Product Owner with backlog management'
+                ],
+                example: `During a Sprint:
+- Team blocked: "We can\'t deploy - need production access"
+- Scrum Master John escalates to IT, gets credentials by EOD
+- In Retrospective: "We spend too much time in code review"
+- John coaches team on pair programming to reduce review time
+- External manager tries to add urgent work mid-Sprint
+- John protects the team: "Let\'s add to next Sprint Planning"`,
+                antipatterns: [
+                    '❌ Acts as project manager giving tasks - not self-organizing',
+                    '❌ Just takes meeting notes - no real facilitation',
+                    '❌ Doesn\'t address team dysfunction - problems fester',
+                    '❌ Manages multiple teams poorly - spread too thin'
+                ],
+                keyPoints: [
+                    'Servant leader, not command-and-control manager',
+                    'Facilitates, doesn\'t dictate',
+                    'Focuses on process, not technical work',
+                    'Empowers team to solve their own problems'
+                ]
+            },
+            {
+                name: 'Development Team',
+                icon: '👥',
+                tagline: 'Cross-Functional Builders',
+                description: 'Self-organizing professionals who turn Product Backlog items into working increments. Typically 3-9 people.',
+                responsibilities: [
+                    'Estimate and commit to Sprint Backlog',
+                    'Self-organize to accomplish Sprint Goal',
+                    'Deliver potentially shippable increment each Sprint',
+                    'Maintain quality through Definition of Done',
+                    'Continuously improve processes and practices'
+                ],
+                example: `Sprint for e-commerce checkout feature:
+- Team: 2 backend devs, 2 frontend devs, 1 QA, 1 UX designer
+- They estimate: "Checkout flow is 21 story points"
+- Self-organize: Backend team tackles payment API integration
+                 Frontend team builds checkout UI
+                 QA writes automated tests in parallel
+- Daily Standup: Share progress, coordinate dependencies
+- End of Sprint: Deliver fully tested checkout feature`,
+                antipatterns: [
+                    '❌ Team of 15+ people - too large, communication overhead',
+                    '❌ Specialists refusing to help outside their area - silos',
+                    '❌ Taking orders from Product Owner - not self-organizing',
+                    '❌ "That\'s not my job" mentality - lack of ownership'
+                ],
+                keyPoints: [
+                    'Cross-functional: all skills needed to deliver',
+                    'Self-organizing: decide how to do work themselves',
+                    'No sub-teams or hierarchies within',
+                    'Collectively accountable for Sprint success',
+                    'Optimal size: 3-9 people (too small = skills gaps, too large = coordination issues)'
+                ]
+            }
+        ]
+    },
+    events: {
+        title: 'Scrum Events',
+        color: 'green',
+        desc: 'Five time-boxed ceremonies that create regularity and minimize other meetings',
+        items: [
+            {
+                name: 'Sprint',
+                icon: '🏃',
+                tagline: 'Time-Boxed Iteration (1-4 weeks)',
+                description: 'The heartbeat of Scrum. A fixed-length iteration where a potentially shippable increment is created.',
+                responsibilities: [
+                    'Fixed duration (typically 2 weeks for most teams)',
+                    'Contains all other Scrum events',
+                    'No changes that endanger Sprint Goal',
+                    'Scope may be renegotiated between PO and Dev Team',
+                    'Sprint ends on time, never extended'
+                ],
+                example: `Two-week Sprint for social media app:
+- Sprint Goal: "Users can create and share photo posts"
+- Week 1: Build photo upload, storage, and basic display
+- Week 2: Add sharing, notifications, and polish
+- Unexpected: Image processing is slow
+- Team negotiates: Drop advanced filters, keep core feature
+- Sprint ends on time with working photo posts`,
+                antipatterns: [
+                    '❌ Extending Sprint because "we\'re not done" - breaks rhythm',
+                    '❌ Canceling Sprint for minor reasons - wastes effort',
+                    '❌ Variable Sprint lengths - unpredictable velocity',
+                    '❌ Treating Sprint as mini-waterfall - no iteration'
+                ],
+                keyPoints: [
+                    'Consistent duration builds predictability',
+                    'Sprint Goal provides focus and flexibility',
+                    'Failed Sprints are learning opportunities',
+                    'Only Product Owner can cancel a Sprint (rare)'
+                ]
+            },
+            {
+                name: 'Sprint Planning',
+                icon: '📋',
+                tagline: 'Plan the Sprint Work (4-8 hours for 2-week Sprint)',
+                description: 'Collaborative meeting where team decides what to build and how to build it.',
+                responsibilities: [
+                    'Product Owner presents top priority backlog items',
+                    'Team asks questions to understand requirements',
+                    'Team forecasts what can be done this Sprint',
+                    'Team creates Sprint Goal',
+                    'Team breaks down items into tasks'
+                ],
+                example: `Planning for project management tool:
+Part 1 - What will we build? (4 hours)
+- PO presents: "Task assignment feature is top priority"
+- Team asks: "Can admins assign to multiple people?"
+- PO clarifies: "One assignee only, for now"
+- Team reviews velocity (32 points last Sprint)
+- Team selects: Task assignment (13 pts) + Due dates (8 pts) + Notifications (8 pts) = 29 pts
+- Sprint Goal: "Users can assign and track tasks"
+
+Part 2 - How will we build it? (2 hours)
+- Break down "Task assignment" into tasks:
+  • Design assignment UI (4h)
+  • Add assignee field to database (2h)
+  • Implement assignment API (6h)
+  • Write tests (4h)`,
+                antipatterns: [
+                    '❌ PO dictates what team commits to - not a negotiation',
+                    '❌ Planning takes all day - analysis paralysis',
+                    '❌ No Sprint Goal defined - just list of stories',
+                    '❌ Team commits to unrealistic work - sets up failure'
+                ],
+                keyPoints: [
+                    'Entire Scrum Team participates',
+                    'Team pulls work, not pushed by PO',
+                    'Sprint Goal is the North Star',
+                    'Time-boxed: don\'t let it drag on'
+                ]
+            },
+            {
+                name: 'Daily Scrum (Standup)',
+                icon: '☀️',
+                tagline: 'Daily Sync (15 minutes max)',
+                description: 'Quick daily synchronization where team inspects progress toward Sprint Goal and adapts the plan.',
+                responsibilities: [
+                    'Same time and place every day',
+                    'Development Team members only (others can observe)',
+                    'Inspect progress toward Sprint Goal',
+                    'Plan work for next 24 hours',
+                    'Surface impediments'
+                ],
+                example: `Daily Standup at 9:00 AM:
+
+Alice (Backend): "Yesterday I finished the payment API. Today I'll integrate with the checkout UI. No blockers."
+
+Bob (Frontend): "Yesterday I built the checkout form. Today I'll connect it to Alice's API. Blocked: Need API documentation."
+
+Alice: "I'll send you the API docs right after standup."
+
+Carol (QA): "Yesterday I wrote test cases. Today I'll start automation. No blockers."
+
+[Meeting ends at 9:12 AM]
+
+After standup: Alice and Bob have 5-min discussion about API integration.`,
+                antipatterns: [
+                    '❌ Turns into status report to Scrum Master - not peer sync',
+                    '❌ Problem-solving during standup - keep it short',
+                    '❌ People sitting down, checking phones - not engaged',
+                    '❌ Skipping when someone is absent - breaks rhythm'
+                ],
+                keyPoints: [
+                    'For the team, by the team',
+                    'Focus on Sprint Goal, not individual tasks',
+                    'Identify blockers, solve them after',
+                    'OK to skip rigid "3 questions" format'
+                ]
+            },
+            {
+                name: 'Sprint Review',
+                icon: '🎬',
+                tagline: 'Demo & Feedback (2-4 hours for 2-week Sprint)',
+                description: 'Team demonstrates completed work to stakeholders and gathers feedback to adapt the Product Backlog.',
+                responsibilities: [
+                    'Team demonstrates working software',
+                    'Product Owner declares what is "Done"',
+                    'Stakeholders provide feedback',
+                    'Discuss what to build next',
+                    'Update Product Backlog based on feedback'
+                ],
+                example: `Review for online learning platform:
+
+Team demos:
+✅ New video player with playback speed control
+✅ Bookmarking feature to save favorite lectures
+✅ Quiz functionality with instant feedback
+
+Stakeholder (College Professor): "Love the quiz feature! Can students retry quizzes?"
+PO: "Great idea - adding to backlog for next Sprint."
+
+Stakeholder (Student): "Bookmarks are helpful, but can we organize them into folders?"
+PO: "Let me prioritize that against other features."
+
+Marketing: "Can we get analytics on video completion rates?"
+PO: "High priority - adding to top of backlog."
+
+[PO re-prioritizes backlog based on feedback]`,
+                antipatterns: [
+                    '❌ Reading PowerPoint slides instead of demoing software',
+                    '❌ Only showing what works, hiding bugs - dishonest',
+                    '❌ No stakeholders attend - waste of time',
+                    '❌ Defensive when receiving feedback - defeats purpose'
+                ],
+                keyPoints: [
+                    'Demo working software, not plans',
+                    'Informal, not a formal presentation',
+                    'Feedback drives backlog refinement',
+                    'Celebration of team\'s accomplishments'
+                ]
+            },
+            {
+                name: 'Sprint Retrospective',
+                icon: '🔄',
+                tagline: 'Process Improvement (1.5-3 hours for 2-week Sprint)',
+                description: 'Team reflects on the Sprint process and identifies improvements for next Sprint.',
+                responsibilities: [
+                    'Inspect how last Sprint went (people, process, tools)',
+                    'Identify what went well and what didn\'t',
+                    'Create action plan for improvements',
+                    'Scrum Master ensures Retro is positive and productive',
+                    'Entire Scrum Team participates'
+                ],
+                example: `Retrospective using "Start, Stop, Continue" format:
+
+STOP:
+- "Stop having side conversations during Daily Standup"
+- "Stop deploying on Fridays - too risky"
+
+START:
+- "Start doing code reviews in pairs - catch bugs earlier"
+- "Start writing better acceptance criteria upfront"
+
+CONTINUE:
+- "Continue our lunch-and-learn sessions - really helpful"
+- "Continue using automated testing - saves time"
+
+Action Items:
+1. Alice will set up pair programming schedule
+2. Bob will create PR review checklist
+3. Team agrees: no Friday deployments starting next Sprint
+
+Team votes: Focus on improving code review quality this Sprint.`,
+                antipatterns: [
+                    '❌ Same issues every Retro, no action - futile',
+                    '❌ Blaming individuals instead of fixing process - toxic',
+                    '❌ Manager dominates, team stays quiet - not safe',
+                    '❌ Skipping Retro to "save time" - misses improvement'
+                ],
+                keyPoints: [
+                    'Safe environment - psychological safety crucial',
+                    'Focus on process, not people',
+                    'Create actionable improvements, not just complaints',
+                    'Most important ceremony for team growth'
+                ]
+            }
+        ]
+    },
+    artifacts: {
+        title: 'Scrum Artifacts',
+        color: 'purple',
+        desc: 'Three key artifacts that provide transparency and opportunities for inspection',
+        items: [
+            {
+                name: 'Product Backlog',
+                icon: '📚',
+                tagline: 'Ordered List of Everything Needed',
+                description: 'Living document of all features, enhancements, fixes, and technical work needed for the product. Owned by Product Owner.',
+                responsibilities: [
+                    'Single source of requirements',
+                    'Ordered by value/priority (not just urgency)',
+                    'Items at top are refined and ready',
+                    'Lower items can be less detailed',
+                    'Never complete - evolves with product'
+                ],
+                example: `Product Backlog for fitness tracking app:
+
+HIGH PRIORITY (Refined, Ready for Sprint)
+1. "As a user, I want to log daily workouts so I can track progress" [13 pts]
+   - Acceptance: Can add workout type, duration, calories
+   - Acceptance: View workout history
+   
+2. "As a user, I want to set fitness goals" [8 pts]
+   - Acceptance: Set weight, distance, or time goals
+   - Acceptance: Track progress toward goal
+
+MEDIUM PRIORITY (Needs refinement)
+3. "Social sharing features" [? pts]
+   - Share achievements with friends
+   - Needs more detail
+   
+LOW PRIORITY (Just ideas)
+4. "AI workout recommendations"
+5. "Wearable device integration"
+
+TECHNICAL DEBT
+- Refactor authentication module [5 pts]`,
+                antipatterns: [
+                    '❌ Backlog frozen for months - ignores feedback',
+                    '❌ 200 items all marked "high priority" - no real priority',
+                    '❌ Items never removed - backlog graveyard',
+                    '❌ Tech team can\'t add technical items - accumulates debt'
+                ],
+                keyPoints: [
+                    'Dynamic - constantly refined and re-ordered',
+                    'Top 1-2 Sprints worth should be "ready"',
+                    'Uses User Story format: "As a [user], I want [goal] so that [reason]"',
+                    'Estimates in relative points, not hours'
+                ]
+            },
+            {
+                name: 'Sprint Backlog',
+                icon: '📝',
+                tagline: 'Sprint Plan + Sprint Goal',
+                description: 'Selected Product Backlog items for the Sprint, plus the plan to deliver them. Owned by Development Team.',
+                responsibilities: [
+                    'Forecast of functionality for this Sprint',
+                    'All tasks needed to deliver the forecast',
+                    'Updated daily as work progresses',
+                    'Visible to everyone (often on task board)',
+                    'Modified only by Development Team'
+                ],
+                example: `Sprint Backlog for messaging app Sprint:
+
+SPRINT GOAL: "Users can send and receive real-time messages"
+
+SELECTED STORIES:
+[ ] Send text messages [8 pts]
+    Tasks:
+    [✓] Design message UI (4h) - Done by Alice
+    [✓] Create message API (6h) - Done by Bob
+    [→] Implement WebSocket connection (8h) - In Progress (Carol)
+    [ ] Write integration tests (4h)
+    
+[→] Receive and display messages [5 pts]
+    Tasks:
+    [✓] Design message list UI (3h) - Done by Alice
+    [ ] Handle incoming WebSocket events (5h)
+    [ ] Update UI in real-time (4h)
+    [ ] Write unit tests (3h)
+
+IMPEDIMENTS:
+- WebSocket library documentation unclear (Scrum Master helping)
+
+BURNDOWN: 22 hours remaining (on track)`,
+                antipatterns: [
+                    '❌ Product Owner changes Sprint Backlog mid-Sprint - chaos',
+                    '❌ No task breakdown - stories too large to track',
+                    '❌ Sprint Backlog hidden - team not transparent',
+                    '❌ Tasks assigned by Scrum Master - not self-organizing'
+                ],
+                keyPoints: [
+                    'Living plan that evolves during Sprint',
+                    'Team owns it - no external changes',
+                    'Granular enough to track daily progress',
+                    'Sprint Goal provides focus when scope must flex'
+                ]
+            },
+            {
+                name: 'Increment',
+                icon: '📦',
+                tagline: 'Potentially Shippable Product',
+                description: 'The sum of all completed Product Backlog items during a Sprint, plus all previous Sprints. Must meet Definition of Done.',
+                responsibilities: [
+                    'Working software, not just code',
+                    'Meets Definition of Done',
+                    'Potentially releasable (Product Owner decides when to release)',
+                    'Integrated with previous Increments',
+                    'Usable by end users (even if not deployed)'
+                ],
+                example: `Increment for project management SaaS:
+
+Sprint 1 Increment:
+✅ User authentication (login/logout)
+✅ Create projects
+✅ Deployed to staging, ready for production
+
+Sprint 2 Increment:
+✅ Everything from Sprint 1, PLUS:
+✅ Add team members to projects
+✅ Assign tasks to team members
+✅ Integrated, tested, deployed to staging
+
+Sprint 3 Increment:
+✅ Everything from Sprints 1-2, PLUS:
+✅ Task comments and attachments
+✅ Email notifications
+✅ All integrated, regression tested, ready to ship
+
+Product Owner: "Let's release Sprint 3 Increment to customers!"`,
+                antipatterns: [
+                    '❌ "Done" means coded but not tested - not shippable',
+                    '❌ Features in separate branches, not integrated - not working software',
+                    '❌ Waiting for "hardening Sprint" to make it releasable - waterfall disguised',
+                    '❌ Skipping documentation because "we\'ll do it later" - never gets done'
+                ],
+                keyPoints: [
+                    'Must be in usable condition regardless of whether PO releases it',
+                    'Includes all previous work (cumulative)',
+                    'Definition of Done is non-negotiable',
+                    'Demonstrates real progress, not just activity'
+                ]
+            }
+        ]
+    },
+    values: {
+        title: 'Scrum Values',
+        color: 'orange',
+        desc: 'Five values that guide successful Scrum implementation',
+        items: [
+            {
+                name: 'Commitment',
+                icon: '🤝',
+                tagline: 'Commit to Team Goals and Quality',
+                description: 'Team members commit to achieving team goals and supporting each other.',
+                responsibilities: [
+                    'Commit to Sprint Goal, not just individual tasks',
+                    'Do whatever it takes to help team succeed',
+                    'Honor agreements and promises',
+                    'Maintain quality standards',
+                    'Finish what you start'
+                ],
+                example: `Commitment in Action:
+
+Sarah (Developer): "I finished my tasks early. Bob's feature is behind schedule. I'll pair program with him to get it done."
+
+Team discovers critical bug on Wednesday:
+Instead of: "Not my problem, I did my part"
+Team says: "Let's all swarm on this and fix it together"
+
+During Sprint Planning:
+Team: "We commit to delivering the payment feature this Sprint."
+[Works extra to integrate when complexity is higher than expected]
+[Delivers working payment feature by Sprint end]`,
+                antipatterns: [
+                    '❌ "I did my part, not my problem if Sprint fails" - individual over team',
+                    '❌ Over-committing to impress, then failing - setting team up to fail',
+                    '❌ Abandoning quality to meet deadlines - technical debt grows',
+                    '❌ Committing to work without understanding it - false promises'
+                ],
+                keyPoints: [
+                    'Commitment to team success, not personal glory',
+                    'Sustainable pace - don\'t burn out',
+                    'Say no when you can\'t commit',
+                    'Help teammates when they struggle'
+                ]
+            },
+            {
+                name: 'Courage',
+                icon: '💪',
+                tagline: 'Do the Right Thing, Tackle Tough Problems',
+                description: 'Have the courage to do the right thing and work on tough problems.',
+                responsibilities: [
+                    'Speak up when something is wrong',
+                    'Challenge assumptions and status quo',
+                    'Admit mistakes and learn from them',
+                    'Push back on unreasonable demands',
+                    'Tackle difficult technical challenges'
+                ],
+                example: `Courage in Action:
+
+Developer in Daily Standup:
+"I made a mistake yesterday. My code broke the build. I've fixed it and added tests to prevent it."
+[Takes ownership instead of hiding]
+
+Product Owner wants to add major feature mid-Sprint:
+Team: "This will jeopardize our Sprint Goal. Let's plan it for next Sprint instead."
+[Courage to say no to authority]
+
+Retrospective:
+Junior Dev: "Our code review process is too slow. Can we try pair programming?"
+[Courage to challenge established process]
+
+Tech Lead discovers architecture flaw:
+"This approach won't scale. We need to refactor now before it's too late."
+[Courage to deliver bad news early]`,
+                antipatterns: [
+                    '❌ Hiding problems hoping they go away - makes them worse',
+                    '❌ Agreeing to impossible deadlines to avoid conflict - burnout',
+                    '❌ Staying silent when you see waste or dysfunction - complicit',
+                    '❌ Not asking for help when stuck - pride before team'
+                ],
+                keyPoints: [
+                    'Psychological safety enables courage',
+                    'Early bad news is better than late disaster',
+                    'Challenge respectfully, not combatively',
+                    'Failing fast is better than failing late'
+                ]
+            },
+            {
+                name: 'Focus',
+                icon: '🎯',
+                tagline: 'Focus on Sprint Goal and Doing Less, Better',
+                description: 'Everyone focuses on the work of the Sprint and the goals of the Scrum Team.',
+                responsibilities: [
+                    'Limit work in progress',
+                    'Finish before starting new work',
+                    'Minimize distractions and context switching',
+                    'Prioritize Sprint work over other demands',
+                    'Keep Sprint Goal in mind'
+                ],
+                example: `Focus in Action:
+
+Team decides in Sprint Planning:
+"We'll work on payment feature only. No side projects this Sprint."
+
+Developer tempted by interesting idea:
+"I have a cool idea for performance optimization, but it's not in this Sprint. Adding to backlog for later."
+
+External manager: "Can you quickly add this report?"
+Scrum Master: "Team is focused on Sprint Goal. Let's discuss for next Sprint."
+
+Team working on checkout flow:
+Instead of: Starting 5 features at once
+They do: Finish payment integration → Then shipping calculation → Then tax calculation
+[One thing at a time, done well]`,
+                antipatterns: [
+                    '❌ Starting all Sprint items at once - nothing finished',
+                    '❌ Constant interruptions for "urgent" tasks - Sprint derailed',
+                    '❌ Multitasking across multiple features - thrashing',
+                    '❌ Gold-plating features beyond acceptance criteria - waste'
+                ],
+                keyPoints: [
+                    'Finish what you start before starting new work',
+                    'Sprint Goal guides what matters most',
+                    'Say no to distractions',
+                    'Value delivery over activity'
+                ]
+            },
+            {
+                name: 'Openness',
+                icon: '🔓',
+                tagline: 'Transparency About Work and Challenges',
+                description: 'Team members are open about their work, progress, and challenges.',
+                responsibilities: [
+                    'Share both good and bad news early',
+                    'Make work visible to everyone',
+                    'Be transparent about impediments',
+                    'Welcome feedback and new ideas',
+                    'Admit what you don\'t know'
+                ],
+                example: `Openness in Action:
+
+Daily Standup:
+"I'm stuck on this database query. I've been stuck for 6 hours. Can someone help?"
+[Open about struggle instead of hiding it]
+
+Sprint Review:
+Team demos: "Here's what we completed. We didn't finish the reporting feature because we underestimated complexity."
+[Honest about what didn't work]
+
+Retrospective:
+"I think our testing process is slowing us down. Can we discuss alternatives?"
+[Open to changing even established processes]
+
+Task Board visible to everyone:
+[All work, blockers, and progress displayed publicly]`,
+                antipatterns: [
+                    '❌ Hiding problems until Sprint Review - too late',
+                    '❌ Sandbagging estimates to look good - dishonest',
+                    '❌ Rejecting all feedback defensively - not learning',
+                    '❌ "Everything is fine" when it isn\'t - fake transparency'
+                ],
+                keyPoints: [
+                    'Transparency builds trust',
+                    'Early visibility enables early help',
+                    'Share failures and successes equally',
+                    'Openness requires psychological safety'
+                ]
+            },
+            {
+                name: 'Respect',
+                icon: '🙏',
+                tagline: 'Respect People, Skills, and Opinions',
+                description: 'Team members respect each other as capable, independent people.',
+                responsibilities: [
+                    'Value diverse perspectives and skills',
+                    'Listen actively to others',
+                    'Assume positive intent',
+                    'Give and receive constructive feedback',
+                    'Acknowledge contributions'
+                ],
+                example: `Respect in Action:
+
+Code Review:
+Instead of: "This code is terrible."
+Respectful: "I think we can simplify this. Here's an alternative approach. What do you think?"
+
+Sprint Planning:
+Junior dev: "I estimate this at 8 points."
+Senior dev: "Interesting. I was thinking 5. Let's discuss our assumptions."
+[Respecting different perspectives]
+
+Disagreement in Daily Standup:
+"I understand your approach, but I see it differently. Let's discuss after standup and find the best solution together."
+
+Retrospective:
+"Thanks Alice for taking initiative on automated testing. It's really helping our quality."
+[Acknowledging contributions]`,
+                antipatterns: [
+                    '❌ Dismissing junior dev ideas without consideration - elitist',
+                    '❌ Blaming individuals for team failures - toxic',
+                    '❌ Interrupting or talking over teammates - disrespectful',
+                    '❌ "Not technical enough to have an opinion" - exclusionary'
+                ],
+                keyPoints: [
+                    'Everyone brings valuable perspective',
+                    'Respect builds psychological safety',
+                    'Disagree on ideas, not attack people',
+                    'Diversity of thought makes better solutions'
+                ]
+            }
+        ]
+    },
+    pillars: {
+        title: 'Scrum Pillars',
+        color: 'pink',
+        desc: 'Three pillars that support empirical process control',
+        items: [
+            {
+                name: 'Transparency',
+                icon: '🔍',
+                tagline: 'Everything Visible to Everyone',
+                description: 'Significant aspects of the process must be visible to those responsible for the outcome. Transparency requires a common language and shared understanding.',
+                responsibilities: [
+                    'Make work visible (task boards, burndown charts)',
+                    'Share common Definition of Done',
+                    'Use consistent terminology',
+                    'Honest reporting of progress',
+                    'All stakeholders have same information'
+                ],
+                example: `Transparency in Practice:
+
+VISIBLE ARTIFACTS:
+- Physical/Digital Task Board showing all work
+  ┌─────────┬─────────────┬────────────┬──────┐
+  │ To Do   │ In Progress │ Testing    │ Done │
+  ├─────────┼─────────────┼────────────┼──────┤
+  │ Story A │ Story B     │ Story C    │ Story│
+  │ Story D │             │            │  E   │
+  └─────────┴─────────────┴────────────┴──────┘
+
+- Burndown Chart updated daily (everyone sees Sprint health)
+- Definition of Done posted on wall:
+  ✓ Code reviewed
+  ✓ Unit tests written (80% coverage)
+  ✓ Integration tests pass
+  ✓ Deployed to staging
+  ✓ Acceptance criteria met
+
+TRANSPARENT COMMUNICATION:
+Team member: "I'm 2 days behind schedule on this feature."
+[Immediate visibility allows team to help]`,
+                antipatterns: [
+                    '❌ Hiding problems to look good - prevents help',
+                    '❌ "Done" means different things to different people - confusion',
+                    '❌ Work tracked in individual silos - no visibility',
+                    '❌ Burndown chart looks great but quality is terrible - misleading'
+                ],
+                keyPoints: [
+                    'Visibility creates accountability',
+                    'Common language prevents misunderstanding',
+                    'Tools should make work visible, not hide it',
+                    'Transparency without inspection is useless'
+                ]
+            },
+            {
+                name: 'Inspection',
+                icon: '🔬',
+                tagline: 'Frequently Check Progress and Quality',
+                description: 'Users must frequently inspect Scrum artifacts and progress toward Sprint Goal to detect undesirable variances.',
+                responsibilities: [
+                    'Inspect Increment against Definition of Done',
+                    'Review progress against Sprint Goal daily',
+                    'Examine process effectiveness in Retrospectives',
+                    'Assess Product Backlog regularly',
+                    'Check for impediments continuously'
+                ],
+                example: `Inspection at Multiple Levels:
+
+DAILY (Daily Scrum):
+"Are we on track for Sprint Goal?"
+"Yesterday we completed 8 hours of work. We have 32 hours left with 3 days remaining. We're slightly behind."
+
+SPRINT-LEVEL (Sprint Review):
+Demo Increment:
+✓ Payment processing works
+✗ Error handling incomplete
+Decision: Accept payment processing, add error handling to backlog
+
+SPRINT-LEVEL (Sprint Retrospective):
+Inspect Process:
+"Our code reviews take 2 days. That's too slow."
+"Root cause: Reviewers are in different time zones."
+Action: Schedule overlapping hours for reviews
+
+PRODUCT-LEVEL (Backlog Refinement):
+Inspect priorities:
+"User analytics shows nobody uses the reporting feature. Let's de-prioritize report enhancements."`,
+                antipatterns: [
+                    '❌ Inspecting only at Sprint Review - too late to adapt',
+                    '❌ Ignoring quality issues "we\'ll fix later" - never fixed',
+                    '❌ Inspection without action - pointless ceremony',
+                    '❌ Defensive when problems are found - prevents learning'
+                ],
+                keyPoints: [
+                    'Inspect frequently, not just at Sprint end',
+                    'Look at product, process, and people',
+                    'Inspection enables adaptation',
+                    'Be honest about what you find'
+                ]
+            },
+            {
+                name: 'Adaptation',
+                icon: '🔄',
+                tagline: 'Adjust Based on Inspection Results',
+                description: 'If inspection shows one or more aspects deviate outside acceptable limits, the process or product must be adjusted as soon as possible.',
+                responsibilities: [
+                    'Change approach when current one isn\'t working',
+                    'Implement improvements from Retrospectives',
+                    'Adjust Sprint Backlog based on Daily Scrum insights',
+                    'Re-prioritize Product Backlog based on feedback',
+                    'Modify processes that create waste'
+                ],
+                example: `Adaptation in Action:
+
+SPRINT-LEVEL ADAPTATION:
+Wednesday Daily Scrum:
+Inspection: "Payment integration is more complex than estimated. We won't finish everything."
+Adaptation: Team and PO agree to drop admin dashboard, keep core payment feature
+Result: Sprint Goal achieved with reduced scope
+
+PROCESS ADAPTATION (from Retrospective):
+Inspection: "Deployments fail often due to manual steps"
+Adaptation: Team automates deployment pipeline
+Result: Next Sprint has zero deployment failures
+
+PRODUCT ADAPTATION (from Sprint Review):
+Inspection: "Users want mobile app, not just web"
+Adaptation: PO re-prioritizes backlog, mobile development becomes top priority
+Result: Next Sprint starts mobile development
+
+TECHNICAL ADAPTATION:
+Inspection: "Performance is slow with 1000 users"
+Adaptation: Team refactors database queries and adds caching
+Result: Handles 10,000 users smoothly`,
+                antipatterns: [
+                    '❌ Identifying problems but never changing - insanity',
+                    '❌ Changing everything at once - can\'t tell what worked',
+                    '❌ Adapting too slowly - problem persists for months',
+                    '❌ Reverting changes at first sign of difficulty - no patience'
+                ],
+                keyPoints: [
+                    'Adapt quickly to minimize waste',
+                    'Small, incremental changes are safer',
+                    'Adaptation requires authority to change',
+                    'Measure impact of adaptations'
+                ]
+            }
+        ]
+    },
+    practices: {
+        title: 'Best Practices & Tips',
+        color: 'teal',
+        desc: 'Proven practices for successful Scrum implementation',
+        items: [
+            {
+                name: 'Definition of Done',
+                icon: '✅',
+                tagline: 'Shared Understanding of "Complete"',
+                description: 'Clear, agreed-upon criteria for when work is truly finished. Prevents "90% done syndrome."',
+                responsibilities: [
+                    'Created and agreed by entire team',
+                    'Applies to every Product Backlog item',
+                    'Non-negotiable quality bar',
+                    'Evolves as team capabilities grow',
+                    'Made visible to everyone'
+                ],
+                example: `Example Definition of Done:
+
+FOR A USER STORY TO BE "DONE":
+
+Code Quality:
+✓ Code written and reviewed by another team member
+✓ Follows team coding standards
+✓ No critical or high-severity bugs
+✓ Code committed to version control
+
+Testing:
+✓ Unit tests written (minimum 80% coverage)
+✓ Integration tests pass
+✓ Acceptance criteria met and verified
+✓ Manual testing completed
+
+Documentation:
+✓ User documentation updated
+✓ API documentation updated (if applicable)
+✓ README updated if needed
+
+Deployment:
+✓ Deployed to staging environment
+✓ Smoke tests pass in staging
+✓ Product Owner has accepted the work
+
+WHY IT MATTERS:
+Sprint 1: "Done" = coded
+Sprint 2: Spend entire Sprint fixing bugs from Sprint 1
+❌ Not sustainable
+
+WITH DEFINITION OF DONE:
+Sprint 1: "Done" = coded, tested, documented, deployed
+Sprint 2: Build new features on solid foundation
+✅ Sustainable velocity`,
+                antipatterns: [
+                    '❌ "Done" means coded but not tested - technical debt builds',
+                    '❌ Different Definition of Done for different items - inconsistent',
+                    '❌ Lowering standards to finish Sprint - quality death spiral',
+                    '❌ No written Definition of Done - everyone assumes different things'
+                ],
+                keyPoints: [
+                    'Creates shared understanding',
+                    'Prevents rework and technical debt',
+                    'Ensures Increment is truly potentially shippable',
+                    'Should get stricter over time, never looser'
+                ]
+            },
+            {
+                name: 'User Stories',
+                icon: '📖',
+                tagline: 'User-Focused Requirements',
+                description: 'Format for expressing requirements from user perspective. Emphasizes conversation over comprehensive documentation.',
+                responsibilities: [
+                    'Written from user\'s point of view',
+                    'Includes role, goal, and benefit',
+                    'Small enough to complete in one Sprint',
+                    'Includes acceptance criteria',
+                    'Serves as placeholder for conversation'
+                ],
+                example: `Good User Story Structure:
+
+STORY:
+"As a [mobile banking customer],
+I want to [transfer money between my accounts],
+so that [I can manage my finances quickly without visiting a branch]."
+
+ACCEPTANCE CRITERIA:
+✓ Can select source account (checking/savings)
+✓ Can select destination account
+✓ Can enter amount up to available balance
+✓ See confirmation before transfer
+✓ Receive confirmation email after transfer
+✓ Transfer completes within 5 seconds
+✓ Cannot transfer more than available balance
+
+CONVERSATION NOTES:
+- Max transfer: $10,000 per transaction
+- No limit on number of transfers
+- Must support scheduled future transfers (separate story)
+
+STORY POINTS: 8
+
+BAD EXAMPLE:
+"Implement account transfer functionality with database transactions and error handling using RESTful API architecture."
+❌ Too technical, not user-focused
+❌ No clear user value
+❌ No acceptance criteria`,
+                antipatterns: [
+                    '❌ Technical stories: "Refactor database schema" - no user value clear',
+                    '❌ Epic stories: "Build entire checkout system" - too large',
+                    '❌ No acceptance criteria - ambiguous what "done" means',
+                    '❌ Treating story as contract - discourages conversation'
+                ],
+                keyPoints: [
+                    'Focus on outcome, not implementation',
+                    'INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable',
+                    'Story is invitation to conversation',
+                    'Acceptance criteria make expectations explicit'
+                ]
+            },
+            {
+                name: 'Story Points & Velocity',
+                icon: '📊',
+                tagline: 'Relative Estimation and Predictability',
+                description: 'Estimate size using relative points (not hours). Velocity is average points completed per Sprint.',
+                responsibilities: [
+                    'Estimate relative complexity, not time',
+                    'Use planning poker or similar technique',
+                    'Track actual velocity over time',
+                    'Use velocity for Sprint Planning forecasts',
+                    'Focus on consistent velocity, not increasing it'
+                ],
+                example: `Story Points in Practice:
+
+BASELINE STORY (3 points):
+"As a user, I want to update my profile picture"
+- Well understood
+- No complex logic
+- Standard CRUD operation
+
+RELATIVE ESTIMATION:
+Story A: "Add email notifications" 
+Team: "Twice as complex as profile picture" → 6 points
+
+Story B: "Integrate payment gateway"
+Team: "Much more complex - new API, security, testing" → 13 points
+
+Story C: "Fix typo in button label"
+Team: "Trivial compared to profile picture" → 1 point
+
+VELOCITY TRACKING:
+Sprint 1: 28 points completed
+Sprint 2: 32 points completed
+Sprint 3: 30 points completed
+Average Velocity: 30 points
+
+SPRINT PLANNING:
+Team: "Our velocity is 30. Let's commit to 28-32 points this Sprint."
+Select stories totaling 30 points
+[Much more accurate than hour estimates]`,
+                antipatterns: [
+                    '❌ Converting points to hours - defeats purpose',
+                    '❌ Comparing velocity across teams - meaningless',
+                    '❌ Pressuring team to increase velocity - burns out',
+                    '❌ Using velocity for performance reviews - gaming the system'
+                ],
+                keyPoints: [
+                    'Points are relative to your team only',
+                    'Velocity stabilizes after 3-4 Sprints',
+                    'Use Fibonacci sequence (1,2,3,5,8,13,21)',
+                    'Focus on sustainable pace, not speed'
+                ]
+            },
+            {
+                name: 'Backlog Refinement',
+                icon: '🔧',
+                tagline: 'Ongoing Backlog Maintenance',
+                description: 'Regular activity to add detail, estimates, and order to Product Backlog items. Not an official Scrum event but essential practice.',
+                responsibilities: [
+                    'Clarify upcoming items before Sprint Planning',
+                    'Break down large items into smaller ones',
+                    'Estimate items at top of backlog',
+                    'Remove obsolete items',
+                    'Typically 10% of team capacity per Sprint'
+                ],
+                example: `Refinement Session (Wednesday, 2 hours):
+
+ITEM 1: "User Dashboard" (too large)
+Team asks PO questions:
+- "What data should dashboard show?"
+- "Real-time or cached?"
+- "Mobile responsive?"
+
+PO clarifies requirements
+Team breaks down:
+- "Display user activity summary" (5 pts)
+- "Show recent notifications" (3 pts)  
+- "Display usage statistics" (8 pts)
+
+ITEM 2: "Two-factor authentication"
+Team discusses technical approach
+Asks: "SMS or authenticator app?"
+PO: "Start with authenticator app"
+Team estimates: 13 points
+Acceptance criteria defined
+
+ITEM 3: "Dark mode theme"
+Team: "We have design system. Easy." → 5 points
+
+RESULT:
+- Top 3 Sprint's worth of backlog is refined
+- Team ready for next Sprint Planning
+- No surprises in Planning meeting`,
+                antipatterns: [
+                    '❌ No refinement - Sprint Planning takes all day',
+                    '❌ Refining too far ahead - waste when priorities change',
+                    '❌ PO not present - team makes assumptions',
+                    '❌ Turning into planning meeting - too detailed too early'
+                ],
+                keyPoints: [
+                    'Just-in-time detailing - not too early',
+                    'Whole team participates (not just PO and tech lead)',
+                    'Makes Sprint Planning much more efficient',
+                    'Ongoing activity, not one-time event'
+                ]
+            },
+            {
+                name: 'Continuous Integration',
+                icon: '🔗',
+                tagline: 'Integrate Code Frequently',
+                description: 'Integrate code into shared repository multiple times per day, with automated tests. Essential for maintaining potentially shippable Increment.',
+                responsibilities: [
+                    'Commit code to main branch daily (minimum)',
+                    'Automated tests run on every commit',
+                    'Fix broken builds immediately',
+                    'Keep main branch deployable at all times',
+                    'Use feature flags for incomplete features'
+                ],
+                example: `CI/CD in Scrum Team:
+
+DAILY WORKFLOW:
+9:00 AM - Alice pulls latest code from main
+10:00 AM - Alice commits feature A to main branch
+→ Automated pipeline runs:
+  ✓ Unit tests (2 min)
+  ✓ Integration tests (5 min)
+  ✓ Code quality checks (1 min)
+  ✓ Deploy to dev environment (3 min)
+  
+2:00 PM - Bob commits feature B
+→ Pipeline runs again
+  ✗ Integration test fails
+  
+Bob immediately:
+1. Investigates failure
+2. Fixes issue
+3. Commits fix
+4. Pipeline passes ✓
+
+END OF DAY:
+Main branch is stable and deployable
+Team could release to production if needed
+
+SPRINT END:
+All code already integrated and tested
+No "integration Sprint" needed
+Product Owner can release Increment immediately`,
+                antipatterns: [
+                    '❌ Working on feature branch for weeks - big bang integration',
+                    '❌ Ignoring broken builds - accumulates problems',
+                    '❌ No automated tests - manual testing bottleneck',
+                    '❌ Waiting for Sprint end to integrate - defeats Scrum'
+                ],
+                keyPoints: [
+                    'Reduces integration risk dramatically',
+                    'Enables truly incremental development',
+                    'Catches bugs early when they\'re cheap to fix',
+                    'Essential for potentially shippable Increment'
+                ]
+            },
+            {
+                name: 'Team Capacity Planning',
+                icon: '📅',
+                tagline: 'Account for Availability',
+                description: 'Calculate actual team capacity considering holidays, meetings, and other commitments. Prevents over-commitment.',
+                responsibilities: [
+                    'Account for time off and holidays',
+                    'Reserve time for Scrum ceremonies',
+                    'Consider other team commitments',
+                    'Plan for sustainable pace',
+                    'Track actual capacity vs. planned'
+                ],
+                example: `Capacity Planning for 2-week Sprint:
+
+TEAM: 5 developers × 10 days × 8 hours = 400 hours
+
+SUBTRACT:
+- Scrum Events:
+  Sprint Planning: 8 hours
+  Daily Scrums: 15 min × 10 days = 2.5 hours
+  Sprint Review: 4 hours
+  Retrospective: 3 hours
+  Backlog Refinement: 4 hours
+  TOTAL: 21.5 hours
+
+- Individual Time Off:
+  Alice: 2 days (16 hours)
+  Bob: 0 days
+  Carol: 1 day (8 hours)
+  TOTAL: 24 hours
+
+- Other Commitments:
+  Production support: 10 hours
+  Meetings with stakeholders: 5 hours
+  TOTAL: 15 hours
+
+AVAILABLE CAPACITY:
+400 - 21.5 - 24 - 15 = 339.5 hours
+
+PLANNING BUFFER (15%):
+339.5 × 0.85 = 288 hours
+
+STORY POINTS:
+Team velocity: 30 points
+Team should commit to ~28 points (slightly under capacity)
+
+RESULT: Realistic commitment, sustainable pace`,
+                antipatterns: [
+                    '❌ Assuming 100% utilization - burnout guaranteed',
+                    '❌ Not accounting for meetings - team squeezed',
+                    '❌ Ignoring holidays - surprised when capacity drops',
+                    '❌ Pressuring team to exceed capacity - unsustainable'
+                ],
+                keyPoints: [
+                    'Reality-based planning prevents failure',
+                    'Account for ALL time, not just coding',
+                    'Sustainable pace is more productive long-term',
+                    'Buffer for unknowns is not slack'
+                ]
+            }
+        ]
+    }
+};
+
+let currentCategory = 'roles';
+
+function render() {
+    const category = scrumConcepts[currentCategory];
+    const html = category.items.map(item => `
+        <div class="concept-card card-${category.color} p-8 rounded-xl mb-6 cursor-pointer" onclick="openModal('${currentCategory}', '${item.name.replace(/'/g, "\\'")}')">
+            <div class="flex items-start gap-6">
+                <div class="icon-badge badge-${category.color}">${item.icon}</div>
+                <div class="flex-1">
+                    <h3 class="text-2xl font-bold mb-2" style="color: var(--scrum-${category.color})">${item.name}</h3>
+                    <p class="text-lg text-gray-300 mb-3 italic">${item.tagline}</p>
+                    <p class="text-gray-400">${item.description}</p>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    document.getElementById('content').innerHTML = `
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold mb-3" style="color: var(--scrum-${category.color})">${category.title}</h2>
+            <p class="text-lg text-gray-400">${category.desc}</p>
+        </div>
+        ${html}
+    `;
+}
+
+function show(cat) {
+    currentCategory = cat;
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + cat).classList.add('active');
+    render();
+}
+
+function openModal(category, itemName) {
+    const cat = scrumConcepts[category];
+    const item = cat.items.find(i => i.name === itemName);
+    
+    let responsibilitiesHtml = '';
+    if (item.responsibilities) {
+        responsibilitiesHtml = `
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-3" style="color: var(--scrum-${cat.color})">Key Responsibilities</h3>
+                <ul class="space-y-2">
+                    ${item.responsibilities.map(r => `<li class="benefit-item">✓ ${r}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    }
+    
+    let exampleHtml = '';
+    if (item.example) {
+        exampleHtml = `
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-3" style="color: var(--scrum-${cat.color})">Real-World Example</h3>
+                <div class="example-box">
+                    <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${item.example}</pre>
+                </div>
+            </div>
+        `;
+    }
+    
+    let antipatternsHtml = '';
+    if (item.antipatterns) {
+        antipatternsHtml = `
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-3 text-red-400">Common Anti-Patterns</h3>
+                <div class="space-y-2">
+                    ${item.antipatterns.map(a => `<div class="antipattern-item">${a}</div>`).join('')}
+                </div>
+            </div>
+        `;
+    }
+    
+    let keyPointsHtml = '';
+    if (item.keyPoints) {
+        keyPointsHtml = `
+            <div class="p-6 rounded-lg" style="background: rgba(16,185,129,0.1); border: 2px solid var(--scrum-green);">
+                <h3 class="text-xl font-bold mb-3" style="color: var(--scrum-green)">💡 Key Takeaways</h3>
+                <ul class="space-y-2">
+                    ${item.keyPoints.map(k => `<li class="text-gray-300">▸ ${k}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    }
+    
+    const html = `
+        <div class="flex items-center gap-4 mb-6">
+            <div class="icon-badge badge-${cat.color}">${item.icon}</div>
+            <div>
+                <h2 class="text-3xl font-bold" style="color: var(--scrum-${cat.color})">${item.name}</h2>
+                <p class="text-xl text-gray-400 italic mt-2">${item.tagline}</p>
+            </div>
+        </div>
+        
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(139,92,246,0.1); border-left: 4px solid var(--scrum-purple);">
+            <p class="text-lg text-gray-300">${item.description}</p>
+        </div>
+        
+        ${responsibilitiesHtml}
+        ${exampleHtml}
+        ${antipatternsHtml}
+        ${keyPointsHtml}
+    `;
+    
+    document.getElementById('modal-content').innerHTML = html;
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+render();
+    </script>
+</body>
+</html>
