@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Testing Guide - Complete Testing Concepts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --test-unit: #3b82f6;
+            --test-integration: #10b981;
+            --test-e2e: #8b5cf6;
+            --test-ui: #f59e0b;
+            --test-api: #ec4899;
+            --test-performance: #06b6d4;
+            --bg-dark: #1a1a2e;
+            --bg-darker: #0f0f1e;
+        }
+        body { font-family: 'JetBrains Mono', monospace; background: var(--bg-darker); color: #e4e4e7; line-height: 1.6; }
+        .hero-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(2.5rem, 10vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--test-unit), var(--test-integration), var(--test-e2e), var(--test-ui));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-tab {
+            padding: 12px 24px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+        .nav-tab.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
+        
+        .test-card {
+            background: rgba(22, 33, 62, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .test-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .test-card:hover::before { width: 100%; opacity: 0.1; }
+        .test-card:hover { transform: translateY(-4px); }
+        
+        .card-unit::before { background: var(--test-unit); }
+        .card-integration::before { background: var(--test-integration); }
+        .card-e2e::before { background: var(--test-e2e); }
+        .card-ui::before { background: var(--test-ui); }
+        .card-api::before { background: var(--test-api); }
+        .card-performance::before { background: var(--test-performance); }
+        
+        .card-unit:hover { border-color: var(--test-unit); box-shadow: 0 10px 40px rgba(59,130,246,0.3); }
+        .card-integration:hover { border-color: var(--test-integration); box-shadow: 0 10px 40px rgba(16,185,129,0.3); }
+        .card-e2e:hover { border-color: var(--test-e2e); box-shadow: 0 10px 40px rgba(139,92,246,0.3); }
+        .card-ui:hover { border-color: var(--test-ui); box-shadow: 0 10px 40px rgba(245,158,11,0.3); }
+        .card-api:hover { border-color: var(--test-api); box-shadow: 0 10px 40px rgba(236,72,153,0.3); }
+        .card-performance:hover { border-color: var(--test-performance); box-shadow: 0 10px 40px rgba(6,182,212,0.3); }
+        
+        .code-block {
+            background: var(--bg-darker);
+            border-left: 4px solid;
+            font-size: 0.875rem;
+        }
+        
+        .tool-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+            margin: 4px;
+        }
+        
+        .pyramid-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .pyramid-level {
+            padding: 20px;
+            margin: 8px 0;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .pyramid-level:hover {
+            transform: scale(1.02);
+        }
+        
+        .level-e2e { 
+            background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.1));
+            border: 2px solid var(--test-e2e);
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .level-integration { 
+            background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.1));
+            border: 2px solid var(--test-integration);
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .level-unit { 
+            background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(59,130,246,0.1));
+            border: 2px solid var(--test-unit);
+            width: 100%;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th {
+            background: rgba(59,130,246,0.2);
+            padding: 12px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table td {
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <header class="py-20 px-6" style="background: linear-gradient(135deg, var(--bg-darker), var(--bg-dark));">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="hero-title mb-6">Software Testing</h1>
+            <p class="text-2xl md:text-3xl text-gray-300 mb-4">Complete Guide to Testing Concepts & Tools</p>
+            <p class="text-xl text-gray-400 mb-8">
+                From Unit Tests to End-to-End: Master Quality Assurance
+            </p>
+            <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="p-4 rounded-lg" style="background: rgba(59,130,246,0.1); border: 2px solid var(--test-unit);">
+                    <div class="text-3xl font-bold" style="color: var(--test-unit)">Unit</div>
+                    <div class="text-sm text-gray-400">Test Components</div>
+                </div>
+                <div class="p-4 rounded-lg" style="background: rgba(16,185,129,0.1); border: 2px solid var(--test-integration);">
+                    <div class="text-3xl font-bold" style="color: var(--test-integration)">Integration</div>
+                    <div class="text-sm text-gray-400">Test Connections</div>
+                </div>
+                <div class="p-4 rounded-lg" style="background: rgba(139,92,246,0.1); border: 2px solid var(--test-e2e);">
+                    <div class="text-3xl font-bold" style="color: var(--test-e2e)">E2E</div>
+                    <div class="text-sm text-gray-400">Test User Flows</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sticky top-0 z-40 backdrop-blur-lg bg-opacity-80 border-b border-gray-800 py-4 px-6" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto flex gap-2 justify-center flex-wrap">
+            <button onclick="show('types')" class="nav-tab active text-blue-500 text-sm" id="btn-types">Testing Types</button>
+            <button onclick="show('pyramid')" class="nav-tab text-green-500 text-sm" id="btn-pyramid">Test Pyramid</button>
+            <button onclick="show('tools')" class="nav-tab text-purple-500 text-sm" id="btn-tools">Tools & Frameworks</button>
+            <button onclick="show('practices')" class="nav-tab text-amber-500 text-sm" id="btn-practices">Best Practices</button>
+        </div>
+    </nav>
+
+    <main class="py-16 px-6 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div id="content"></div>
+        </div>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(15,15,30,0.95);">
+        <div class="relative max-w-6xl w-full max-h-[90vh] overflow-y-auto rounded-xl p-8" style="background: rgba(22,33,62,0.98); border: 2px solid var(--test-unit);">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-4xl text-gray-400 hover:text-white">×</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <footer class="py-12 px-6 border-t border-gray-800" style="background: var(--bg-darker);">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-xl text-gray-300 mb-2">Quality Through Comprehensive Testing</p>
+            <p class="text-sm text-gray-500">Master testing at every level of your application</p>
+        </div>
+    </footer>
+
+    <script>
+const testingContent = {
+    types: {
+        title: 'Types of Software Testing',
+        subtitle: 'Different levels of testing for comprehensive quality assurance',
+        items: [
+            {
+                id: 'unit',
+                name: 'Unit Testing',
+                icon: '🔬',
+                tagline: 'Test individual components in isolation',
+                color: 'unit',
+                definition: 'Testing the smallest testable parts of an application (functions, methods, classes) in isolation from the rest of the system.',
+                purpose: 'Catch bugs early, ensure individual components work correctly, enable confident refactoring.',
+                scope: 'Single function, method, or class - typically 1-50 lines of code',
+                speed: 'Very Fast (milliseconds)',
+                tools: ['Jest', 'Mocha', 'JUnit', 'PyTest', 'NUnit', 'xUnit'],
+                when: 'Run constantly during development, on every code commit',
+                example: `// Testing a utility function - Unit Test
+// calculator.ts
+export function add(a: number, b: number): number {
+    return a + b;
+}
+
+export function calculateTax(amount: number, rate: number): number {
+    if (amount < 0 || rate < 0) {
+        throw new Error('Values must be positive');
+    }
+    return amount * rate;
+}
+
+// calculator.test.ts - JEST
+describe('Calculator', () => {
+    describe('add', () => {
+        test('adds two positive numbers', () => {
+            expect(add(2, 3)).toBe(5);
+        });
+        
+        test('adds negative numbers', () => {
+            expect(add(-2, -3)).toBe(-5);
+        });
+        
+        test('adds zero', () => {
+            expect(add(5, 0)).toBe(5);
+        });
+    });
+    
+    describe('calculateTax', () => {
+        test('calculates tax correctly', () => {
+            expect(calculateTax(100, 0.1)).toBe(10);
+        });
+        
+        test('throws error for negative amount', () => {
+            expect(() => calculateTax(-100, 0.1))
+                .toThrow('Values must be positive');
+        });
+        
+        test('throws error for negative rate', () => {
+            expect(() => calculateTax(100, -0.1))
+                .toThrow('Values must be positive');
+        });
+    });
+});
+
+// Run: npm test
+// ✓ adds two positive numbers (2ms)
+// ✓ adds negative numbers (1ms)
+// ✓ adds zero (1ms)
+// ✓ calculates tax correctly (1ms)
+// ✓ throws error for negative amount (2ms)
+// ✓ throws error for negative rate (1ms)`,
+                benefits: [
+                    'Fast feedback - run thousands of tests in seconds',
+                    'Catch bugs early when they\'re cheapest to fix',
+                    'Enable confident refactoring',
+                    'Serve as living documentation',
+                    'Force you to write testable (better) code'
+                ],
+                bestPractices: [
+                    'Test one thing per test',
+                    'Use descriptive test names',
+                    'Follow AAA pattern: Arrange, Act, Assert',
+                    'Keep tests independent',
+                    'Mock external dependencies'
+                ]
+            },
+            {
+                id: 'integration',
+                name: 'Integration Testing',
+                icon: '🔗',
+                tagline: 'Test how components work together',
+                color: 'integration',
+                definition: 'Testing the interaction between different modules, services, or components to ensure they work together correctly.',
+                purpose: 'Verify that integrated components communicate properly, data flows correctly between modules.',
+                scope: 'Multiple units working together - API + Database, Frontend + Backend',
+                speed: 'Medium (seconds to minutes)',
+                tools: ['Supertest', 'TestContainers', 'Spring Test', 'Postman', 'REST Assured'],
+                when: 'After unit tests pass, before deployment',
+                example: `// Testing API + Database integration
+// userService.ts
+export class UserService {
+    constructor(private db: Database) {}
+    
+    async createUser(userData: UserData): Promise<User> {
+        // Validate
+        if (!userData.email.includes('@')) {
+            throw new Error('Invalid email');
+        }
+        
+        // Save to database
+        const user = await this.db.users.create({
+            email: userData.email,
+            name: userData.name,
+            createdAt: new Date()
+        });
+        
+        return user;
+    }
+    
+    async getUserById(id: string): Promise<User | null> {
+        return await this.db.users.findById(id);
+    }
+}
+
+// userService.integration.test.ts
+describe('UserService Integration', () => {
+    let db: Database;
+    let userService: UserService;
+    
+    beforeAll(async () => {
+        // Setup real test database
+        db = await setupTestDatabase();
+        userService = new UserService(db);
+    });
+    
+    afterEach(async () => {
+        // Clean database between tests
+        await db.users.deleteAll();
+    });
+    
+    afterAll(async () => {
+        // Teardown test database
+        await db.close();
+    });
+    
+    test('creates user and retrieves from database', async () => {
+        // Create user
+        const created = await userService.createUser({
+            email: 'test@example.com',
+            name: 'Test User'
+        });
+        
+        expect(created.id).toBeDefined();
+        expect(created.email).toBe('test@example.com');
+        
+        // Retrieve user - tests database integration
+        const retrieved = await userService.getUserById(created.id);
+        
+        expect(retrieved).not.toBeNull();
+        expect(retrieved.email).toBe('test@example.com');
+        expect(retrieved.name).toBe('Test User');
+    });
+    
+    test('throws error for invalid email', async () => {
+        await expect(userService.createUser({
+            email: 'invalid-email',
+            name: 'Test'
+        })).rejects.toThrow('Invalid email');
+        
+        // Verify nothing saved to database
+        const allUsers = await db.users.findAll();
+        expect(allUsers).toHaveLength(0);
+    });
+});
+
+// Testing API endpoint integration
+// api.integration.test.ts
+import request from 'supertest';
+import { app } from './app';
+
+describe('User API Integration', () => {
+    test('POST /api/users creates user', async () => {
+        const response = await request(app)
+            .post('/api/users')
+            .send({
+                email: 'test@example.com',
+                name: 'Test User'
+            })
+            .expect(201);
+        
+        expect(response.body.id).toBeDefined();
+        expect(response.body.email).toBe('test@example.com');
+        
+        // Verify can retrieve user
+        const getResponse = await request(app)
+            .get(\`/api/users/\${response.body.id}\`)
+            .expect(200);
+        
+        expect(getResponse.body.email).toBe('test@example.com');
+    });
+});`,
+                benefits: [
+                    'Catch integration issues early',
+                    'Verify API contracts',
+                    'Test database interactions',
+                    'Ensure modules communicate correctly',
+                    'Detect configuration issues'
+                ],
+                bestPractices: [
+                    'Use test databases/containers',
+                    'Clean up data between tests',
+                    'Test realistic scenarios',
+                    'Mock external services (not internal)',
+                    'Keep tests independent'
+                ]
+            },
+            {
+                id: 'e2e',
+                name: 'End-to-End (E2E) Testing',
+                icon: '🎭',
+                tagline: 'Test complete user workflows',
+                color: 'e2e',
+                definition: 'Testing the entire application flow from start to finish, simulating real user behavior across all layers.',
+                purpose: 'Ensure the complete system works together, validate user journeys, catch system-level bugs.',
+                scope: 'Full application stack - UI, API, Database, External Services',
+                speed: 'Slow (minutes to hours)',
+                tools: ['Cypress', 'Playwright', 'Selenium', 'TestCafe', 'Puppeteer'],
+                when: 'Before releases, critical user flows',
+                example: `// E2E Test - User Registration Flow
+// Cypress example
+describe('User Registration E2E', () => {
+    beforeEach(() => {
+        // Visit application
+        cy.visit('http://localhost:3000');
+        // Clear database
+        cy.task('clearDatabase');
+    });
+    
+    it('complete user registration and login flow', () => {
+        // 1. Navigate to registration
+        cy.get('[data-testid="signup-button"]').click();
+        cy.url().should('include', '/signup');
+        
+        // 2. Fill registration form
+        cy.get('[data-testid="email-input"]')
+            .type('newuser@example.com');
+        cy.get('[data-testid="password-input"]')
+            .type('SecurePassword123!');
+        cy.get('[data-testid="confirm-password-input"]')
+            .type('SecurePassword123!');
+        cy.get('[data-testid="name-input"]')
+            .type('John Doe');
+        
+        // 3. Submit form
+        cy.get('[data-testid="submit-button"]').click();
+        
+        // 4. Verify success message
+        cy.get('[data-testid="success-message"]')
+            .should('contain', 'Registration successful');
+        
+        // 5. Verify email sent (mock email service)
+        cy.task('getLastEmail').then((email) => {
+            expect(email.to).to.equal('newuser@example.com');
+            expect(email.subject).to.include('Welcome');
+        });
+        
+        // 6. Verify redirected to dashboard
+        cy.url().should('include', '/dashboard');
+        cy.get('[data-testid="welcome-message"]')
+            .should('contain', 'Welcome, John Doe');
+        
+        // 7. Logout
+        cy.get('[data-testid="logout-button"]').click();
+        cy.url().should('eq', 'http://localhost:3000/');
+        
+        // 8. Login with new credentials
+        cy.get('[data-testid="login-button"]').click();
+        cy.get('[data-testid="email-input"]')
+            .type('newuser@example.com');
+        cy.get('[data-testid="password-input"]')
+            .type('SecurePassword123!');
+        cy.get('[data-testid="submit-button"]').click();
+        
+        // 9. Verify logged in
+        cy.url().should('include', '/dashboard');
+        cy.get('[data-testid="user-profile"]')
+            .should('contain', 'John Doe');
+    });
+    
+    it('prevents registration with existing email', () => {
+        // Create existing user
+        cy.task('createUser', {
+            email: 'existing@example.com',
+            password: 'password123'
+        });
+        
+        // Try to register with same email
+        cy.visit('http://localhost:3000/signup');
+        cy.get('[data-testid="email-input"]')
+            .type('existing@example.com');
+        cy.get('[data-testid="password-input"]')
+            .type('NewPassword123!');
+        cy.get('[data-testid="confirm-password-input"]')
+            .type('NewPassword123!');
+        cy.get('[data-testid="submit-button"]').click();
+        
+        // Verify error message
+        cy.get('[data-testid="error-message"]')
+            .should('contain', 'Email already exists');
+    });
+});
+
+// Playwright example - E-commerce checkout
+test('complete purchase flow', async ({ page }) => {
+    // 1. Browse products
+    await page.goto('http://localhost:3000');
+    await page.click('text=Shop Now');
+    
+    // 2. Add product to cart
+    await page.click('[data-testid="product-1"]');
+    await page.click('text=Add to Cart');
+    await expect(page.locator('[data-testid="cart-count"]'))
+        .toHaveText('1');
+    
+    // 3. Go to cart
+    await page.click('[data-testid="cart-icon"]');
+    await expect(page).toHaveURL(/.*cart/);
+    
+    // 4. Proceed to checkout
+    await page.click('text=Checkout');
+    
+    // 5. Fill shipping info
+    await page.fill('[name="address"]', '123 Main St');
+    await page.fill('[name="city"]', 'New York');
+    await page.fill('[name="zip"]', '10001');
+    await page.click('text=Continue');
+    
+    // 6. Enter payment
+    await page.fill('[name="cardNumber"]', '4242424242424242');
+    await page.fill('[name="expiry"]', '12/25');
+    await page.fill('[name="cvc"]', '123');
+    
+    // 7. Place order
+    await page.click('text=Place Order');
+    
+    // 8. Verify confirmation
+    await expect(page.locator('[data-testid="order-confirmation"]'))
+        .toBeVisible();
+    await expect(page.locator('[data-testid="order-number"]'))
+        .toContainText(/ORDER-\\d+/);
+});`,
+                benefits: [
+                    'Test real user scenarios',
+                    'Catch integration issues across entire stack',
+                    'Validate complete workflows',
+                    'Increase confidence in releases',
+                    'Serve as acceptance tests'
+                ],
+                bestPractices: [
+                    'Focus on critical user journeys',
+                    'Keep tests independent',
+                    'Use data-testid attributes',
+                    'Avoid testing implementation details',
+                    'Run in parallel when possible'
+                ]
+            },
+            {
+                id: 'api',
+                name: 'API Testing',
+                icon: '🔌',
+                tagline: 'Test API endpoints and contracts',
+                color: 'api',
+                definition: 'Testing REST APIs, GraphQL endpoints, or other web services to ensure they return correct responses and handle errors properly.',
+                purpose: 'Verify API contracts, validate request/response formats, test error handling and authentication.',
+                scope: 'API endpoints, request/response validation, status codes',
+                speed: 'Fast to Medium',
+                tools: ['Postman', 'Insomnia', 'REST Assured', 'Supertest', 'Pact'],
+                when: 'After changes to API, before frontend integration',
+                example: `// API Testing with Supertest (JavaScript)
+import request from 'supertest';
+import { app } from '../app';
+
+describe('User API Tests', () => {
+    describe('POST /api/users', () => {
+        test('creates user with valid data', async () => {
+            const response = await request(app)
+                .post('/api/users')
+                .send({
+                    email: 'test@example.com',
+                    name: 'Test User',
+                    password: 'SecurePass123!'
+                })
+                .expect('Content-Type', /json/)
+                .expect(201);
+            
+            expect(response.body).toHaveProperty('id');
+            expect(response.body.email).toBe('test@example.com');
+            expect(response.body).not.toHaveProperty('password');
+        });
+        
+        test('returns 400 for missing email', async () => {
+            const response = await request(app)
+                .post('/api/users')
+                .send({
+                    name: 'Test User',
+                    password: 'SecurePass123!'
+                })
+                .expect(400);
+            
+            expect(response.body.error).toContain('email required');
+        });
+        
+        test('returns 409 for duplicate email', async () => {
+            // Create first user
+            await request(app)
+                .post('/api/users')
+                .send({
+                    email: 'duplicate@example.com',
+                    name: 'First User',
+                    password: 'pass123'
+                });
+            
+            // Try to create duplicate
+            const response = await request(app)
+                .post('/api/users')
+                .send({
+                    email: 'duplicate@example.com',
+                    name: 'Second User',
+                    password: 'pass456'
+                })
+                .expect(409);
+            
+            expect(response.body.error).toContain('Email already exists');
+        });
+    });
+    
+    describe('GET /api/users/:id', () => {
+        test('returns user by id', async () => {
+            // Create user
+            const created = await request(app)
+                .post('/api/users')
+                .send({
+                    email: 'find@example.com',
+                    name: 'Find Me',
+                    password: 'pass123'
+                });
+            
+            // Retrieve user
+            const response = await request(app)
+                .get(\`/api/users/\${created.body.id}\`)
+                .expect(200);
+            
+            expect(response.body.id).toBe(created.body.id);
+            expect(response.body.email).toBe('find@example.com');
+        });
+        
+        test('returns 404 for non-existent user', async () => {
+            const response = await request(app)
+                .get('/api/users/nonexistent-id')
+                .expect(404);
+            
+            expect(response.body.error).toContain('User not found');
+        });
+    });
+    
+    describe('Authentication', () => {
+        test('requires authentication for protected routes', async () => {
+            await request(app)
+                .get('/api/users/profile')
+                .expect(401);
+        });
+        
+        test('accepts valid JWT token', async () => {
+            const token = 'valid-jwt-token';
+            
+            await request(app)
+                .get('/api/users/profile')
+                .set('Authorization', \`Bearer \${token}\`)
+                .expect(200);
+        });
+    });
+});
+
+// Postman/Newman Collection Example (JSON)
+{
+  "info": {
+    "name": "User API Tests"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/users",
+        "body": {
+          "mode": "raw",
+          "raw": {
+            "email": "test@example.com",
+            "name": "Test User"
+          }
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "pm.test('Status code is 201', () => {",
+            "  pm.response.to.have.status(201);",
+            "});",
+            "",
+            "pm.test('Response has user id', () => {",
+            "  const json = pm.response.json();",
+            "  pm.expect(json).to.have.property('id');",
+            "  pm.environment.set('userId', json.id);",
+            "});"
+          ]
+        }
+      }]
+    }
+  ]
+}`,
+                benefits: [
+                    'Test API independently of UI',
+                    'Verify request/response contracts',
+                    'Test error handling',
+                    'Validate authentication/authorization',
+                    'Enable parallel frontend/backend development'
+                ],
+                bestPractices: [
+                    'Test all HTTP methods (GET, POST, PUT, DELETE)',
+                    'Verify status codes',
+                    'Test error cases',
+                    'Validate response schemas',
+                    'Test authentication flows'
+                ]
+            }
+        ]
+    },
+    pyramid: {
+        title: 'The Testing Pyramid',
+        subtitle: 'Understanding the optimal test distribution'
+    },
+    tools: {
+        title: 'Testing Tools & Frameworks',
+        subtitle: 'Popular tools for different testing needs',
+        categories: [
+            {
+                name: 'Unit Testing Frameworks',
+                color: 'unit',
+                tools: [
+                    {
+                        name: 'Jest',
+                        languages: ['JavaScript', 'TypeScript'],
+                        description: 'Most popular JavaScript testing framework. Zero config, fast, includes mocking and coverage.',
+                        bestFor: 'React, Node.js, TypeScript projects',
+                        example: 'test("adds numbers", () => expect(add(2,3)).toBe(5));'
+                    },
+                    {
+                        name: 'JUnit',
+                        languages: ['Java'],
+                        description: 'Industry standard for Java testing. Annotations-based, extensive ecosystem.',
+                        bestFor: 'Java, Spring applications',
+                        example: '@Test void testAdd() { assertEquals(5, add(2,3)); }'
+                    },
+                    {
+                        name: 'PyTest',
+                        languages: ['Python'],
+                        description: 'Pythonic testing framework. Simple syntax, powerful fixtures, plugins.',
+                        bestFor: 'Python applications, data science',
+                        example: 'def test_add(): assert add(2, 3) == 5'
+                    },
+                    {
+                        name: 'NUnit / xUnit',
+                        languages: ['C#', '.NET'],
+                        description: '.NET testing frameworks. NUnit is older, xUnit is more modern.',
+                        bestFor: '.NET, C# applications',
+                        example: '[Fact] void TestAdd() { Assert.Equal(5, Add(2,3)); }'
+                    },
+                    {
+                        name: 'Mocha',
+                        languages: ['JavaScript'],
+                        description: 'Flexible JavaScript test framework. Often paired with Chai for assertions.',
+                        bestFor: 'Node.js, backend testing',
+                        example: 'it("adds numbers", () => expect(add(2,3)).to.equal(5));'
+                    }
+                ]
+            },
+            {
+                name: 'E2E / UI Testing Tools',
+                color: 'e2e',
+                tools: [
+                    {
+                        name: 'Cypress',
+                        languages: ['JavaScript', 'TypeScript'],
+                        description: 'Modern, fast E2E testing. Great DX, time-travel debugging, automatic waiting.',
+                        bestFor: 'Web applications, React, Vue, Angular',
+                        example: 'cy.get("#login").type("user@example.com").should("have.value", "user@example.com");'
+                    },
+                    {
+                        name: 'Playwright',
+                        languages: ['JavaScript', 'TypeScript', 'Python', 'Java', '.NET'],
+                        description: 'Microsoft\'s E2E framework. Multi-browser, multi-language, very fast.',
+                        bestFor: 'Cross-browser testing, mobile emulation',
+                        example: 'await page.click("text=Login"); await expect(page).toHaveURL(/dashboard/);'
+                    },
+                    {
+                        name: 'Selenium',
+                        languages: ['Java', 'Python', 'C#', 'JavaScript', 'Ruby'],
+                        description: 'Industry standard, browser automation. Mature, extensive support.',
+                        bestFor: 'Legacy systems, multi-language teams',
+                        example: 'driver.findElement(By.id("login")).sendKeys("user@example.com");'
+                    },
+                    {
+                        name: 'TestCafe',
+                        languages: ['JavaScript', 'TypeScript'],
+                        description: 'No WebDriver, runs in Node.js. Easy setup, automatic waiting.',
+                        bestFor: 'Quick setup, CI/CD integration',
+                        example: 'await t.typeText("#login", "user@example.com").expect(Selector("#welcome").exists).ok();'
+                    },
+                    {
+                        name: 'Appium',
+                        languages: ['Java', 'JavaScript', 'Python', 'Ruby'],
+                        description: 'Mobile app testing (iOS, Android). Based on WebDriver protocol.',
+                        bestFor: 'Mobile apps (native, hybrid, web)',
+                        example: 'driver.findElement(By.id("loginButton")).click();'
+                    },
+                    {
+                        name: 'Katalon Studio',
+                        languages: ['Groovy', 'Java'],
+                        description: 'All-in-one low-code automation. Web, mobile, API testing.',
+                        bestFor: 'Teams with mixed technical skills',
+                        example: 'WebUI.click(findTestObject("loginButton"))'
+                    }
+                ]
+            },
+            {
+                name: 'API Testing Tools',
+                color: 'api',
+                tools: [
+                    {
+                        name: 'Postman',
+                        languages: ['JavaScript (for scripts)'],
+                        description: 'GUI-based API testing. Collections, environments, automation with Newman.',
+                        bestFor: 'Manual and automated API testing',
+                        example: 'pm.test("Status is 200", () => pm.response.to.have.status(200));'
+                    },
+                    {
+                        name: 'Insomnia',
+                        languages: ['JavaScript'],
+                        description: 'API client and testing tool. GraphQL support, clean UI.',
+                        bestFor: 'REST and GraphQL API testing',
+                        example: 'Similar to Postman, GUI-based'
+                    },
+                    {
+                        name: 'REST Assured',
+                        languages: ['Java', 'Groovy'],
+                        description: 'Java DSL for API testing. Very readable, powerful.',
+                        bestFor: 'Java projects, BDD-style API tests',
+                        example: 'given().when().get("/users").then().statusCode(200);'
+                    },
+                    {
+                        name: 'Supertest',
+                        languages: ['JavaScript', 'TypeScript'],
+                        description: 'HTTP assertion library for Node.js. Great for Express apps.',
+                        bestFor: 'Node.js API testing',
+                        example: 'request(app).get("/users").expect(200);'
+                    }
+                ]
+            }
+        ]
+    },
+    practices: {
+        title: 'Testing Best Practices',
+        subtitle: 'Guidelines for effective testing',
+        practices: [
+            {
+                title: 'Write Tests First (TDD)',
+                icon: '🔴',
+                description: 'Write failing tests before writing code. This ensures your code is testable and meets requirements.',
+                example: 'Red → Green → Refactor cycle'
+            },
+            {
+                title: 'Keep Tests Independent',
+                icon: '🔀',
+                description: 'Tests should not depend on each other. Each test should set up its own data and clean up after.',
+                example: 'Use beforeEach/afterEach for setup/teardown'
+            },
+            {
+                title: 'Test Behavior, Not Implementation',
+                icon: '🎯',
+                description: 'Test what the code does, not how it does it. This makes tests resilient to refactoring.',
+                example: 'Test user can login, not that setState was called'
+            },
+            {
+                title: 'Use Descriptive Test Names',
+                icon: '📝',
+                description: 'Test names should clearly describe what is being tested and expected outcome.',
+                example: '"should return 404 when user not found" not "test1"'
+            },
+            {
+                title: 'Follow AAA Pattern',
+                icon: '🎬',
+                description: 'Arrange (setup), Act (execute), Assert (verify). Makes tests easy to read.',
+                example: 'Setup data → Call function → Check result'
+            },
+            {
+                title: 'Mock External Dependencies',
+                icon: '🎭',
+                description: 'Unit tests should mock APIs, databases, and other services for speed and reliability.',
+                example: 'Mock API calls, use in-memory databases'
+            },
+            {
+                title: 'Aim for High Coverage',
+                icon: '📊',
+                description: 'Strive for 80%+ code coverage, but don\'t chase 100%. Focus on critical paths.',
+                example: 'Cover edge cases, error handling, business logic'
+            },
+            {
+                title: 'Run Tests in CI/CD',
+                icon: '⚙️',
+                description: 'Automate tests to run on every commit/PR. Prevent broken code from merging.',
+                example: 'GitHub Actions, Jenkins, CircleCI'
+            }
+        ]
+    }
+};
+
+let currentSection = 'types';
+
+function render() {
+    let html = '';
+    
+    if (currentSection === 'types') {
+        html = `
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4" style="color: var(--test-unit)">${testingContent.types.title}</h2>
+                <p class="text-xl text-gray-400">${testingContent.types.subtitle}</p>
+            </div>
+            ${testingContent.types.items.map(item => `
+                <div class="test-card card-${item.color} p-8 rounded-xl mb-8 cursor-pointer" onclick="openTestModal('${item.id}')">
+                    <div class="flex items-start gap-6">
+                        <div class="text-6xl">${item.icon}</div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--test-${item.color})">${item.name}</h3>
+                            <p class="text-lg text-gray-300 mb-3 italic">${item.tagline}</p>
+                            <p class="text-gray-400 mb-4">${item.definition}</p>
+                            <div class="grid md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <strong style="color: var(--test-${item.color})">Scope:</strong>
+                                    <div class="text-gray-400">${item.scope}</div>
+                                </div>
+                                <div>
+                                    <strong style="color: var(--test-${item.color})">Speed:</strong>
+                                    <div class="text-gray-400">${item.speed}</div>
+                                </div>
+                                <div>
+                                    <strong style="color: var(--test-${item.color})">When:</strong>
+                                    <div class="text-gray-400">${item.when}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        `;
+    } else if (currentSection === 'pyramid') {
+        html = `
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4" style="color: var(--test-green)">${testingContent.pyramid.title}</h2>
+                <p class="text-xl text-gray-400 mb-8">${testingContent.pyramid.subtitle}</p>
+            </div>
+            
+            <div class="pyramid-container mb-12">
+                <div class="pyramid-level level-e2e">
+                    <div class="text-2xl font-bold mb-2" style="color: var(--test-e2e)">E2E Tests</div>
+                    <div class="text-sm text-gray-400">Few - Slow - Expensive</div>
+                    <div class="text-xs text-gray-500 mt-2">~10% of tests</div>
+                </div>
+                <div class="pyramid-level level-integration">
+                    <div class="text-2xl font-bold mb-2" style="color: var(--test-integration)">Integration Tests</div>
+                    <div class="text-sm text-gray-400">Some - Medium Speed</div>
+                    <div class="text-xs text-gray-500 mt-2">~20% of tests</div>
+                </div>
+                <div class="pyramid-level level-unit">
+                    <div class="text-2xl font-bold mb-2" style="color: var(--test-unit)">Unit Tests</div>
+                    <div class="text-sm text-gray-400">Many - Fast - Cheap</div>
+                    <div class="text-xs text-gray-500 mt-2">~70% of tests</div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6 rounded-lg" style="background: rgba(59,130,246,0.1); border: 2px solid var(--test-unit);">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--test-unit)">Unit Tests (Base)</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="list-item">✓ Largest quantity (70%)</li>
+                        <li class="list-item">✓ Fastest execution</li>
+                        <li class="list-item">✓ Cheapest to maintain</li>
+                        <li class="list-item">✓ Run on every commit</li>
+                        <li class="list-item">✓ Immediate feedback</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-lg" style="background: rgba(16,185,129,0.1); border: 2px solid var(--test-integration);">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--test-integration)">Integration Tests (Middle)</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="list-item">✓ Moderate quantity (20%)</li>
+                        <li class="list-item">✓ Medium speed</li>
+                        <li class="list-item">✓ Test module interactions</li>
+                        <li class="list-item">✓ Catch integration bugs</li>
+                        <li class="list-item">✓ Run before deployment</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-lg" style="background: rgba(139,92,246,0.1); border: 2px solid var(--test-e2e);">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--test-e2e)">E2E Tests (Top)</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="list-item">✓ Smallest quantity (10%)</li>
+                        <li class="list-item">✓ Slowest execution</li>
+                        <li class="list-item">✓ Most expensive</li>
+                        <li class="list-item">✓ Critical user journeys</li>
+                        <li class="list-item">✓ Highest confidence</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 p-8 rounded-xl" style="background: rgba(245,158,11,0.1); border: 2px solid var(--test-ui);">
+                <h3 class="text-2xl font-bold mb-4" style="color: var(--test-ui)">Why the Pyramid Shape?</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold mb-2 text-green-400">✓ Benefits of This Distribution</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>Fast feedback from many unit tests</li>
+                            <li>Cost-effective test suite</li>
+                            <li>Easy to maintain</li>
+                            <li>Catches most bugs early</li>
+                            <li>Sustainable in long term</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-2 text-red-400">✗ Anti-Pattern: Inverted Pyramid</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li>Mostly E2E tests = very slow</li>
+                            <li>Tests take hours to run</li>
+                            <li>Hard to debug failures</li>
+                            <li>Expensive to maintain</li>
+                            <li>Developers avoid running tests</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (currentSection === 'tools') {
+        html = `
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4" style="color: var(--test-purple)">${testingContent.tools.title}</h2>
+                <p class="text-xl text-gray-400">${testingContent.tools.subtitle}</p>
+            </div>
+            
+            ${testingContent.tools.categories.map(cat => `
+                <div class="mb-16">
+                    <h3 class="text-3xl font-bold mb-6" style="color: var(--test-${cat.color})">${cat.name}</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        ${cat.tools.map(tool => `
+                            <div class="test-card p-6 rounded-lg">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h4 class="text-xl font-bold" style="color: var(--test-${cat.color})">${tool.name}</h4>
+                                    <div class="flex flex-wrap gap-1 justify-end">
+                                        ${tool.languages.map(lang => `
+                                            <span class="tool-badge" style="background: rgba(59,130,246,0.2); color: var(--test-unit)">${lang}</span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 mb-3">${tool.description}</p>
+                                <div class="mb-3">
+                                    <strong class="text-sm" style="color: var(--test-${cat.color})">Best for:</strong>
+                                    <div class="text-sm text-gray-400">${tool.bestFor}</div>
+                                </div>
+                                <div class="code-block p-3 rounded" style="border-left-color: var(--test-${cat.color})">
+                                    <code class="text-xs text-gray-300">${tool.example}</code>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+            
+            <div class="mt-12 p-8 rounded-xl" style="background: rgba(139,92,246,0.1); border: 2px solid var(--test-e2e);">
+                <h3 class="text-2xl font-bold mb-4" style="color: var(--test-e2e)">Choosing the Right Tool</h3>
+                <div class="grid md:grid-cols-2 gap-6 text-gray-300">
+                    <div>
+                        <h4 class="font-bold mb-3 text-green-400">Consider These Factors:</h4>
+                        <ul class="space-y-2">
+                            <li>▸ Project language/framework</li>
+                            <li>▸ Team expertise</li>
+                            <li>▸ Test type needed (unit/E2E/API)</li>
+                            <li>▸ CI/CD integration requirements</li>
+                            <li>▸ Cross-browser/platform needs</li>
+                            <li>▸ Budget (open-source vs commercial)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-3 text-blue-400">Popular Combinations:</h4>
+                        <ul class="space-y-2">
+                            <li>▸ <strong>React:</strong> Jest + Cypress/Playwright</li>
+                            <li>▸ <strong>Angular:</strong> Jasmine/Karma + Protractor/Cypress</li>
+                            <li>▸ <strong>Java/Spring:</strong> JUnit + Selenium + REST Assured</li>
+                            <li>▸ <strong>Python/Django:</strong> PyTest + Selenium + Requests</li>
+                            <li>▸ <strong>.NET:</strong> NUnit/xUnit + Selenium + RestSharp</li>
+                            <li>▸ <strong>Mobile:</strong> JUnit/XCTest + Appium</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (currentSection === 'practices') {
+        html = `
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl font-bold mb-4" style="color: var(--test-ui)">${testingContent.practices.title}</h2>
+                <p class="text-xl text-gray-400">${testingContent.practices.subtitle}</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                ${testingContent.practices.practices.map(practice => `
+                    <div class="test-card p-6 rounded-lg">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="text-4xl">${practice.icon}</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2" style="color: var(--test-ui)">${practice.title}</h3>
+                                <p class="text-gray-300 mb-3">${practice.description}</p>
+                                <div class="text-sm" style="color: var(--test-integration)">
+                                    <strong>Example:</strong> ${practice.example}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div class="mt-12 grid md:grid-cols-3 gap-6">
+                <div class="p-6 rounded-lg" style="background: rgba(16,185,129,0.1); border: 2px solid var(--test-integration);">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--test-integration)">DO ✓</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li>✓ Write tests for all new features</li>
+                        <li>✓ Run tests before committing</li>
+                        <li>✓ Keep tests simple and focused</li>
+                        <li>✓ Fix failing tests immediately</li>
+                        <li>✓ Refactor tests like production code</li>
+                        <li>✓ Use meaningful assertions</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-lg" style="background: rgba(239,68,68,0.1); border: 2px solid var(--test-unit);">
+                    <h3 class="text-xl font-bold mb-4 text-red-400">DON'T ✗</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li>✗ Skip tests to meet deadlines</li>
+                        <li>✗ Ignore flaky tests</li>
+                        <li>✗ Test implementation details</li>
+                        <li>✗ Write tests that depend on each other</li>
+                        <li>✗ Commit commented-out tests</li>
+                        <li>✗ Chase 100% coverage blindly</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-lg" style="background: rgba(245,158,11,0.1); border: 2px solid var(--test-ui);">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--test-ui)">Testing Metrics</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li>▸ Code coverage: 70-80%+</li>
+                        <li>▸ Test execution time: <5 min</li>
+                        <li>▸ Test to code ratio: ~1:2 or 1:3</li>
+                        <li>▸ Flaky test rate: <1%</li>
+                        <li>▸ Mean time to find bugs: Low</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+    
+    document.getElementById('content').innerHTML = html;
+}
+
+function show(section) {
+    currentSection = section;
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + section).classList.add('active');
+    render();
+}
+
+function openTestModal(id) {
+    const item = testingContent.types.items.find(i => i.id === id);
+    
+    const html = `
+        <div class="flex items-center gap-4 mb-6">
+            <div class="text-6xl">${item.icon}</div>
+            <div>
+                <h2 class="text-3xl font-bold" style="color: var(--test-${item.color})">${item.name}</h2>
+                <p class="text-xl text-gray-400 italic mt-2">${item.tagline}</p>
+            </div>
+        </div>
+        
+        <div class="p-6 rounded-lg mb-6" style="background: rgba(59,130,246,0.1); border-left: 4px solid var(--test-${item.color});">
+            <p class="text-lg text-gray-300 mb-4">${item.definition}</p>
+            <p class="text-gray-400"><strong>Purpose:</strong> ${item.purpose}</p>
+        </div>
+        
+        <div class="grid md:grid-cols-4 gap-4 mb-6">
+            <div class="p-4 rounded-lg" style="background: rgba(22,33,62,0.8); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="text-sm text-gray-500 mb-1">Scope</div>
+                <div class="text-gray-300">${item.scope}</div>
+            </div>
+            <div class="p-4 rounded-lg" style="background: rgba(22,33,62,0.8); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="text-sm text-gray-500 mb-1">Speed</div>
+                <div class="text-gray-300">${item.speed}</div>
+            </div>
+            <div class="p-4 rounded-lg" style="background: rgba(22,33,62,0.8); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="text-sm text-gray-500 mb-1">When to Run</div>
+                <div class="text-gray-300">${item.when}</div>
+            </div>
+            <div class="p-4 rounded-lg" style="background: rgba(22,33,62,0.8); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="text-sm text-gray-500 mb-1">Tools</div>
+                <div class="text-gray-300 text-sm">${item.tools.slice(0, 2).join(', ')}</div>
+            </div>
+        </div>
+        
+        <div class="mb-6">
+            <h3 class="text-xl font-bold mb-3" style="color: var(--test-${item.color})">Example Code</h3>
+            <div class="code-block p-4 rounded-lg" style="border-left-color: var(--test-${item.color})">
+                <pre class="text-sm text-gray-300 whitespace-pre-wrap font-mono">${item.example.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-xl font-bold mb-3 text-green-400">Benefits</h3>
+                <div class="space-y-2">
+                    ${item.benefits.map(b => `
+                        <div class="p-3 rounded-lg" style="background: rgba(16,185,129,0.1); border-left: 3px solid var(--test-integration);">
+                            ${b}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-3" style="color: var(--test-${item.color})">Best Practices</h3>
+                <div class="space-y-2">
+                    ${item.bestPractices.map(bp => `
+                        <div class="p-3 rounded-lg" style="background: rgba(59,130,246,0.1); border-left: 3px solid var(--test-unit);">
+                            ${bp}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('modal-content').innerHTML = html;
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+render();
+    </script>
+</body>
+</html>
