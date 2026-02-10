@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radix UI CDN Example</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom animations for the Dialog */
+        .DialogOverlay { background-color: rgba(0, 0, 0, 0.5); position: fixed; inset: 0; animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1); }
+        .DialogContent { background-color: white; border-radius: 6px; box-shadow: 0 10px 38px -10px rgba(22, 23, 24, 0.35); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90vw; max-width: 450px; padding: 25px; animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes overlayShow { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes contentShow { from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div id="root"></div>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18",
+        "react-dom": "https://esm.sh/react-dom@18",
+        "react-dom/client": "https://esm.sh/react-dom@18/client",
+        "@radix-ui/react-dialog": "https://esm.sh/@radix-ui/react-dialog@1.0"
+      }
+    }
+    </script>
+
+    <script type="module">
+        import React from 'react';
+        import { createRoot } from 'react-dom/client';
+        import * as Dialog from '@radix-ui/react-dialog';
+
+        const App = () => {
+            return React.createElement(Dialog.Root, null, [
+                // Trigger Button
+                React.createElement(Dialog.Trigger, { 
+                    className: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition" 
+                }, "Open Radix Dialog"),
+
+                // Portal for the Modal
+                React.createElement(Dialog.Portal, null, [
+                    React.createElement(Dialog.Overlay, { className: "DialogOverlay" }),
+                    React.createElement(Dialog.Content, { className: "DialogContent" }, [
+                        React.createElement(Dialog.Title, { className: "font-bold text-lg" }, "Edit Profile"),
+                        React.createElement(Dialog.Description, { className: "text-gray-600 mb-4" }, 
+                            "This is a Radix UI component running directly in your browser."
+                        ),
+                        React.createElement(Dialog.Close, { 
+                            className: "bg-gray-200 px-3 py-1 rounded hover:bg-gray-300" 
+                        }, "Close")
+                    ])
+                ])
+            ]);
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(React.createElement(App));
+    </script>
+</body>
+</html>
