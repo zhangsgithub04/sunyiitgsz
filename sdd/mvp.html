@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agile MVP Strategy | Whiteboard Case Study</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .agile-step:hover { border-color: #f59e0b; background-color: #fffbeb; }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 font-sans">
+
+    <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-black text-amber-600 tracking-tighter uppercase">MVP.Sprints</h1>
+            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-stone-500">
+                <a href="#definition" class="hover:text-amber-600 transition">MVP Definition</a>
+                <a href="#prioritization" class="hover:text-amber-600 transition">Prioritization</a>
+                <a href="#cycle" class="hover:text-amber-600 transition">Agile Cycle</a>
+                <a href="#metrics" class="hover:text-amber-600 transition">Success Metrics</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-amber-500 text-white py-24 px-6 relative">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-5xl md:text-7xl font-extrabold mb-6 leading-none">MVP & Agile Development</h2>
+            <p class="text-xl text-amber-100 max-w-2xl leading-relaxed italic">
+                "Think big, start small, learn fast." How to launch our Collaborative Whiteboard in weeks, not years.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+
+        <section id="definition" class="mb-24">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-10 w-2 bg-amber-500"></div>
+                <h3 class="text-3xl font-bold">What is an MVP?</h3>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <p class="text-stone-600 leading-relaxed">
+                    An MVP is the version of a new product that allows a team to collect the maximum amount of validated learning about customers with the least effort. It is about finding the <strong>Value Proposition</strong>—the one thing users can't live without.
+                </p>
+                <div class="bg-stone-800 text-amber-400 p-6 rounded-2xl shadow-inner">
+                    <h4 class="font-bold uppercase text-xs mb-2">Whiteboard MVP Core Value:</h4>
+                    <p class="text-lg font-serif">"Two people, in different cities, drawing on the same digital canvas simultaneously without lag."</p>
+                    <p class="text-xs mt-4 text-stone-400">Everything else (AI shapes, PDF export, templates) is secondary.</p>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="prioritization" class="mb-24">
+            <h3 class="text-2xl font-bold mb-8">Feature Prioritization: The MoSCoW Method</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                <div class="p-6 bg-white border-2 border-green-200 rounded-xl">
+                    <h4 class="font-bold text-green-600">Must Have</h4>
+                    <p class="text-[10px] text-stone-500">Real-time stroke sync, login, single board.</p>
+                </div>
+                <div class="p-6 bg-white border-2 border-blue-200 rounded-xl">
+                    <h4 class="font-bold text-blue-600">Should Have</h4>
+                    <p class="text-[10px] text-stone-500">Sticky notes, shape library, text tool.</p>
+                </div>
+                <div class="p-6 bg-white border-2 border-yellow-200 rounded-xl">
+                    <h4 class="font-bold text-yellow-600">Could Have</h4>
+                    <p class="text-[10px] text-stone-500">AI auto-beautify, custom templates, dark mode.</p>
+                </div>
+                <div class="p-6 bg-white border-2 border-red-200 rounded-xl">
+                    <h4 class="font-bold text-red-600">Won't Have</h4>
+                    <p class="text-[10px] text-stone-500">VR support, integration with 50+ apps (v1).</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cycle" class="mb-24 bg-stone-900 text-stone-50 p-12 rounded-3xl">
+            <h3 class="text-3xl font-bold mb-10 text-center">The Agile Build-Measure-Learn Loop</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="agile-step p-6 border border-stone-700 rounded-2xl transition-all">
+                    <span class="text-amber-500 font-mono text-4xl">01</span>
+                    <h4 class="text-xl font-bold my-4">Sprint Backlog</h4>
+                    <p class="text-sm text-stone-400">Pulling "Must Have" features into a 2-week development cycle. Each sprint produces a "Potentially Shippable Increment."</p>
+                </div>
+                <div class="agile-step p-6 border border-stone-700 rounded-2xl transition-all">
+                    <span class="text-amber-500 font-mono text-4xl">02</span>
+                    <h4 class="text-xl font-bold my-4">Daily Standups</h4>
+                    <p class="text-sm text-stone-400">Team alignment: What did I do yesterday? What will I do today? Any blockers (e.g., WebSocket latency issues)?</p>
+                </div>
+                <div class="agile-step p-6 border border-stone-700 rounded-2xl transition-all">
+                    <span class="text-amber-500 font-mono text-4xl">03</span>
+                    <h4 class="text-xl font-bold my-4">Sprint Review</h4>
+                    <p class="text-sm text-stone-400">Demonstrating the working MVP to stakeholders and users to get immediate feedback for the next sprint.</p>
+                </div>
+            </div>
+        </section>
+
+        
+
+[Image of the Agile Scrum process diagram]
+
+
+        <section id="metrics" class="mb-20">
+            <h3 class="text-2xl font-bold mb-6">Measuring the MVP</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-stone-100">
+                        <tr>
+                            <th class="p-4 border">Key Metric</th>
+                            <th class="p-4 border">Why it matters for the Whiteboard</th>
+                            <th class="p-4 border">Target for V1</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-stone-600">
+                        <tr>
+                            <td class="p-4 border font-bold">Retention Rate</td>
+                            <td class="p-4 border">Do users come back to use the board again?</td>
+                            <td class="p-4 border">> 30% weekly</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 border font-bold text-amber-700">Latency (ms)</td>
+                            <td class="p-4 border">Does the sync feel "live" enough for collaboration?</td>
+                            <td class="p-4 border">< 100ms</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 border font-bold">Viral Coefficient</td>
+                            <td class="p-4 border">Are users inviting teammates via board links?</td>
+                            <td class="p-4 border">> 1.2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-100 py-12 px-6 text-center border-t border-stone-200">
+        <p class="text-stone-400 text-sm italic">"Done is better than perfect." — Building the future of collaboration, one sprint at a time.</p>
+    </footer>
+
+</body>
+</html>
