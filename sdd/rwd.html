@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RWD Mastery | Responsive Whiteboard Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .device-toggle:hover { transform: scale(1.05); }
+        .canvas-preview { background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans selection:bg-sky-200">
+
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-black text-sky-600 tracking-tighter uppercase">Fluid.Layout</h1>
+            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-slate-500">
+                <a href="#fluid" class="hover:text-sky-600 transition">Fluid Grids</a>
+                <a href="#media" class="hover:text-sky-600 transition">Media Queries</a>
+                <a href="#images" class="hover:text-sky-600 transition">Flexible Media</a>
+                <a href="#touch" class="hover:text-sky-600 transition">Touch Targets</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-br from-sky-600 to-indigo-700 text-white py-24 px-6">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-5xl md:text-7xl font-extrabold mb-6">Responsive Web Design</h2>
+            <p class="text-xl text-sky-100 max-w-2xl leading-relaxed">
+                One codebase, infinite screens. Ensuring our <strong>Collaborative Whiteboard</strong> feels native on desktops, tablets, and smartphones.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+
+        <section id="fluid" class="mb-24">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="p-3 bg-sky-100 text-sky-600 rounded-xl"><i class="fas fa-th-large fa-lg"></i></div>
+                <h3 class="text-3xl font-bold">Fluid Grids & Flexbox</h3>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="space-y-4 text-slate-600">
+                    <p>Gone are the days of fixed-pixel widths. Responsive design uses <strong>relative units</strong> (%, vw, vh) and modern CSS layout engines like <strong>Grid</strong> and <strong>Flexbox</strong> to redistribute space dynamically.</p>
+                    <div class="bg-slate-100 p-4 rounded-lg font-mono text-sm text-sky-700">
+                        container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+                    </div>
+                </div>
+                <div class="border-2 border-dashed border-slate-300 rounded-2xl p-6 canvas-preview flex items-center justify-center">
+                    <div class="bg-white p-4 shadow-lg rounded-lg border border-slate-200 text-center">
+                        <p class="text-xs font-bold text-slate-400 mb-2 uppercase">Whiteboard Component</p>
+                        <div class="h-2 w-24 bg-sky-200 mx-auto rounded"></div>
+                        <div class="mt-2 flex gap-1 justify-center">
+                            <div class="h-4 w-4 bg-slate-200 rounded"></div>
+                            <div class="h-4 w-4 bg-slate-200 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="media" class="mb-24">
+            <div class="bg-white p-10 rounded-3xl shadow-sm border border-slate-200">
+                <h3 class="text-2xl font-bold mb-6">Media Queries: The Breakpoint Strategy</h3>
+                <p class="text-slate-600 mb-8">Instead of designing for "iPhone" or "iPad," we design for <strong>content breakpoints</strong>. We start <strong>Mobile First</strong> and add complexity as the viewport expands.</p>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-4 bg-sky-50 rounded-xl border border-sky-100">
+                        <h4 class="font-bold text-sky-700 mb-2">Mobile (< 640px)</h4>
+                        <p class="text-xs text-slate-500 italic">Whiteboard tools collapse into a bottom sheet; canvas fills 100% of the screen.</p>
+                    </div>
+                    <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                        <h4 class="font-bold text-indigo-700 mb-2">Tablet (< 1024px)</h4>
+                        <p class="text-xs text-slate-500 italic">Sidebars become toggleable drawers; typography scales up for better legibility.</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-700 mb-2">Desktop (> 1024px)</h4>
+                        <p class="text-xs text-slate-500 italic">Permanent left toolbar, right participant list, and keyboard shortcut overlays.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="images" class="mb-24">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="p-3 bg-indigo-100 text-indigo-600 rounded-xl"><i class="fas fa-expand-arrows-alt fa-lg"></i></div>
+                <h3 class="text-3xl font-bold">Flexible Media & SVGs</h3>
+            </div>
+            <div class="prose prose-slate max-w-none">
+                <p class="text-slate-600">For our whiteboard, bitmaps (JPG/PNG) can become pixelated when zoomed. We prioritize <strong>SVG (Scalable Vector Graphics)</strong> for all strokes and shapes because they remain crisp at any resolution or screen size.</p>
+                <div class="mt-6 p-6 bg-slate-900 rounded-2xl text-white">
+                    <h5 class="text-sky-400 font-bold mb-2">Implementation Tip:</h5>
+                    <p class="text-sm opacity-80">Use the <code>srcset</code> attribute for raster images to serve small files to phones and high-res files to Retina displays, saving bandwidth for mobile collaborators.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="touch" class="mb-20">
+            <div class="flex flex-col md:flex-row gap-12">
+                <div class="flex-1">
+                    <h3 class="text-3xl font-bold mb-6">Touch Targets & Fitt's Law</h3>
+                    <p class="text-slate-600 leading-relaxed mb-6">
+                        Desktop users have pixel-perfect precision with a mouse. Mobile users have "fat fingers." RWD best practice dictates that touch targets (buttons, links) should be at least <strong>44x44 points</strong>.
+                    </p>
+                    <div class="flex gap-4">
+                        <button class="h-12 w-12 bg-sky-600 text-white rounded-full shadow-lg flex items-center justify-center"><i class="fas fa-pencil-alt"></i></button>
+                        <span class="text-xs text-slate-400 flex items-center">← 44px+ Accessible Target</span>
+                    </div>
+                </div>
+                <div class="flex-1 bg-white p-8 rounded-3xl border border-slate-200">
+                    <h4 class="font-bold text-sm uppercase text-slate-400 mb-4">Responsive Interaction Design</h4>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 text-sm">
+                            <i class="fas fa-mouse-pointer text-sky-500"></i>
+                            <span><strong>Hover States:</strong> Disabled or replaced on touch devices (since "hover" doesn't exist).</span>
+                        </li>
+                        <li class="flex gap-3 text-sm">
+                            <i class="fas fa-hand-pointer text-sky-500"></i>
+                            <span><strong>Gestures:</strong> Implementing pinch-to-zoom and two-finger pan for tablet users.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-16 px-6 text-center">
+        <div class="max-w-7xl mx-auto">
+            <p class="text-sm mb-4">Responsive Design Checklist: Fluid Grid? Media Queries? Flexible Media? Accessible Targets?</p>
+            <div class="flex justify-center gap-4 text-xl">
+                <i class="fas fa-mobile-alt"></i>
+                <i class="fas fa-tablet-alt"></i>
+                <i class="fas fa-laptop"></i>
+                <i class="fas fa-desktop"></i>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
