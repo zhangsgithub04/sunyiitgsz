@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Design | Whiteboard Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-900">
+
+    <nav class="sticky top-0 z-50 glass border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-black text-violet-600 tracking-tighter uppercase">UX.Flow</h1>
+            <div class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-slate-500">
+                <a href="#discovery" class="hover:text-violet-600 transition">Discovery</a>
+                <a href="#ia" class="hover:text-violet-600 transition">Architecture</a>
+                <a href="#interaction" class="hover:text-violet-600 transition">Interaction</a>
+                <a href="#visual" class="hover:text-violet-600 transition">Visual</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-violet-700 text-white py-24 px-6 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto text-center">
+            <h2 class="text-5xl md:text-7xl font-extrabold mb-6">User-Centered Design</h2>
+            <p class="text-xl text-violet-100 max-w-2xl mx-auto leading-relaxed">
+                Transforming complex collaborative features into an intuitive, invisible interface.
+            </p>
+        </div>
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-violet-600 rounded-full mix-blend-multiply opacity-50 filter blur-3xl"></div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+
+        <section id="discovery" class="mb-24">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-violet-600 font-bold uppercase tracking-widest text-sm">Step 01</span>
+                    <h3 class="text-4xl font-bold mt-2 mb-6 text-slate-800">Discovery & Empathy</h3>
+                    <p class="text-slate-600 mb-6">Before drawing a single pixel, we must understand the user's mental model. UX designers conduct research to identify pain points and motivations.</p>
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-search text-violet-500 mt-1"></i>
+                            <span><strong>User Personas:</strong> Creating profiles like "The Remote Project Manager" who needs to quickly organize team ideas.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marked-alt text-violet-500 mt-1"></i>
+                            <span><strong>User Journey Maps:</strong> Plotting the emotional highs and lows of a user trying to run a virtual workshop.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+                    <h4 class="font-bold text-slate-400 uppercase text-xs mb-4 italic">Scenario: The Whiteboard User</h4>
+                    <p class="text-sm text-slate-600 italic leading-relaxed">
+                        Research shows that users get frustrated when tools cover up the canvas. Requirement: The UI must be "low-chrome"—meaning menus should be minimal and out of the way.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        
+
+[Image of User Journey Map template]
+
+
+        <section id="ia" class="mb-24">
+            <div class="bg-slate-900 text-white p-12 rounded-3xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-3xl font-bold mb-6">Information Architecture & Wireframing</h3>
+                    <p class="text-slate-400 mb-10 max-w-2xl">Organizing content and flow. IA is the blueprint of the interface—ensuring that tools are where users expect them to be.</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-4 border border-slate-700 rounded-xl">
+                            <h4 class="text-violet-400 font-bold mb-2">Sitemaps</h4>
+                            <p class="text-xs opacity-70 italic">Defining the navigation: Dashboard > Board View > Settings > Export.</p>
+                        </div>
+                        <div class="p-4 border border-slate-700 rounded-xl">
+                            <h4 class="text-violet-400 font-bold mb-2">Lo-Fi Wireframes</h4>
+                            <p class="text-xs opacity-70 italic">B&W skeletal layouts focused on placement, not style.</p>
+                        </div>
+                        <div class="p-4 border border-slate-700 rounded-xl">
+                            <h4 class="text-violet-400 font-bold mb-2">Card Sorting</h4>
+                            <p class="text-xs opacity-70 italic">Testing how users categorize drawing tools vs. admin settings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="interaction" class="mb-24">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="h-12 w-2 bg-violet-500"></div>
+                <h3 class="text-3xl font-bold">Interaction Design & Prototyping</h3>
+            </div>
+            <p class="text-slate-600 mb-10 max-w-3xl">This is where we define how the system *responds* to the user. For a whiteboard, this is the most critical stage.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-violet-50 p-8 rounded-2xl border border-violet-100">
+                    <h4 class="font-bold mb-4">Micro-interactions</h4>
+                    <p class="text-sm text-slate-700">The subtle animations when a sticky note is dropped or the way a cursor "wiggles" when a peer joins. These provide essential feedback.</p>
+                </div>
+                <div class="bg-violet-50 p-8 rounded-2xl border border-violet-100">
+                    <h4 class="font-bold mb-4">Affordances</h4>
+                    <p class="text-sm text-slate-700">Designing the "Pen" tool to look and behave like a physical pen, making the digital experience feel familiar and grounded.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="visual" class="mb-24">
+            <div class="text-center mb-16">
+                <span class="text-violet-600 font-bold uppercase tracking-widest text-sm">The Final Layer</span>
+                <h3 class="text-4xl font-bold mt-2">Visual Design & Design Systems</h3>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-4">
+                <div class="p-6 bg-white border border-gray-200 rounded-2xl text-center">
+                    <div class="w-12 h-12 bg-violet-600 rounded-full mx-auto mb-4"></div>
+                    <h5 class="font-bold text-sm">Typography</h5>
+                    <p class="text-[10px] text-slate-400">Accessible, legible sans-serif fonts.</p>
+                </div>
+                <div class="p-6 bg-white border border-gray-200 rounded-2xl text-center">
+                    <div class="w-12 h-12 bg-gradient-to-r from-violet-500 to-pink-500 rounded-lg mx-auto mb-4"></div>
+                    <h5 class="font-bold text-sm">Color Theory</h5>
+                    <p class="text-[10px] text-slate-400">Using color to signal state (e.g., active tools).</p>
+                </div>
+                <div class="p-6 bg-white border border-gray-200 rounded-2xl text-center">
+                    <div class="w-12 h-12 flex items-center justify-center text-violet-600 text-2xl mx-auto mb-4"><i class="fas fa-icons"></i></div>
+                    <h5 class="font-bold text-sm">Iconography</h5>
+                    <p class="text-[10px] text-slate-400">Clear, universal symbols for drawing tools.</p>
+                </div>
+                <div class="p-6 bg-white border border-gray-200 rounded-2xl text-center">
+                    <div class="w-12 h-12 border-2 border-dashed border-violet-400 rounded-md mx-auto mb-4"></div>
+                    <h5 class="font-bold text-sm">Grid System</h5>
+                    <p class="text-[10px] text-slate-400">Ensuring consistency across screen sizes.</p>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section class="mb-20 bg-violet-50 rounded-3xl p-10 border border-violet-100">
+            <h3 class="text-2xl font-bold mb-4">The Loop: Usability Testing</h3>
+            <p class="text-slate-600 leading-relaxed text-sm">
+                UX design is iterative. We put our <strong>High-Fidelity Prototype</strong> in front of real users. 
+                <br><br>
+                <span class="italic font-semibold">Test Observation:</span> "Users struggled to find the 'Export' button because it was hidden in a hamburger menu."
+                <br>
+                <span class="italic font-semibold">Design Fix:</span> Move the Export button to the top-right toolbar for immediate visibility.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="bg-white py-12 px-6 text-center border-t border-gray-200">
+        <p class="text-slate-400 text-sm">"Design is not just what it looks like and feels like. Design is how it works." — Steve Jobs</p>
+    </footer>
+
+</body>
+</html>
