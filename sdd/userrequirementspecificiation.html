@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URS Blueprint | Software Design Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        .req-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-neutral-50 text-neutral-800 antialiased">
+
+    <nav class="fixed left-0 top-0 h-full w-64 bg-slate-900 text-white hidden lg:flex flex-col p-6 z-50">
+        <h1 class="text-2xl font-black mb-10 text-cyan-400">URS.Mastery</h1>
+        <div class="space-y-4 text-sm">
+            <a href="#intro" class="block hover:text-cyan-400">01. Overview</a>
+            <a href="#elicitation" class="block hover:text-cyan-400">02. Elicitation</a>
+            <a href="#functional" class="block hover:text-cyan-400">03. Functional Specs</a>
+            <a href="#non-functional" class="block hover:text-cyan-400">04. Non-Functional</a>
+            <a href="#matrix" class="block hover:text-cyan-400">05. Traceability Matrix</a>
+            <a href="#validation" class="block hover:text-cyan-400">06. Validation</a>
+        </div>
+        <div class="mt-auto pt-6 border-t border-slate-700 text-xs text-slate-400">
+            Real-time Whiteboard Project v2.0
+        </div>
+    </nav>
+
+    <div class="lg:ml-64 p-4 md:p-12">
+        
+        <header id="intro" class="max-w-5xl mb-16">
+            <span class="px-3 py-1 bg-cyan-100 text-cyan-700 text-xs font-bold rounded-full uppercase tracking-widest">Phase 1: Requirements</span>
+            <h2 class="text-5xl font-extrabold mt-4 mb-6 leading-tight">User Requirements Specification (URS)</h2>
+            <p class="text-lg text-slate-600 leading-relaxed">
+                The URS is a contractual and technical document that defines exactly what the users need from a system. For our <strong>Real-time Collaborative Whiteboard</strong>, it bridges the gap between a designer's "I want to draw together" and a developer's "WebSocket implementation for JSON payloads."
+            </p>
+        </header>
+
+        <section id="elicitation" class="mb-20">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-10 w-2 bg-cyan-500"></div>
+                <h3 class="text-3xl font-bold">01. Requirements Elicitation</h3>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 mb-10">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h4 class="font-bold text-lg mb-4 text-slate-700">Techniques Used</h4>
+                    <ul class="space-y-3 text-sm list-disc list-inside text-slate-600">
+                        <li><strong>Stakeholder Interviews:</strong> Talking to Lead Architects and UX Designers.</li>
+                        <li><strong>Brainstorming:</strong> Identifying "Blue Sky" features like AI-shape recognition.</li>
+                        <li><strong>Observation:</strong> Watching teams use physical whiteboards to identify pain points (e.g., "running out of space").</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h4 class="font-bold text-lg mb-4 text-slate-700">User Personas</h4>
+                    <p class="text-sm text-slate-600 italic">"The Remote Facilitator" – Needs to control the view of 20+ people simultaneously to keep the workshop on track.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="functional" class="mb-20">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-10 w-2 bg-emerald-500"></div>
+                <h3 class="text-3xl font-bold">02. Functional Requirements (FR)</h3>
+            </div>
+            <p class="mb-8 text-slate-600 italic">Functional requirements describe specific behavior and data processing logic.</p>
+            
+            <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200">
+                            <th class="p-4 font-bold text-sm">ID</th>
+                            <th class="p-4 font-bold text-sm">Function</th>
+                            <th class="p-4 font-bold text-sm">Description</th>
+                            <th class="p-4 font-bold text-sm">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm text-slate-600">
+                        <tr class="border-b">
+                            <td class="p-4 font-mono font-bold text-emerald-600">FR-001</td>
+                            <td class="p-4 font-bold">Stroke Synchronization</td>
+                            <td class="p-4">The system shall broadcast vector coordinates of a brush stroke to all users in the same room.</td>
+                            <td class="p-4"><span class="px-2 py-1 bg-red-100 text-red-700 rounded-md text-xs">CRITICAL</span></td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="p-4 font-mono font-bold text-emerald-600">FR-002</td>
+                            <td class="p-4 font-bold">Infinite Canvas</td>
+                            <td class="p-4">The canvas shall support panning and zooming without fixed boundaries.</td>
+                            <td class="p-4"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-md text-xs">HIGH</span></td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono font-bold text-emerald-600">FR-003</td>
+                            <td class="p-4 font-bold">Object Grouping</td>
+                            <td class="p-4">Users shall be able to select multiple elements and group them as a single entity.</td>
+                            <td class="p-4"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-xs">MEDIUM</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        
+
+        <section id="non-functional" class="mb-20">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-10 w-2 bg-indigo-500"></div>
+                <h3 class="text-3xl font-bold">03. Non-Functional Requirements (NFR)</h3>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="req-card bg-indigo-600 text-white p-6 rounded-2xl">
+                    <h4 class="font-bold mb-2">Performance</h4>
+                    <p class="text-xs opacity-80 italic">End-to-end latency for a stroke must not exceed 150ms.</p>
+                </div>
+                <div class="req-card bg-slate-800 text-white p-6 rounded-2xl">
+                    <h4 class="font-bold mb-2">Availability</h4>
+                    <p class="text-xs opacity-80 italic">The system shall maintain 99.9% uptime during business hours (EST).</p>
+                </div>
+                <div class="req-card bg-rose-600 text-white p-6 rounded-2xl">
+                    <h4 class="font-bold mb-2">Security</h4>
+                    <p class="text-xs opacity-80 italic">All board data must be encrypted using AES-256 at rest.</p>
+                </div>
+                <div class="req-card bg-cyan-600 text-white p-6 rounded-2xl">
+                    <h4 class="font-bold mb-2">Scalability</h4>
+                    <p class="text-xs opacity-80 italic">Support for 1,000 concurrent active boards per server cluster.</p>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="matrix" class="mb-20 bg-white p-8 rounded-3xl border border-slate-200">
+            <h3 class="text-2xl font-bold mb-6">04. Requirements Traceability Matrix (RTM)</h3>
+            <p class="text-sm text-slate-500 mb-6">Tracing ensures that the design (UML) and the code directly address the user's needs.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-xs text-left border">
+                    <tr class="bg-slate-100">
+                        <th class="p-3 border">User Need ID</th>
+                        <th class="p-3 border">Requirement ID</th>
+                        <th class="p-3 border">Design Element (UML)</th>
+                        <th class="p-3 border">Test Case</th>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border">NEED-01: Collaboration</td>
+                        <td class="p-3 border text-emerald-600 font-bold">FR-001</td>
+                        <td class="p-3 border italic">Sequence Diagram: SyncStroke</td>
+                        <td class="p-3 border">TC-001: Multi-user Sync</td>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border">NEED-02: Privacy</td>
+                        <td class="p-3 border text-indigo-600 font-bold">NFR-SEC-01</td>
+                        <td class="p-3 border italic">Component: AuthModule</td>
+                        <td class="p-3 border">TC-099: Pen-test Encryption</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="validation" class="mb-20">
+            <h3 class="text-2xl font-bold mb-6">05. Requirements Validation</h3>
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-xl">
+                <h4 class="font-bold text-amber-800 flex items-center gap-2">
+                    <i class="fas fa-exclamation-triangle"></i> The Quality Check
+                </h4>
+                <p class="text-sm text-amber-700 mt-2 leading-relaxed">
+                    Requirements must be <strong>SMART</strong>: Specific, Measurable, Achievable, Relevant, and Time-bound. 
+                    Validation ensures we aren't building the "wrong thing" right. In our Whiteboard app, we validate by showing wireframes to users to confirm FR-002 (Infinite Canvas) actually meets their spatial needs.
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="lg:ml-64 bg-slate-50 p-12 text-center border-t border-slate-200">
+        <p class="text-slate-400 text-sm italic">"A project is only as strong as its specifications."</p>
+    </footer>
+
+</body>
+</html>
