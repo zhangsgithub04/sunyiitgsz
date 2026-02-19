@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Architecture | From Strategy to Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        .step-gradient { background: linear-gradient(to bottom, #4f46e5, #06b6d4); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans">
+
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-black text-indigo-600 tracking-tighter uppercase">Design.Hierarchy</h1>
+            <div class="hidden lg:flex space-x-6 text-xs font-bold uppercase tracking-widest text-slate-500">
+                <a href="#high-level" class="hover:text-indigo-600">High-Level</a>
+                <a href="#architecture" class="hover:text-indigo-600">Architecture</a>
+                <a href="#component" class="hover:text-indigo-600">Component</a>
+                <a href="#class" class="hover:text-indigo-600">Class & Function</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-slate-900 text-white py-24 px-6 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto relative z-10">
+            <h2 class="text-5xl md:text-7xl font-extrabold mb-6 leading-none">The Software Design Process.</h2>
+            <p class="text-xl text-slate-400 max-w-2xl leading-relaxed">
+                A structured journey from abstract user needs to concrete, executable code. Every layer ensures the system is scalable, maintainable, and robust.
+            </p>
+        </div>
+        <div class="absolute right-0 bottom-0 opacity-10 text-[20rem] font-black -mb-20 -mr-20">DEV</div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+
+        <section id="high-level" class="mb-32">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-6xl font-black text-indigo-200">01</span>
+                <div>
+                    <h3 class="text-3xl font-bold">High-Level Design (HLD)</h3>
+                    <p class="text-slate-500">The "What" and the "Global Context"</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                <div class="prose prose-slate">
+                    <p class="mb-4">High-Level Design focuses on the conceptual landscape. It defines system boundaries, user interactions, and external dependencies. This is where we decide how the application fits into the world.</p>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3">
+                            <i class="fas fa-check-circle text-indigo-500 mt-1"></i>
+                            <span><strong>Context Diagrams:</strong> Identifying external users and third-party APIs (like Auth0 or AWS S3).</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <i class="fas fa-check-circle text-indigo-500 mt-1"></i>
+                            <span><strong>User Journeys:</strong> Mapping the path from landing page to collaborative drawing.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-indigo-50 p-8 rounded-3xl border border-indigo-100">
+                    <h4 class="font-bold text-indigo-900 mb-4 tracking-wide uppercase text-sm italic">Whiteboard Application Context</h4>
+                    <p class="text-sm text-indigo-800 leading-relaxed">
+                        In HLD, we establish that our Whiteboard system consists of a <strong>Web Client</strong>, a <strong>Synchronization Cluster</strong>, and a <strong>Storage Engine</strong>. We define that users must be able to share a "Board URL" and see peers' cursors in real-time.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="mb-32">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-6xl font-black text-cyan-200">02</span>
+                <div>
+                    <h3 class="text-3xl font-bold">Architectural Design</h3>
+                    <p class="text-slate-500">The "Skeleton" and "Decision Making"</p>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-xl">
+                <div class="grid md:grid-cols-3">
+                    <div class="p-8 border-r border-slate-100">
+                        <h4 class="font-bold mb-4 flex items-center gap-2"><i class="fas fa-layer-group text-cyan-500"></i> Patterns</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Choosing between Monolithic, Microservices, or Serverless. For our whiteboard, we select <strong>Event-Driven Architecture</strong> to handle live WebSocket streams.</p>
+                    </div>
+                    <div class="p-8 border-r border-slate-100">
+                        <h4 class="font-bold mb-4 flex items-center gap-2"><i class="fas fa-database text-cyan-500"></i> Data Strategy</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Deciding on <strong>Redis</strong> for ephemeral real-time state (cursor positions) and <strong>PostgreSQL</strong> for persistent board data (saved shapes).</p>
+                    </div>
+                    <div class="p-8">
+                        <h4 class="font-bold mb-4 flex items-center gap-2"><i class="fas fa-shield-alt text-cyan-500"></i> Quality Attributes</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Defining "The -ilities": Scalability to 10k users, Availability of 99.9%, and sub-50ms Latency for ink synchronization.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+
+        <section id="component" class="mb-32">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-6xl font-black text-emerald-200">03</span>
+                <div>
+                    <h3 class="text-3xl font-bold">Component-Level Design</h3>
+                    <p class="text-slate-500">The "Modules" and "Interfaces"</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-8 bg-emerald-900 text-emerald-50 rounded-3xl">
+                    <h4 class="text-xl font-bold mb-4">Decomposition</h4>
+                    <p class="text-sm opacity-80 mb-6">Breaking the architecture into manageable, pluggable modules. Each component has a specific responsibility and a defined API.</p>
+                    <div class="space-y-4">
+                        <div class="bg-emerald-800 p-4 rounded-lg">
+                            <span class="text-xs font-mono text-emerald-300">Module A</span>
+                            <p class="text-sm font-bold font-mono">Stroke-Engine</p>
+                        </div>
+                        <div class="bg-emerald-800 p-4 rounded-lg">
+                            <span class="text-xs font-mono text-emerald-300">Module B</span>
+                            <p class="text-sm font-bold font-mono">Conflict-Resolution-Service</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center">
+                    <p class="text-slate-600 leading-relaxed italic border-l-4 border-emerald-500 pl-6">
+                        "In our whiteboard application, the <strong>Conflict Resolution Component</strong> is critical. It uses algorithms (like CRDTs or Operational Transformation) to ensure that if two users move the same sticky note at once, the system decides on a consistent final position."
+                    </p>
+                </div>
+            </div>
+            
+        </section>
+
+        <section id="class" class="mb-20">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-6xl font-black text-rose-200">04</span>
+                <div>
+                    <h3 class="text-3xl font-bold">Low-Level Design (LLD)</h3>
+                    <p class="text-slate-500">The "Classes," "Methods," and "Algorithms"</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-3xl border border-slate-200">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-rose-100 text-rose-600 rounded-lg"><i class="fas fa-code"></i></div>
+                        <h4 class="text-xl font-bold">Class Level</h4>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-6">Detailed definition of object attributes, visibility (private/public), and inheritance structures.</p>
+                    <pre class="bg-slate-50 p-4 rounded-xl text-xs font-mono text-rose-700">
+class Shape {
+  private id: string;
+  protected color: string;
+  public draw(): void;
+  public updatePosition(x, y): void;
+}
+                    </pre>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl border border-slate-200">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-rose-100 text-rose-600 rounded-lg"><i class="fas fa-microchip"></i></div>
+                        <h4 class="text-xl font-bold">Function/Logic Level</h4>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-6">The "Algorithms." How a specific method works internally—step by step.</p>
+                    <div class="p-4 bg-slate-50 rounded-xl">
+                        <p class="text-xs font-bold uppercase text-slate-400 mb-2">Algorithm: SmoothPath()</p>
+                        <ol class="text-xs text-slate-600 list-decimal list-inside space-y-1">
+                            <li>Receive raw mouse points array.</li>
+                            <li>Apply Catmull-Rom spline interpolation.</li>
+                            <li>Reduce point density using Douglas-Peucker.</li>
+                            <li>Return simplified SVG path string.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-16 px-6 text-center border-t border-slate-800">
+        <p class="text-sm">Design is the bridge between imagination and implementation.</p>
+        <div class="mt-4 flex justify-center gap-6 text-lg">
+            <i class="fab fa-github hover:text-white pointer"></i>
+            <i class="fab fa-linkedin hover:text-white pointer"></i>
+        </div>
+    </footer>
+
+</body>
+</html>
