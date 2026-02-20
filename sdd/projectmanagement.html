@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM Mastery | Engineering the Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gantt-bar { height: 8px; border-radius: 4px; }
+        .phase-card:hover { border-color: #3b82f6; background-color: #f8faff; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans">
+
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-black text-blue-700 tracking-tight italic">PM.STRATEGY</h1>
+            <div class="hidden lg:flex space-x-8 text-xs font-bold uppercase tracking-widest text-slate-500">
+                <a href="#foundations" class="hover:text-blue-700">Foundations</a>
+                <a href="#spm" class="hover:text-blue-700">Software Specifics</a>
+                <a href="#lifecycle" class="hover:text-blue-700">Project Lifecycle</a>
+                <a href="#risk" class="hover:text-blue-700">Risk & Quality</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-blue-800 text-white py-24 px-6 shadow-inner">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-5xl md:text-7xl font-extrabold mb-6">Software Project Management</h2>
+            <p class="text-xl text-blue-100 max-w-2xl leading-relaxed">
+                Navigating the "Triple Constraint" to deliver a high-performance <strong>Collaborative Whiteboard</strong> on time and within budget.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+
+        <section id="foundations" class="mb-24">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="p-3 bg-blue-100 text-blue-700 rounded-xl"><i class="fas fa-shapes fa-lg"></i></div>
+                <h3 class="text-3xl font-bold">The PM Foundations</h3>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div>
+                    <h4 class="text-xl font-bold mb-4">The Iron Triangle</h4>
+                    <p class="text-slate-600 mb-6">Every project is bound by three competing forces. If you change one, the others must react. For our Whiteboard, if we want to add <strong>AI Auto-Drawing</strong> (Scope), we either need more <strong>Time</strong> or more <strong>Budget</strong> for better GPUs.</p>
+                    <ul class="space-y-3 text-sm font-medium">
+                        <li class="flex items-center gap-2"><div class="w-3 h-3 bg-blue-500 rounded-full"></div> Scope: The specific features (Drawing, Syncing).</li>
+                        <li class="flex items-center gap-2"><div class="w-3 h-3 bg-blue-500 rounded-full"></div> Time: The delivery schedule (V1 in 3 months).</li>
+                        <li class="flex items-center gap-2"><div class="w-3 h-3 bg-blue-500 rounded-full"></div> Cost: The resources (Developers, Cloud Servers).</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 flex flex-col justify-center text-center">
+                    
+                    <p class="text-xs text-slate-400 mt-4 italic">Quality sits in the center of the triangle.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="spm" class="mb-24 bg-blue-900 text-white p-12 rounded-3xl">
+            <h3 class="text-3xl font-bold mb-8">What makes Software PM unique?</h3>
+            <p class="text-blue-200 mb-10">Unlike building a bridge, software is "invisible" and highly volatile. SPM manages <strong>Intangibility</strong>, <strong>Complexity</strong>, and <strong>Change</strong>.</p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6 bg-blue-800/50 rounded-2xl border border-blue-700">
+                    <h4 class="font-bold text-blue-300 mb-2">Estimation Complexity</h4>
+                    <p class="text-xs opacity-80">Software tasks are hard to estimate. "Adding a pen tool" might take 2 hours; "Syncing strokes at scale" might take 2 months.</p>
+                </div>
+                <div class="p-6 bg-blue-800/50 rounded-2xl border border-blue-700">
+                    <h4 class="font-bold text-blue-300 mb-2">Requirement Volatility</h4>
+                    <p class="text-xs opacity-80">Users might realize they want "Voice Chat" halfway through. SPM uses Agile to embrace this change.</p>
+                </div>
+                <div class="p-6 bg-blue-800/50 rounded-2xl border border-blue-700">
+                    <h4 class="font-bold text-blue-300 mb-2">Technical Debt</h4>
+                    <p class="text-xs opacity-80">Managing the long-term "cost" of quick-and-dirty code fixes to meet a whiteboard launch date.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="lifecycle" class="mb-24">
+            <h3 class="text-3xl font-bold mb-10">Project Lifecycle Phases</h3>
+            <div class="grid md:grid-cols-5 gap-4">
+                <div class="phase-card p-6 border border-slate-200 rounded-2xl transition-all">
+                    <h5 class="font-bold text-blue-600 text-sm mb-2">1. Initiation</h5>
+                    <p class="text-[10px] text-slate-500">Feasibility study: Is there a market for a new whiteboard?</p>
+                </div>
+                <div class="phase-card p-6 border border-slate-200 rounded-2xl transition-all">
+                    <h5 class="font-bold text-blue-600 text-sm mb-2">2. Planning</h5>
+                    <p class="text-[10px] text-slate-500">Defining WBS (Work Breakdown Structure) and timelines.</p>
+                </div>
+                <div class="phase-card p-6 border border-slate-200 rounded-2xl transition-all">
+                    <h5 class="font-bold text-blue-600 text-sm mb-2">3. Execution</h5>
+                    <p class="text-[10px] text-slate-500">The Sprints: Coding, Design, and Integration.</p>
+                </div>
+                <div class="phase-card p-6 border border-slate-200 rounded-2xl transition-all">
+                    <h5 class="font-bold text-blue-600 text-sm mb-2">4. Monitoring</h5>
+                    <p class="text-[10px] text-slate-500">Tracking Burn-down charts and server performance.</p>
+                </div>
+                <div class="phase-card p-6 border border-slate-200 rounded-2xl transition-all">
+                    <h5 class="font-bold text-blue-600 text-sm mb-2">5. Closing</h5>
+                    <p class="text-[10px] text-slate-500">Handover to Ops and "Post-Mortem" lessons learned.</p>
+                </div>
+            </div>
+            <div class="mt-12 bg-slate-100 p-8 rounded-2xl">
+                
+                <p class="text-center text-xs text-slate-400 mt-4 italic">Visualizing dependencies and milestones across the whiteboard project timeline.</p>
+            </div>
+        </section>
+
+        <section id="risk" class="mb-20">
+            <div class="flex flex-col md:flex-row gap-12">
+                <div class="flex-1">
+                    <h3 class="text-3xl font-bold mb-6">Risk Management</h3>
+                    <p class="text-slate-600 mb-6 italic">"What if the WebSocket server crashes with 1,000 users?"</p>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+                            <h6 class="font-bold text-red-800 text-sm">Risk Identification</h6>
+                            <p class="text-xs text-red-700">High latency in stroke syncing during peak hours.</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                            <h6 class="font-bold text-green-800 text-sm">Mitigation Strategy</h6>
+                            <p class="text-xs text-green-700">Implement horizontal scaling and load balancing early in development.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 bg-white p-8 rounded-3xl border border-slate-200">
+                    <h4 class="font-bold mb-4">Quality Management (QA)</h4>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 text-sm">
+                            <i class="fas fa-microscope text-blue-500"></i>
+                            <span><strong>Verification:</strong> Are we building the product correctly? (Code reviews, Unit tests).</span>
+                        </li>
+                        <li class="flex gap-3 text-sm">
+                            <i class="fas fa-bullseye text-blue-500"></i>
+                            <span><strong>Validation:</strong> Are we building the right product? (User testing on drawing speed).</span>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-16 px-6 text-center">
+        <p class="text-sm">PM is the art of getting things done through others.</p>
+    </footer>
+
+</body>
+</html>
