@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Specification | From Sketch to Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-zinc-50 text-zinc-900 font-sans selection:bg-emerald-100">
+
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-zinc-200">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-black text-emerald-600 tracking-tighter uppercase italic">Visual.Spec</h1>
+            <div class="hidden lg:flex space-x-8 text-xs font-bold uppercase tracking-widest text-zinc-500">
+                <a href="#wireframes" class="hover:text-emerald-600">Wireframes</a>
+                <a href="#mockups" class="hover:text-emerald-600">Mock UI</a>
+                <a href="#figma" class="hover:text-emerald-600">Figma & Handoff</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-zinc-900 text-white py-20 px-6">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-5xl font-extrabold mb-6">Interface Specification</h2>
+            <p class="text-xl text-zinc-400 max-w-2xl">
+                Visualizing the <strong>Real-time Whiteboard</strong>: Using different levels of fidelity to bridge the gap between user needs and engineering reality.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+
+        <section id="wireframes" class="mb-24">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-sm bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-bold">STAGE: REQUIREMENTS</span>
+                <h3 class="text-3xl font-bold">Low-Fidelity Wireframes</h3>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="prose prose-zinc">
+                    <p>In the <strong>User Requirement Stage</strong>, we don't care about colors or branding. We care about <strong>Structure</strong> and <strong>Information Architecture</strong>.</p>
+                    <ul class="space-y-4">
+                        <li><strong>The Goal:</strong> Validate that all functional requirements (FR) have a place in the UI.</li>
+                        <li><strong>Whiteboard Example:</strong> Does the "Invite" button fit in the top bar? Is the "Toolbar" accessible on small screens?</li>
+                    </ul>
+                </div>
+                <div class="bg-zinc-200 aspect-video rounded-2xl flex items-center justify-center border-2 border-dashed border-zinc-300">
+                    <div class="text-center">
+                        <i class="fas fa-pencil-ruler text-4xl text-zinc-400 mb-2"></i>
+                        <p class="text-xs font-mono text-zinc-500">Placeholder for Structural Layout</p>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+
+        <section id="mockups" class="mb-24">
+            <div class="flex items-center gap-4 mb-10">
+                <span class="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold">STAGE: DESIGN</span>
+                <h3 class="text-3xl font-bold">High-Fidelity Mock UI</h3>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-8 bg-white rounded-3xl border border-zinc-200 shadow-sm">
+                    <h4 class="font-bold mb-3 text-blue-600">Visual Identity</h4>
+                    <p class="text-sm text-zinc-500">Applying the "Skin." Choosing the specific purple for the "Active Pen" and the exact border-radius for the "Sticky Notes."</p>
+                </div>
+                <div class="p-8 bg-white rounded-3xl border border-zinc-200 shadow-sm">
+                    <h4 class="font-bold mb-3 text-blue-600">Static Accuracy</h4>
+                    <p class="text-sm text-zinc-500">A pixel-perfect representation of what the final product will look like. Used for stakeholder sign-off before coding starts.</p>
+                </div>
+                <div class="p-8 bg-white rounded-3xl border border-zinc-200 shadow-sm">
+                    <h4 class="font-bold mb-3 text-blue-600">Asset Definition</h4>
+                    <p class="text-sm text-zinc-500">Defining the iconography and typography that the "Vibe Programming" agents will later implement.</p>
+                </div>
+            </div>
+            
+        </section>
+
+        <section id="figma" class="mb-20">
+            <div class="bg-emerald-900 text-white rounded-3xl p-10 md:p-16 relative overflow-hidden">
+                <div class="max-w-3xl relative z-10">
+                    <h3 class="text-4xl font-bold mb-6">Figma & The Handoff</h3>
+                    <p class="text-emerald-100 mb-8 leading-relaxed">
+                        Figma is the industry standard for <strong>Interactive Prototyping</strong>. It transforms static mockups into living experiences that developers can inspect.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4 p-4 bg-emerald-800/50 rounded-xl border border-emerald-700">
+                            <i class="fas fa-link mt-1"></i>
+                            <div>
+                                <h5 class="font-bold">Prototyping Connections</h5>
+                                <p class="text-xs text-emerald-200/70">Linking frames to simulate the "Board Creation" flow. If a user clicks 'New Board', it transitions to the 'Canvas' view.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 p-4 bg-emerald-800/50 rounded-xl border border-emerald-700">
+                            <i class="fas fa-terminal mt-1"></i>
+                            <div>
+                                <h5 class="font-bold">Dev Mode & Inspection</h5>
+                                <p class="text-xs text-emerald-200/70">Developers can click any element to see the exact CSS (padding, colors, box-shadow) and export assets (SVG icons).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-emerald-800 hidden lg:block opacity-20"></div>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <footer class="bg-zinc-100 py-12 text-center text-sm border-t border-zinc-200">
+        <p class="text-zinc-500 italic">"Design is the bridge between user needs and technical code."</p>
+    </footer>
+
+</body>
+</html>
