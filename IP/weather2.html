@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ZIP Code Weather</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 8px;
+      margin-right: 8px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Current Temperature by ZIP Code</h1>
+
+  <label for="zip">Enter ZIP code:</label>
+  <input type="text" id="zip" placeholder="e.g. 10001" maxlength="5">
+  <button id="getWeather">Get Weather</button>
+
+  <p id="result">Enter a ZIP code to see the current temperature.</p>
+
+  <script>
+    async function getWeatherByZip() {
+      const zip = document.getElementById("zip").value.trim();
+      const result = document.getElementById("result");
+
+      if (!/^\d{5}$/.test(zip)) {
+        result.textContent = "Please enter a valid 5-digit ZIP code.";
+        result.className = "error";
+        return;
+      }
+
+      result.textContent = "Loading...";
+      result.className = "";
+
+      try {
+        // Step 1: Convert ZIP code to lat/lon using Zippopotam.us
+        const zipResponse = await fetch(`https://api.zippopotam.us/us/${zip}`);
+        if (!zipResponse.ok) {
+          throw new Error("ZIP code not found.");
+        }
+
+        const zipData = await zipResponse.json();
+        const place = zipData.places[0];
+        const city = place["place name"];
+        const state = place["state abbreviation"];
+        const latitude = place["latitude"];
+        const longitude = place["longitude"];
+
+        // Step 2: Get current temperature from Open-Meteo
+        const weatherUrl =
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m`;
+
+        const weatherResponse = await fetch(weatherUrl);
+        if (!weatherResponse.ok) {
+          throw new Error("Weather service unavailable.");
+        }
+
+        const weatherData = await weatherResponse.json();
+        const temp = weatherData.current.temperature_2m;
+        const unit = weatherData.current_units.temperature_2m;
+
+        result.textContent = `The current temperature in ${city}, ${state} is ${temp}${unit}.`;
+      } catch (error) {
+        result.textContent = `Could not load weather data: ${error.message}`;
+        result.className = "error";
+      }
+    }
+
+    document.getElementById("getWeather").addEventListener("click", getWeatherByZip);
+
+    document.getElementById("zip").addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        getWeatherByZip();
+      }
+    });
+  </script>
+</body>
+</html>
