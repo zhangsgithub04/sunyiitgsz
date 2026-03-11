@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ZIP Weather Template</title>
+</head>
+<body>
+  <h1>ZIP Weather Template Demo</h1>
+
+  <input type="text" id="zip" placeholder="Enter ZIP code" maxlength="5">
+  <button id="load">Load Weather</button>
+
+  <p id="report">The current temperature in {{city}}, {{state}} is {{temp}}{{unit}}.</p>
+
+  <script>
+    const template = "The current temperature in {{city}}, {{state}} is {{temp}}{{unit}}.";
+
+    function fillTemplate(str, data) {
+      return str.replace(/\{\{(\w+)\}\}/g, (_, key) => data[key] ?? "");
+    }
+
+    async function loadWeather() {
+      const zip = document.getElementById("zip").value.trim();
+      const report = document.getElementById("report");
+
+      if (!/^\d{5}$/.test(zip)) {
+        report.textContent = "Please enter a valid 5-digit ZIP code.";
+        return;
+      }
+
+      try {
+        const zipRes = await fetch(`https://api.zippopotam.us/us/${zip}`);
+        if (!zipRes.ok) throw new Error("ZIP code not found");
+
+        const zipData = await zipRes.json();
+        const place = zipData.places[0];
+
+        const city = place["place name"];
+        const state = place["state abbreviation"];
+        const lat = place["latitude"];
+        const lon = place["longitude"];
+
+        const weatherRes = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`
+        );
+        if (!weatherRes.ok) throw new Error("Weather lookup failed");
+
+        const weatherData = await weatherRes.json();
+
+        report.textContent = fillTemplate(template, {
+          city: city,
+          state: state,
+          temp: weatherData.current.temperature_2m,
+          unit: weatherData.current_units.temperature_2m
+        });
+      } catch (err) {
+        report.textContent = `Error: ${err.message}`;
+      }
+    }
+
+    document.getElementById("load").addEventListener("click", loadWeather);
+  </script>
+</body>
+</html>
