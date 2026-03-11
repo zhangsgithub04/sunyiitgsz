@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Current Temperature</title>
+</head>
+<body>
+  <h1>Weather Demo</h1>
+  <p id="weatherText">Loading temperature...</p>
+
+  <script>
+    async function loadTemperature() {
+      try {
+        // Example: New York City coordinates
+        const lat = 40.7128;
+        const lon = -74.0060;
+
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+
+        const data = await response.json();
+        const temp = data.current.temperature_2m;
+        const unit = data.current_units.temperature_2m;
+
+        document.getElementById("weatherText").textContent =
+          `The current temperature is ${temp}${unit}.`;
+      } catch (error) {
+        document.getElementById("weatherText").textContent =
+          `Could not load temperature: ${error.message}`;
+      }
+    }
+
+    loadTemperature();
+  </script>
+</body>
+</html>
