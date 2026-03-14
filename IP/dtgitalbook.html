@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Book Demo</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <h1>Digital Book Framework Demo</h1>
+      <p>
+        A book can render static and live facts while keeping citation and provenance transparent.
+      </p>
+    </header>
+
+    <article class="chapter">
+      <h2>Chapter 1: Living Facts</h2>
+
+      <p>
+        The first edition of this imaginary book was published in
+        <span data-fact="book.publication.firstEditionYear"></span>.
+      </p>
+
+      <section aria-labelledby="pub-fact-heading">
+        <h3 id="pub-fact-heading">Publication metadata</h3>
+        <div data-fact-block="book.publication.firstEditionYear"></div>
+      </section>
+
+      <p>
+        The same framework can render live evidence-backed facts. For example, the
+        current temperature in New York City appears below.
+      </p>
+
+      <section aria-labelledby="weather-fact-heading">
+        <h3 id="weather-fact-heading">Current weather fact</h3>
+        <div data-fact-block="weather.new_york_city.currentTemperature"></div>
+      </section>
+    </article>
+
+    <section class="grid" aria-label="Debug panels">
+      <section class="panel">
+        <h3>Registered facts</h3>
+        <pre id="facts-debug">Loading...</pre>
+      </section>
+
+      <section class="panel">
+        <h3>Used sources</h3>
+        <div id="sources-debug">Loading...</div>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
