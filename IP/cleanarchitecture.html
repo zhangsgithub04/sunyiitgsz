@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NestJS Clean Architecture Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .layer-hover:hover { filter: brightness(1.2); transform: scale(1.02); transition: all 0.2s; }
+        .dependency-arrow { stroke: #64748b; stroke-width: 2; fill: none; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans">
+
+    <div class="max-w-6xl mx-auto px-6 py-12">
+        <header class="text-center mb-16">
+            <div class="flex justify-center mb-4">
+                <img src="https://nestjs.com/img/logo-small.svg" alt="NestJS Logo" class="w-16 h-16">
+            </div>
+            <h1 class="text-5xl font-black text-white mb-4 tracking-tight">
+                Clean Architecture <span class="text-red-500">in NestJS</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                How to structure enterprise-grade Node.js applications that are testable, scalable, and independent of frameworks.
+            </p>
+        </header>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
+            
+            <div class="bg-slate-900 p-8 rounded-3xl border border-slate-800 shadow-2xl">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-8 text-center">The Dependency Rule: Points Inward</h3>
+                
+                <div class="relative flex flex-col items-center space-y-4">
+                    <div onclick="showLayer('infra')" class="layer-hover w-full bg-blue-900/40 border-2 border-blue-500 p-4 rounded-xl cursor-pointer">
+                        <span class="text-blue-400 font-bold">1. Infrastructure / Frameworks</span>
+                        <p class="text-xs text-blue-300/70">TypeORM, Mongoose, Passport, Express</p>
+                    </div>
+
+                    <div class="text-slate-600">▼</div>
+
+                    <div onclick="showLayer('adapter')" class="layer-hover w-5/6 bg-green-900/40 border-2 border-green-500 p-4 rounded-xl cursor-pointer">
+                        <span class="text-green-400 font-bold">2. Interface Adapters</span>
+                        <p class="text-xs text-green-300/70">Controllers, Gateways, Repositories</p>
+                    </div>
+
+                    <div class="text-slate-600">▼</div>
+
+                    <div onclick="showLayer('usecase')" class="layer-hover w-4/6 bg-red-900/40 border-2 border-red-500 p-4 rounded-xl cursor-pointer">
+                        <span class="text-red-400 font-bold">3. Application (Use Cases)</span>
+                        <p class="text-xs text-red-300/70">Services, Command Handlers</p>
+                    </div>
+
+                    <div class="text-slate-600">▼</div>
+
+                    <div onclick="showLayer('domain')" class="layer-hover w-3/6 bg-yellow-900/40 border-2 border-yellow-500 p-6 rounded-xl cursor-pointer text-center">
+                        <span class="text-yellow-400 font-bold block">4. Domain</span>
+                        <p class="text-xs text-yellow-300/70">Entities & Value Objects</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-panel" class="bg-white text-slate-900 p-8 rounded-3xl shadow-2xl min-h-[500px]">
+                <div id="default-msg" class="h-full flex flex-col justify-center items-center text-center py-20">
+                    <svg class="w-16 h-16 text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                    <p class="text-lg font-medium text-slate-500">Click a layer to see the NestJS implementation details</p>
+                </div>
+
+                <div id="layer-info" class="hidden animate-in fade-in duration-500">
+                    <h2 id="layer-title" class="text-3xl font-black mb-2 text-slate-900"></h2>
+                    <p id="layer-tag" class="inline-block px-2 py-1 rounded bg-slate-100 text-xs font-bold mb-6"></p>
+                    
+                    <div class="prose prose-slate mb-8">
+                        <p id="layer-desc" class="text-slate-600 leading-relaxed"></p>
+                    </div>
+
+                    <div class="bg-slate-950 rounded-xl p-5 overflow-x-auto">
+                        <p class="text-slate-500 text-xs mb-3 font-mono">// NestJS Example</p>
+                        <pre id="layer-code" class="text-blue-400 font-mono text-sm"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="mt-20">
+            <h2 class="text-2xl font-bold mb-8 text-center">Mapping Clean Architecture to NestJS Files</h2>
+            <div class="overflow-hidden rounded-xl border border-slate-800">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-900">
+                        <tr>
+                            <th class="p-4 border-b border-slate-800">Clean Layer</th>
+                            <th class="p-4 border-b border-slate-800">NestJS Component</th>
+                            <th class="p-4 border-b border-slate-800">Responsibility</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        <tr><td class="p-4 font-bold text-yellow-500">Domain</td><td class="p-4 font-mono">user.entity.ts</td><td>Pure JS classes with business logic. No TypeORM here!</td></tr>
+                        <tr><td class="p-4 font-bold text-red-500">Use Case</td><td class="p-4 font-mono">create-user.service.ts</td><td>Orchestrates entities to perform a specific action.</td></tr>
+                        <tr><td class="p-4 font-bold text-green-500">Adapter</td><td class="p-4 font-mono">user.controller.ts</td><td>Handles HTTP requests and calls the service.</td></tr>
+                        <tr><td class="p-4 font-bold text-blue-500">Infrastructure</td><td class="p-4 font-mono">user.repository.ts</td><td>Actual SQL queries or external API calls.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const layerData = {
+            domain: {
+                title: "Domain Entities",
+                tag: "src/domain/entities",
+                desc: "The innermost circle. These are plain TypeScript classes. They should NOT depend on NestJS, TypeORM, or any other library. They contain the logic that is true even if you weren't using a computer.",
+                code: "export class User {\n  id: string;\n  email: string;\n\n  changeEmail(newEmail: string) {\n    if (!newEmail.includes('@')) throw Error();\n    this.email = newEmail;\n  }\n}"
+            },
+            usecase: {
+                title: "Application Services",
+                tag: "src/application/use-cases",
+                desc: "Services orchestrate the flow. They receive a DTO, fetch an entity from a repository interface, and tell the entity to do something. They don't know if the data comes from SQL or a JSON file.",
+                code: "@Injectable()\nexport class UpdateEmailService {\n  constructor(private repo: IUserRepository) {}\n\n  async execute(id: string, email: string) {\n    const user = await this.repo.findById(id);\n    user.changeEmail(email);\n    await this.repo.save(user);\n  }\n}"
+            },
+            adapter: {
+                title: "Controllers & Presenters",
+                tag: "src/infrastructure/controllers",
+                desc: "This is where NestJS @Controllers live. Their only job is to listen for a request (HTTP/Websocket), parse the body, and call the appropriate Service.",
+                code: "@Controller('users')\nexport class UserController {\n  constructor(private service: UpdateEmailService) {}\n\n  @Patch(':id')\n  update(@Param('id') id, @Body() dto) {\n    return this.service.execute(id, dto.email);\n  }\n}"
+            },
+            infra: {
+                title: "External Tools",
+                tag: "src/infrastructure/persistence",
+                desc: "The 'dirty' details. Database connections, mailer services, and third-party APIs. We hide these behind interfaces so the rest of the app doesn't care which DB we use.",
+                code: "@Entity()\nexport class UserOrmEntity extends BaseEntity {\n  @PrimaryGeneratedColumn() id: number;\n  @Column() email: string;\n}"
+            }
+        };
+
+        function showLayer(key) {
+            document.getElementById('default-msg').classList.add('hidden');
+            const panel = document.getElementById('layer-info');
+            panel.classList.remove('hidden');
+            
+            const data = layerData[key];
+            document.getElementById('layer-title').innerText = data.title;
+            document.getElementById('layer-tag').innerText = data.tag;
+            document.getElementById('layer-desc').innerText = data.desc;
+            document.getElementById('layer-code').innerText = data.code;
+        }
+    </script>
+</body>
+</html>
