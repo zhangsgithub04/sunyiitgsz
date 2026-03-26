@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini React in One File</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    .app {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 400px;
+    }
+    button {
+      padding: 8px 14px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    const MiniReact = (() => {
+      let hooks = [];
+      let hookIndex = 0;
+      let rootComponent = null;
+      let rootContainer = null;
+
+      function useState(initialValue) {
+        const currentIndex = hookIndex;
+
+        if (hooks[currentIndex] === undefined) {
+          hooks[currentIndex] = initialValue;
+        }
+
+        function setState(newValue) {
+          hooks[currentIndex] =
+            typeof newValue === "function"
+              ? newValue(hooks[currentIndex])
+              : newValue;
+
+          rerender();
+        }
+
+        hookIndex++;
+        return [hooks[currentIndex], setState];
+      }
+
+      function render(Component, container) {
+        rootComponent = Component;
+        rootContainer = container;
+        rerender();
+      }
+
+      function rerender() {
+        hookIndex = 0;
+        rootContainer.innerHTML = rootComponent();
+        bindEvents();
+      }
+
+      function bindEvents() {
+        const btn = document.getElementById("btn");
+        if (btn) {
+          btn.onclick = () => {
+            window.increment();
+          };
+        }
+      }
+
+      return { useState, render };
+    })();
+
+    function App() {
+      const [count, setCount] = MiniReact.useState(0);
+
+      window.increment = () => setCount(c => c + 1);
+
+      return `
+        <div class="app">
+          <h1>Hello World</h1>
+          <p>Count: ${count}</p>
+          <button id="btn">Click me</button>
+        </div>
+      `;
+    }
+
+    MiniReact.render(App, document.getElementById("root"));
+  </script>
+</body>
+</html>
