@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oneonta Postcard Component</title>
+</head>
+<body style="margin:0; padding:32px; font-family:Arial, sans-serif; background:#f3f6fb;">
+
+  <!-- custom element + custom attribute -->
+  <oneonta-postcard name="Sen" mood="sunset"></oneonta-postcard>
+
+  <script>
+    class OneontaPostcard extends HTMLElement {
+      static get observedAttributes() {
+        return ["name", "mood"];
+      }
+
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+
+        this.shadowRoot.innerHTML = `
+          <style>
+            :host {
+              display: block;
+              max-width: 520px;
+              margin: 0 auto;
+            }
+
+            .card {
+              color: white;
+              border-radius: 24px;
+              padding: 24px;
+              position: relative;
+              overflow: hidden;
+              box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
+              transition: transform 0.25s ease;
+            }
+
+            .card:hover {
+              transform: translateY(-3px);
+            }
+
+            .glow {
+              position: absolute;
+              border-radius: 999px;
+              background: rgba(255,255,255,0.14);
+              filter: blur(2px);
+            }
+
+            .glow.one {
+              width: 140px;
+              height: 140px;
+              top: -40px;
+              right: -20px;
+            }
+
+            .glow.two {
+              width: 80px;
+              height: 80px;
+              bottom: 18px;
+              left: -18px;
+            }
+
+            .badge {
+              display: inline-block;
+              padding: 6px 10px;
+              border-radius: 999px;
+              font-size: 12px;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              background: rgba(255,255,255,0.18);
+              margin-bottom: 14px;
+            }
+
+            h2 {
+              margin: 0 0 8px;
+              font-size: 30px;
+              line-height: 1.1;
+            }
+
+            p {
+              margin: 8px 0;
+              line-height: 1.5;
+              font-size: 16px;
+            }
+
+            .name {
+              color: #ffe0e5;
+              font-weight: 700;
+            }
+
+            .scene {
+              font-size: 46px;
+              margin: 10px 0 14px;
+            }
+
+            .controls {
+              display: flex;
+              gap: 10px;
+              flex-wrap: wrap;
+              margin-top: 18px;
+            }
+
+            button {
+              border: none;
+              border-radius: 12px;
+              padding: 10px 14px;
+              font-size: 14px;
+              font-weight: 700;
+              cursor: pointer;
+              background: white;
+              color: #8b0020;
+              transition: transform 0.15s ease, box-shadow 0.15s ease;
+            }
+
+            button:hover {
+              transform: translateY(-1px);
+              box-shadow: 0 8px 18px rgba(0,0,0,0.16);
+            }
+
+            .footer {
+              margin-top: 16px;
+              font-size: 13px;
+              opacity: 0.92;
+            }
+          </style>
+
+          <div class="card" id="card">
+            <div class="glow one"></div>
+            <div class="glow two"></div>
+
+            <div class="badge">SUNY Oneonta Postcard</div>
+            <div class="scene" id="scene">🍁</div>
+            <h2>Hello, <span class="name" id="name">friend</span>!</h2>
+            <p id="message">Welcome to Oneonta.</p>
+
+            <div class="controls">
+              <button data-action="sunset">Sunset mood</button>
+              <button data-action="snow">Snow day mood</button>
+              <button data-action="spirit">Red Dragon mood</button>
+            </div>
+
+            <div class="footer">
+              Custom element: <code>&lt;oneonta-postcard&gt;</code><br />
+              Custom attribute: <code>mood="..."</code>
+            </div>
+          </div>
+        `;
+      }
+
+      connectedCallback() {
+        this.render();
+
+        this.shadowRoot.querySelectorAll("button").forEach((button) => {
+          button.addEventListener("click", () => {
+            const action = button.dataset.action;
+            this.setAttribute("mood", action);
+          });
+        });
+      }
+
+      attributeChangedCallback() {
+        this.render();
+      }
+
+      render() {
+        if (!this.shadowRoot) return;
+
+        const name = this.getAttribute("name") || "friend";
+        const mood = this.getAttribute("mood") || "sunset";
+
+        const card = this.shadowRoot.getElementById("card");
+        const scene = this.shadowRoot.getElementById("scene");
+        const message = this.shadowRoot.getElementById("message");
+        const nameEl = this.shadowRoot.getElementById("name");
+
+        nameEl.textContent = name;
+
+        const moods = {
+          sunset: {
+            background: "linear-gradient(135deg, #b30024, #ff7b54)",
+            scene: "🌄",
+            message: "A warm hilltop sunset over Oneonta says hello."
+          },
+          snow: {
+            background: "linear-gradient(135deg, #7a0019, #6fa8dc)",
+            scene: "❄️",
+            message: "Snowflakes drift across campus. It is a perfect Oneonta winter moment."
+          },
+          spirit: {
+            background: "linear-gradient(135deg, #8b0000, #5a0014)",
+            scene: "🐉",
+            message: "Red Dragon spirit is in the air. Time to build something bold."
+          }
+        };
+
+        const current = moods[mood] || moods.sunset;
+        card.style.background = current.background;
+        scene.textContent = current.scene;
+        message.textContent = current.message;
+      }
+    }
+
+    customElements.define("oneonta-postcard", OneontaPostcard);
+  </script>
+</body>
+</html>
